@@ -6,14 +6,14 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/02 16:03:41 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/02 16:07:22 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 NAME_OF_PROJECT = minishell
 CC = cc
-LIBFT = 42libft/libft.a
+LIBFT = libft/libft.a
 READLINE = $(HOME)/.brew/opt/readline
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
@@ -60,7 +60,7 @@ $(OBJS_DIR)%.o: %.c
 
 $(LIBFT):
 	@git submodule update --init --recursive --remote
-	@make -C ./libft
+	@make -C /libft
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "$(GREEN)Compiled with $(CYAN)$(CFLAGS)$(RESET)"
