@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/02 16:24:50 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/02 19:26:58 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ RM = rm -rf
 
 UTILS_DIR = src/
 UTILS = $(UTILS_DIR)functions/ft_exit.c \
-		$(UTILS_DIR)parser/ft_test.c
+		$(UTILS_DIR)shell/ft_prompt.c
 
 UTILS_OBJS = $(patsubst %.c, $(OBJS_DIR)%.o, $(notdir $(UTILS)))
 SRC = minishell.c
@@ -48,7 +48,17 @@ $(OBJS_DIR)%.o: $(UTILS_DIR)functions/%.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
 
+$(OBJS_DIR)%.o: $(UTILS_DIR)shell/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
 $(OBJS_DIR)%.o: $(UTILS_DIR)parser/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)tokenizer/%.c
 	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)

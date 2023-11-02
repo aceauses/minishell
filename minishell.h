@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/02 16:21:31 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:39:42 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,19 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 # include "libft/libft.h"
 
 
+typedef struct s_shell
+{
+	char	**env;
+	char	**argv;
+}				t_shell;
+
 // 
 void	xerror(char *s, void *data);
+
+void	prepare_prompt(void);
 
 #endif
