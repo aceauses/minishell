@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/02 16:07:22 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/02 16:24:50 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,21 +58,24 @@ $(OBJS_DIR)%.o: %.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
 
-$(LIBFT):
-	@git submodule update --init --recursive --remote
-	@make -C /libft
 
 $(NAME): $(LIBFT) $(OBJS)
 	@echo "$(GREEN)Compiled with $(CYAN)$(CFLAGS)$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAG)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT)
+
+$(LIBFT):
+	@git submodule update --init --recursive --remote
+	@make -C libft all
 
 clean:
 	@$(RM) $(OBJS_DIR)
 	@echo "$(CYAN)[$(NAME_OF_PROJECT)] $(RED)Objects Cleaned$(RESET)"
+	@make -C libft clean
 
 fclean:
 	@$(RM) $(NAME) $(OBJS_DIR)
 	@echo "$(CYAN)[$(NAME_OF_PROJECT)] $(RED)Executable, Objects Cleaned$(RESET)"
+	@make -C libft fclean
 
 re: fclean all
 
