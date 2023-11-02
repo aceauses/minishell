@@ -6,13 +6,14 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/02 15:26:30 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/02 16:03:41 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 NAME_OF_PROJECT = minishell
 CC = cc
+LIBFT = 42libft/libft.a
 READLINE = $(HOME)/.brew/opt/readline
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
@@ -57,9 +58,13 @@ $(OBJS_DIR)%.o: %.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
 
-$(NAME): $(OBJS)
+$(LIBFT):
+	@git submodule update --init --recursive --remote
+	@make -C ./libft
+
+$(NAME): $(LIBFT) $(OBJS)
 	@echo "$(GREEN)Compiled with $(CYAN)$(CFLAGS)$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAG)
 
 clean:
 	@$(RM) $(OBJS_DIR)

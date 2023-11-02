@@ -6,13 +6,16 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/02 15:02:04 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/02 15:36:14 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit()
+void	xerror(char *s, void *data)
 {
+	printf("%s\n", s);
+	if (data != NULL)
+		free(data);
 	exit(0);
 }
