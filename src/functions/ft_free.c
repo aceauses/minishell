@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prompt.c                                        :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 18:37:21 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 09:52:45 by aceauses         ###   ########.fr       */
+/*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
+/*   Updated: 2023/11/03 09:41:50 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void prepare_prompt(void)
+void	ft_free(char **s)
 {
-	char *cwd = getcwd(NULL, 0);
-	char *short_cwd = cwd;	
-	char *last_slash = ft_strrchr(cwd, '/');
-	if (last_slash != NULL) {
-		last_slash++;
-		char *second_last_slash = ft_strrchr(cwd, '/');
-		if (second_last_slash != NULL) {
-			second_last_slash++;
-			short_cwd = second_last_slash;
-		}
-	}
-	printf("%s $ %s ", getenv("USER"), short_cwd);
-	free(cwd);
-}
+	int	i;
 
+	i = 0;
+	while (s[i] != NULL)
+		free(s[i++]);
+	free(s);
+}

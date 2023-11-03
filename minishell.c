@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/02 20:22:14 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 10:01:14 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,11 @@ void	env_print(char **env)
 	}
 }
 
-void	init_data(char **argv, char **ev, t_shell *shell)
+void	init_data(char **ev, t_shell *shell)
 {
-	(void)argv;
-	shell->env = malloc(sizeof(char *) * env_len(ev));
 	shell->env = copy_env(ev);
 	if (!shell->env)
 		exit(12);
-	// env_print(shell->env);
 }
 
 void	ft_ctrl(int	signal)
@@ -92,10 +89,11 @@ int	main(int argc, char **argv, char **env)
 	char	*line;
 	t_shell	*shell;
 
+	(void)argv;
 	if (argc > 1)
 		xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
-	init_data(argv, env, shell);
+	init_data(env, shell);
 	while (1)
 	{
 		signal(SIGINT, ft_ctrl);
@@ -105,7 +103,9 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		free(line);
 	}
+	ft_free(shell->env);
 	free(shell); // free everything inside that was allocated with malloc
+	free(line);
 	system("leaks minishell");
 	return (0);
 }

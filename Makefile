@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/03 09:25:25 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/03 09:46:42 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ RM = rm -rf
 
 UTILS_DIR = src/
 UTILS = $(UTILS_DIR)functions/ft_exit.c \
-		$(UTILS_DIR)shell/ft_prompt.c
+		$(UTILS_DIR)shell/ft_prompt.c \
+		$(UTILS_DIR)functions/ft_free.c 
 
 UTILS_OBJS = $(patsubst %.c, $(OBJS_DIR)%.o, $(notdir $(UTILS)))
 SRC = minishell.c
