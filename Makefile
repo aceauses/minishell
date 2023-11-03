@@ -3,14 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
+#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2023/11/03 17:22:58 by aceauses         ###   ########.fr        #
-=======
-#    Updated: 2023/11/03 14:53:05 by rmitache         ###   ########.fr        #
->>>>>>> ff5faf931b28509998d247377142f846ff96bcb2
+#    Updated: 2023/11/03 18:26:54 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +22,6 @@ CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
 UTILS_DIR = src/
-<<<<<<< HEAD
 UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \
@@ -35,10 +30,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)builtins/ft_pwd.c \
 		$(UTILS_DIR)builtins/ft_unset.c \
 		$(UTILS_DIR)builtins/ft_builtins.c \
-=======
-UTILS = $(UTILS_DIR)functions/ft_exit.c \
 		$(UTILS_DIR)functions/ft_signals.c \
->>>>>>> ff5faf931b28509998d247377142f846ff96bcb2
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)parser/ft_parser.c \

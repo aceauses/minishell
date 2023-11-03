@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signals.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:40:35 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/03 18:09:28 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/03 18:30:38 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,23 @@ void	ctrl_c_settings(void)
 	sigaction(SIGINT, &ctrl_c, NULL);
 }
 
+void reset_prompt()
+{
+	char *cwd = getcwd(NULL, 0);
+	char *short_cwd = cwd;	
+	char *last_slash = ft_strrchr(cwd, '/');
+	if (last_slash != NULL) {
+		last_slash++;
+		char *second_last_slash = ft_strrchr(cwd, '/');
+		if (second_last_slash != NULL) {
+			second_last_slash++;
+			short_cwd = second_last_slash;
+		}
+	}
+	printf("[%s] %s%s $ %s%s %s ", getenv("TERM_PROGRAM"), BLUE, getenv("USER")
+			, YELLOW, short_cwd, RESET);
+	free(cwd);
+}
 void	handle_ctrl_c(int signal, siginfo_t *info, void *x)
 {
 	(void)info;
@@ -54,10 +71,12 @@ void	handle_ctrl_c(int signal, siginfo_t *info, void *x)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		prepare_prompt();
+		rl_replace_line("", 0);
+		reset_prompt();
 		rl_redisplay();
 	}
 }
+
 
 void	handle_ctrl_slash(int signal, siginfo_t *info, void *x)
 {
@@ -66,7 +85,7 @@ void	handle_ctrl_slash(int signal, siginfo_t *info, void *x)
 
 	if (signal == SIGQUIT)
 	{
-		prepare_prompt();
+		reset_prompt();
 		rl_redisplay();
 	}
 }
