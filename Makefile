@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
+#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/03 14:48:09 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/03 14:53:05 by rmitache         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ RM = rm -rf
 
 UTILS_DIR = src/
 UTILS = $(UTILS_DIR)functions/ft_exit.c \
+		$(UTILS_DIR)functions/ft_signals.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)parser/ft_parser.c 
