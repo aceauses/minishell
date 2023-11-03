@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/11/03 14:54:45 by aceauses         ###   ########.fr       */
+=======
+/*   Updated: 2023/11/03 15:38:01 by rmitache         ###   ########.fr       */
+>>>>>>> ff5faf931b28509998d247377142f846ff96bcb2
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +32,11 @@ static int	num_words(char const *s, char set)
 	return (words);
 }
 
+<<<<<<< HEAD
+=======
+//static char	**ft_trim_space()
+
+>>>>>>> ff5faf931b28509998d247377142f846ff96bcb2
 /*ft_getreq:
 	A function that will split the shell->line and get each argument after
 	pipes if they exist.*/
