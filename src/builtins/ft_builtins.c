@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 09:04:40 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 17:20:36 by aceauses         ###   ########.fr       */
+/*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
+/*   Updated: 2023/11/03 17:55:58 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_exit(char *line)
+int	check_builtins(char *line, t_shell *shell)
 {
-	int	i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] == 'e' && line[i + 1] == 'x' && line[i + 2] == 'i'
-		&& line[i + 3] == 't')
-		return (printf("exit\n"), 1);
+	if (check_exit(line))
+		return (1);
+	if (env_print(line, shell) || pwd_print(line, shell))
+		return (2);
 	return (0);
 }

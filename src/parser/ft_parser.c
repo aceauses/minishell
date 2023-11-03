@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 14:51:41 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:54:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ static int	num_words(char const *s, char set)
 	}
 	return (words);
 }
-
-static char	**ft_trim_space()
 
 /*ft_getreq:
 	A function that will split the shell->line and get each argument after

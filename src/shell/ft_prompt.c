@@ -6,14 +6,23 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 18:37:21 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 14:48:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:51:02 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void prepare_prompt(void)
+void	check_status(t_shell *shell)
 {
+	if (shell->status == 0)
+		shell->current_status = shell->status_s;
+	else if (shell->status > 0)
+		shell->current_status = shell->status_f;
+}
+
+void prepare_prompt(t_shell *shell)
+{
+	check_status(shell);
 	char *cwd = getcwd(NULL, 0);
 	char *short_cwd = cwd;	
 	char *last_slash = ft_strrchr(cwd, '/');

@@ -6,24 +6,11 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 14:44:11 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:51:30 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int check_exit(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] == 'e' && line[i + 1] == 'x' && line[i + 2] == 'i'
-		&& line[i + 3] == 't')
-		return (printf("exit\n"), 1);
-	return (0);
-}
 
 char	**copy_env(char **env)
 {
@@ -46,30 +33,22 @@ char	**copy_env(char **env)
 	return (copied);
 }
 
-void	env_print(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		printf("->%s\n", env[i]);
-		i++;
-	}
-}
-
 void	init_data(char **ev, t_shell *shell)
 {
 	shell->env = copy_env(ev);
 	if (!shell->env)
 		exit(12);
+	shell->status_s = ft_strdup("⇥ ");
+	shell->status_f = ft_strdup("⥇ ");
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
+	int		builtin;
 
 	(void)argv;
+	builtin = 0;
 	if (argc > 1)
 		xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
@@ -77,12 +56,17 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		//check_signals();
-		prepare_prompt();
-		shell->line = readline("💁");
-		if (check_exit(shell->line))
+		prepare_prompt(shell);
+		shell->line = readline(shell->current_status);
+		if (!shell->line)
 			break ;
+		builtin = check_builtins(shell->line, shell);
+		if (builtin == 1)
+			break ;
+		else if (builtin > 1)
+			continue ;
 		ft_getreq(shell);
-		env_print(shell->req);
+		shell->status = pipex(shell->req, shell->env);
 		free(shell->line);
 	}
 	ft_free(shell->env);

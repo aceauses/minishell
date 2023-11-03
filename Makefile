@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/03 14:48:09 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/03 17:22:58 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,21 @@ CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
 UTILS_DIR = src/
-UTILS = $(UTILS_DIR)functions/ft_exit.c \
+UTILS = $(UTILS_DIR)functions/ft_error.c \
+		$(UTILS_DIR)builtins/ft_env.c \
+		$(UTILS_DIR)builtins/ft_exit.c \
+		$(UTILS_DIR)builtins/ft_echo.c \
+		$(UTILS_DIR)builtins/ft_export.c \
+		$(UTILS_DIR)builtins/ft_pwd.c \
+		$(UTILS_DIR)builtins/ft_unset.c \
+		$(UTILS_DIR)builtins/ft_builtins.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)functions/ft_free.c \
-		$(UTILS_DIR)parser/ft_parser.c 
+		$(UTILS_DIR)parser/ft_parser.c \
+		$(UTILS_DIR)test/ft_pipe.c \
+		$(UTILS_DIR)test/ft_error_pipex.c \
+		$(UTILS_DIR)test/pipex.c \
+		$(UTILS_DIR)test/ft_bonus.c 
 
 UTILS_OBJS = $(patsubst %.c, $(OBJS_DIR)%.o, $(notdir $(UTILS)))
 SRC = minishell.c
@@ -46,6 +57,16 @@ RESET	= \x1b[0m
 all: $(NAME)
 
 $(OBJS_DIR)%.o: $(UTILS_DIR)functions/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)builtins/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)test/%.c
 	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
