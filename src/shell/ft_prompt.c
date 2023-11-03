@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 18:37:21 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 09:52:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:48:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void prepare_prompt(void)
 			short_cwd = second_last_slash;
 		}
 	}
-	printf("%s $ %s ", getenv("USER"), short_cwd);
+	printf("[%s] %s%s $ %s%s %s ", getenv("TERM_PROGRAM"), BLUE, getenv("USER")
+			, YELLOW, short_cwd, RESET);
 	free(cwd);
 }
 

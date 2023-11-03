@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 10:01:14 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:44:11 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,6 @@ char	**copy_env(char **env)
 	return (copied);
 }
 
-int	env_len(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-		i++;
-	return (i);
-}
-
 void	env_print(char **env)
 {
 	int	i;
@@ -63,7 +53,7 @@ void	env_print(char **env)
 	i = 0;
 	while (env[i] != NULL)
 	{
-		printf("%s\n", env[i]);
+		printf("->%s\n", env[i]);
 		i++;
 	}
 }
@@ -75,18 +65,8 @@ void	init_data(char **ev, t_shell *shell)
 		exit(12);
 }
 
-void	ft_ctrl(int	signal)
-{
-	if (signal == 2)
-	{
-		write(1, "\n", 2);
-		rl_on_new_line();
-	}
-}
-
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
 	t_shell	*shell;
 
 	(void)argv;
@@ -96,16 +76,17 @@ int	main(int argc, char **argv, char **env)
 	init_data(env, shell);
 	while (1)
 	{
-		signal(SIGINT, ft_ctrl);
+		//check_signals();
 		prepare_prompt();
-		line = readline("💁");
-		if (check_exit(line))
+		shell->line = readline("💁");
+		if (check_exit(shell->line))
 			break ;
-		free(line);
+		ft_getreq(shell);
+		env_print(shell->req);
+		free(shell->line);
 	}
 	ft_free(shell->env);
 	free(shell); // free everything inside that was allocated with malloc
-	free(line);
-	system("leaks minishell");
+	free(shell->line);
 	return (0);
 }
