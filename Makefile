@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/02 19:26:58 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/03 09:25:25 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 NAME_OF_PROJECT = minishell
 CC = cc
 LIBFT = libft/libft.a
-READLINE = $(HOME)/.brew/opt/readline
+READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
 CFLAGS = -Wall -Werror -Wextra
