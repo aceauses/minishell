@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/03 18:26:54 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/04 19:44:39 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)builtins/ft_pwd.c \
 		$(UTILS_DIR)builtins/ft_unset.c \
 		$(UTILS_DIR)builtins/ft_builtins.c \
+		$(UTILS_DIR)builtins/ft_cd.c \
 		$(UTILS_DIR)functions/ft_signals.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)functions/ft_free.c \

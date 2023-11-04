@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 18:25:22 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/04 19:54:57 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **env)
 		shell->line = readline(shell->current_status);
 		if (!shell->line)
 			break ;
-		builtin = check_builtins(shell->line, shell);
+		builtin = check_builtins(shell);
 		if (builtin == 1)
 			break ;
 		else if (builtin > 1)

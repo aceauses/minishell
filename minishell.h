@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 18:25:11 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/04 20:06:23 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,12 @@ void	prepare_prompt(t_shell *shell);
 
 void	ft_getreq(t_shell *shell);
 
-int	env_print(char *line, t_shell *shell);
-
-int	check_builtins(char *line, t_shell *shell);
+// builtins
+int	env_print(t_shell *shell);
+int	check_builtins(t_shell *shell);
 int check_exit(char *line);
-int	pwd_print(char *line, t_shell *shell);
+int	pwd_print(t_shell *shell);
+int	ft_export(t_shell *shell);
 
 // colors
 # define RED "\033[0;31m"
