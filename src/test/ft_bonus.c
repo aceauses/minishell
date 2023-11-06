@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 14:40:59 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 15:38:13 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/03 23:07:53 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,10 @@ static void	copy_command(char *argv, char *r, int i, int special)
 char	**special_command(char *argv)
 {
 	int		i;
-	int		x;
 	int		special;
 	char	**r;
 
 	i = 4;
-	x = 0;
 	special = 0;
 	r = malloc(3 * sizeof(char *));
 	if (!r)
