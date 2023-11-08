@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 09:41:50 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/07 20:12:21 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free(char **s)
 	int	i;
 
 	i = 0;
-	while (s[i] != NULL)
+	while (s[i] != NULL && s != NULL)
 		free(s[i++]);
 	free(s);
 }

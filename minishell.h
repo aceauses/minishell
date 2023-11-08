@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/04 23:51:44 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/08 16:26:49 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,34 @@ typedef struct s_redir
 	int		type; // Here we store the type of redirection
 }				t_redir;
 
+typedef enum s_token
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_HERE_DOC,
+	TOKEN_APPEND,
+	TOKEN_REDIRECTION_IN,
+	TOKEN_REDIRECTION_OUT,
+} t_token;
+
+// Define a structure to represent tokens
+typedef struct s_token_s
+{
+    t_token type;
+    char *value;
+} t_token_s;
+
 typedef struct s_shell
 {
-	char	**env;
-	char 	**path;
-	char 	*line;
-	char	**req; // splitted argument after pipes
-	char	*status_s;
-	char	*status_f;
-	char	*current_status;
-	int		status;
+	char			**env;
+	char 			**path;
+	char 			*line;
+	char			**req; // splitted argument after pipes
+	t_token_s		*tokens;
+	char			*status_s;
+	char			*status_f;
+	char			*current_status;
+	int				status;
 	struct termios	saved;
 }					t_shell;
 
@@ -87,6 +105,13 @@ void	ft_free(char **s);
 void	prepare_prompt(t_shell *shell);
 
 void	ft_getreq(t_shell *shell);
+
+
+// parser
+void	ft_parser(t_shell *shell);
+
+//lexer
+int	lexer(char *line, t_shell *shell);
 
 // builtins
 int	env_print(t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/04 20:11:55 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/07 18:28:35 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ int	ft_export(t_shell *shell)
 		ft_putstr_fd("minishell: export: `", 2);
 		ft_putstr_fd(var[1], 2);
 		ft_putstr_fd("': not a valid identifier\n", 2);
-		return (0);
+		return (ft_free(var), 0);
 	}
 	shell->env = ft_add_env(shell->env, var[1]);
+	ft_free(var);
 	return (1);
 }
