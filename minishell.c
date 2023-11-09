@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 19:37:44 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/09 20:46:11 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,12 @@ int	main(int argc, char **argv, char **env)
 	check_signals(&shell->saved);
 	while (1)
 	{
-		// prepare promp for first read or after a command
 		prepare_prompt(shell);
-
 		shell->line = readline(shell->current_status);
 		if (shell->line == NULL)
 			break ;
 		// if nothing was written we should skip to next iteration
-		if (lexer(shell->line, shell) == 0)
+		if (lexer(shell->line, shell) == 1)
 			continue ;
 		// Lexer
 		// Parser

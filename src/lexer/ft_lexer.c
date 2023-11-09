@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 20:17:05 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/09 20:43:28 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static	int	line_valid(char *line)
 {
 	if (line[0] == '\0' || line == NULL || line[0] == ' ')
 		return (1);
-	if (check_pipes(line))
+	if (!check_pipes(line))
 		return (1);
 	return (0);
 }
@@ -71,7 +71,7 @@ static int	check_quotes(char *line)
 	return (0);
 }
 
-static int	tokenizer(char *line, t_shell *shell)
+static void	tokenizer(char *line, t_shell *shell)
 {
 	char	**token;
 	int		i;
@@ -99,7 +99,7 @@ static int	tokenizer(char *line, t_shell *shell)
 	}
 	shell->tokens[i].value = NULL;
 	shell->tokens[i].type = -1;
-	return (ft_free(token), 0);
+	ft_free(token);
 }
 
 static void	*replace_with_env(char *type, t_shell *shell)
@@ -155,9 +155,9 @@ static int	check_pipes(char *line)
 	tmp = ft_strtrim(line, " ");
 	i = ft_strlen(tmp) - 1;
 	if (tmp[0] == '|')
-		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp),  1);
+		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp), 1);
 	if (tmp[i] == '|')
-		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp),  1);
+		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp), 1);
 	return (free(tmp), 0);
 }
 
@@ -168,21 +168,20 @@ int	lexer(char *line, t_shell *shell)
 	int	i;
 
 	i = 0;
-	if (line_valid(line)) // check line if its valid
-		return (free(line), 0);
-	if (tokenizer(line, shell)) // check if tokenizer failed
-		return (free(line), 0);
+	if (!line_valid(line))
+		return (1);
+	tokenizer(line, shell);
 	// for (int i = 0; shell->tokens[i].value != NULL; i++)
 	// 	printf("token[%d] = [%u]\n", i, shell->tokens[i].type);
 	while (shell->tokens[i].value != NULL)
 	{
-		if (check_quotes(shell->tokens[i].value))
-			return (free(line), 0); // also add free tokens function
-		if (handle_expansions(shell->tokens[i].value, shell, i))
-			return (free(line), 0);
+		if (!check_quotes(shell->tokens[i].value))
+			return (1); // also add free tokens function
+		if (!handle_expansions(shell->tokens[i].value, shell, i))
+			return (1);
 		i++;
 	}
 	// for (int i = 0; shell->tokens[i].value != NULL; i++)
 	// 	printf("token[%d] = [%s]\n", i, shell->tokens[i].value);
-	return (1);
+	return (0);
 }
