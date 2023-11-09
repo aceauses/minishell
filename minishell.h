@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/08 16:26:49 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/09 20:16:13 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@
 # include <signal.h>
 # include <termios.h>
 # include "libft/libft.h"
+
+
+//##########################ERRORS#############################################
+# define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
+
+
 
 //pipex
 # include <unistd.h>

@@ -6,19 +6,19 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/08 16:31:02 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/09 20:17:05 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	check_pipes(char *line);
 
 static	int	line_valid(char *line)
 {
-	int	i;
-
-	i = 0;
-	if (line[i] == '\0' || line == NULL)
+	if (line[0] == '\0' || line == NULL || line[0] == ' ')
+		return (1);
+	if (check_pipes(line))
 		return (1);
 	return (0);
 }
@@ -76,9 +76,9 @@ static int	tokenizer(char *line, t_shell *shell)
 	char	**token;
 	int		i;
 
-	shell->tokens = malloc(sizeof(t_token_s) * (ft_strlen(line) + 1));
+	shell->tokens = malloc(sizeof(t_token_s) * 100);
 	if (!shell->tokens)
-		return (1);
+		exit(12);
 	token = ft_split(line, ' ');
 	i = -1;
 	while (token[++i] != NULL)
@@ -98,58 +98,67 @@ static int	tokenizer(char *line, t_shell *shell)
 		shell->tokens[i].value = ft_strdup(token[i]);
 	}
 	shell->tokens[i].value = NULL;
+	shell->tokens[i].type = -1;
 	return (ft_free(token), 0);
 }
 
-// static void	replace_with_env(char *type, t_shell *shell, char *line)
-// {
-// 	int		i;
-// 	char	*env;
-// 	char	*tmp;
-// 	char	*tmp2;
+static void	*replace_with_env(char *type, t_shell *shell)
+{
+	int		i;
+	char	*tmp;
+	char	*tmp2;
 
-// 	i = 0;
-// 	while (shell->env[i] != NULL)
-// 	{
-// 		if (ft_strncmp(shell->env[i], type + 1, ft_strlen(type + 1)) == 0)
-// 		{
-// 			env = ft_strdup(shell->env[i]);
-// 			tmp = ft_strchr(env, '=');
-// 			tmp2 = ft_strdup(tmp + 1);
-// 			free(line);
-// 			line = ft_strdup(tmp2);
-// 			free(env);
-// 			free(tmp2);
-// 			return ;
-// 		}
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (shell->env[i] != NULL)
+	{
+		if (ft_strncmp(shell->env[i], type, ft_strlen(type)) == 0)
+		{
+			tmp = ft_strchr(shell->env[i], '=');
+			tmp2 = ft_strdup(tmp + 1);
+			return (tmp2);
+		}
+		i++;
+	}
+	return (0);
+}
 
-static int	handle_expansions(char *line, t_shell *shell)
+static int	handle_expansions(char *line, t_shell *shell, int place)
 {
 	char	*type;
 	int		i;
-	int		k;
 
 	i = 0;
-	k = 0;
-	(void)shell;
 	type = NULL;
-	if (ft_strcmp(line, "$"))
+	while (line[i] != '\0')
 	{
-		while (line[i] != '\0')
+		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '(')
+			type = ft_strdup(line + i + 1);
+		if (line[i] == '$' && line[i + 1] == '(')
 		{
-			if (line[i] == '$')
-				type = ft_strdup(line + i);
-			i++;
+			type = ft_strdup(line + i + 2);
+			type[ft_strlen(type) - 1] = '\0';
 		}
+		i++;
 	}
-	else
+	if (type == NULL)
 		return (0);
-	printf("type = [%s]\n", type);
-	// replace_with_env(type, shell, line);
-	return (0);
+	free(shell->tokens[place].value);
+	shell->tokens[place].value = replace_with_env(type, shell);
+	return (free(type), 0);
+}
+
+static int	check_pipes(char *line)
+{
+	int	i;
+	char	*tmp;
+
+	tmp = ft_strtrim(line, " ");
+	i = ft_strlen(tmp) - 1;
+	if (tmp[0] == '|')
+		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp),  1);
+	if (tmp[i] == '|')
+		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp),  1);
+	return (free(tmp), 0);
 }
 
 /*A function that will check the input give for problems*/
@@ -163,18 +172,17 @@ int	lexer(char *line, t_shell *shell)
 		return (free(line), 0);
 	if (tokenizer(line, shell)) // check if tokenizer failed
 		return (free(line), 0);
-	for (int i = 0; shell->tokens[i].value != NULL; i++)
-		printf("token[%d] = [%u]\n", i, shell->tokens[i].type);
+	// for (int i = 0; shell->tokens[i].value != NULL; i++)
+	// 	printf("token[%d] = [%u]\n", i, shell->tokens[i].type);
 	while (shell->tokens[i].value != NULL)
 	{
 		if (check_quotes(shell->tokens[i].value))
 			return (free(line), 0); // also add free tokens function
-		if (handle_expansions(shell->tokens[i].value, shell))
+		if (handle_expansions(shell->tokens[i].value, shell, i))
 			return (free(line), 0);
 		i++;
 	}
-	for (int i = 0; shell->tokens[i].value != NULL; i++)
-		printf("token[%d] = [%s]\n", i, shell->tokens[i].value);
-	printf("lexer [%s]\n", line);
+	// for (int i = 0; shell->tokens[i].value != NULL; i++)
+	// 	printf("token[%d] = [%s]\n", i, shell->tokens[i].value);
 	return (1);
 }

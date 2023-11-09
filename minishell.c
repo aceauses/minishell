@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/07 20:51:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/09 19:37:44 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	init_data(char **ev, t_shell *shell)
 	shell->env = copy_env(ev);
 	if (!shell->env)
 		exit(12);
+	shell->status = 0;
 	shell->status_s = ft_strdup("🟢 ");
 	shell->status_f = ft_strdup("🔴 ");
 }
@@ -60,6 +61,8 @@ int	main(int argc, char **argv, char **env)
 		prepare_prompt(shell);
 
 		shell->line = readline(shell->current_status);
+		if (shell->line == NULL)
+			break ;
 		// if nothing was written we should skip to next iteration
 		if (lexer(shell->line, shell) == 0)
 			continue ;
@@ -69,17 +72,26 @@ int	main(int argc, char **argv, char **env)
 		// Executor
 		builtin = check_builtins(shell);
 		if (builtin == 1)
+		{
+			free(shell->line);
+			free(shell->tokens); // Should make another function to free tokens
+			int i = 0;
+			while (shell->tokens[i].value != NULL)
+				free(shell->tokens[i++].value);
 			break ;
+		}
 		else if (builtin > 1)
+		{
+			free(shell->line);
+			free(shell->tokens); // Should make another function to free tokens
+			int i = 0;
+			while (shell->tokens[i].value != NULL)
+				free(shell->tokens[i++].value);
 			continue ;
+		}
 		// ft_getreq(shell);
 		// shell->status = pipex(shell->req, shell->env);
 		// ft_free(shell->req);
-		free(shell->line);
-		free(shell->tokens); // Should make another function to free tokens
-		int i = 0;
-		while (shell->tokens[i].value != NULL)
-			free(shell->tokens[i++].value);
 	}
 	ft_free(shell->env);
 	// EXIT memory leak
@@ -87,6 +99,6 @@ int	main(int argc, char **argv, char **env)
 	free(shell->status_s);
 	free(shell->status_f);
 	free(shell); // free everything inside that was allocated with malloc
-	system("leaks minishell");
+	// system("leaks minishell");
 	return (0);
 }

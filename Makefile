@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/06 19:48:02 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/09 19:24:31 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIBFT = libft/libft.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = 
 CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
@@ -105,7 +105,6 @@ $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT)
 
 $(LIBFT):
-	@git submodule update --init --recursive --remote
 	@make -C libft all
 
 clean:
