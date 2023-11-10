@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/10 15:36:08 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/10 16:19:25 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 # include <termios.h>
 # include "libft/libft.h"
 
+# define SPACES " \t\n\v\r\f"
 
 //##########################ERRORS#############################################
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
-
 
 //pipex
 # include <unistd.h>
@@ -94,6 +94,7 @@ typedef struct s_shell
 	char			**env;
 	char 			**path;
 	char 			*line;
+	char			*trimmed_line;
 	char			**req; // splitted argument after pipes
 	t_token			*tokens;
 	char			*status_s;
@@ -118,7 +119,7 @@ void	ft_getreq(t_shell *shell);
 void	ft_parser(t_shell *shell);
 
 //lexer
-int	lexer(char *line, t_shell *shell);
+int	lexer(t_shell *shell);
 
 // builtins
 int	env_print(t_shell *shell);

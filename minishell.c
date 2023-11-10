@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/10 15:42:42 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/10 16:23:48 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ int	main(int argc, char **argv, char **env)
 	{
 		prepare_prompt(shell);
 		shell->line = readline(shell->current_status);
+		shell->trimmed_line = ft_strtrim(shell->line, SPACES);
 		if (shell->line == NULL)
 			break ;
-		if (lexer(shell->line, shell) == 1)
+		if (lexer(shell) == 1)
 			continue ;
 		if (check_builtins(shell) == 1)
 		{
@@ -93,6 +94,8 @@ void	fully_free(t_shell *shell)
 		ft_free(shell->req);
 	// if (shell->line)
 	// 	free(shell->line);
+	if (shell->trimmed_line)
+		free(shell->trimmed_line);
 	if (shell->tokens)
 		free(shell->tokens);
 	if (shell->status_f)

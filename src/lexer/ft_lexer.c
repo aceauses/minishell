@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/10 15:43:00 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/10 16:23:03 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 static int	check_pipes(char *line);
 
+
+static int an_empty_line(char *line)
+{
+	if (line[0] == '')
+}
+
 static	int	line_valid(char *line)
 {
-	if (line[0] == '\0' || line == NULL || line[0] == ' ')
+	if (ft_strlen(line) == 0 || an_empty_line(line) == 1)
 		return (1);
-	if (!check_pipes(line))
-		return (1);
-	return (0);
 }
 
 static void	remove_quotes(char *line)
@@ -163,21 +166,21 @@ static int	check_pipes(char *line)
 
 /*A function that will check the input give for problems*/
 // Maybe implement check of the string.
-int	lexer(char *line, t_shell *shell)
+int	lexer(t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	if (!line_valid(line))
+	if (!line_valid(shell->trimmed_line) || !check_pipes(shell->trimmed_line))
 		return (1);
-	tokenizer(line, shell);
-	while (shell->tokens[i].value != NULL)
-	{
-		if (check_quotes(shell->tokens[i].value) == 1)
-			return (1); // also add free tokens function
-		if (handle_expansions(shell->tokens[i].value, shell, i) == 1)
-			return (1);
-		i++;
-	}
+	// tokenizer(line, shell); // THIS SHOULD BE IN PARSERES SAME WITH WHILE LOOP BELOW
+	// while (shell->tokens[i].value != NULL)
+	// {
+	// 	if (check_quotes(shell->tokens[i].value) == 1)
+	// 		return (1); // also add free tokens function
+	// 	if (handle_expansions(shell->tokens[i].value, shell, i) == 1)
+	// 		return (1);
+	// 	i++;
+	// }
 	return (0);
 }
