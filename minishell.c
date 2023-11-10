@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 20:46:11 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/10 15:42:42 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,8 @@ void	init_data(char **ev, t_shell *shell)
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
-	int		builtin;
 
 	(void)argv;
-	builtin = 0;
 	if (argc > 1)
 		xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
@@ -61,42 +59,44 @@ int	main(int argc, char **argv, char **env)
 		shell->line = readline(shell->current_status);
 		if (shell->line == NULL)
 			break ;
-		// if nothing was written we should skip to next iteration
 		if (lexer(shell->line, shell) == 1)
 			continue ;
-		// Lexer
-		// Parser
-		// Builtins
-		// Executor
-		builtin = check_builtins(shell);
-		if (builtin == 1)
+		if (check_builtins(shell) == 1)
 		{
-			free(shell->line);
-			free(shell->tokens); // Should make another function to free tokens
 			int i = 0;
 			while (shell->tokens[i].value != NULL)
 				free(shell->tokens[i++].value);
 			break ;
 		}
-		else if (builtin > 1)
+		else if (check_builtins(shell) > 1)
 		{
 			free(shell->line);
-			free(shell->tokens); // Should make another function to free tokens
+			free(shell->tokens);
 			int i = 0;
 			while (shell->tokens[i].value != NULL)
 				free(shell->tokens[i++].value);
 			continue ;
 		}
-		// ft_getreq(shell);
-		// shell->status = pipex(shell->req, shell->env);
-		// ft_free(shell->req);
 	}
-	ft_free(shell->env);
-	// EXIT memory leak
-	free(shell->line);
-	free(shell->status_s);
-	free(shell->status_f);
-	free(shell); // free everything inside that was allocated with malloc
-	// system("leaks minishell");
+	fully_free(shell);
 	return (0);
+}
+
+void	fully_free(t_shell *shell)
+{
+
+	if (shell->env)
+		ft_free(shell->env);
+	if (shell->path)
+		ft_free(shell->path);
+	if (shell->req)
+		ft_free(shell->req);
+	// if (shell->line)
+	// 	free(shell->line);
+	if (shell->tokens)
+		free(shell->tokens);
+	if (shell->status_f)
+		free(shell->status_f);
+	if (shell->status_s)
+		free(shell->status_s);
 }

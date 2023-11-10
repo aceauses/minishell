@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 20:43:28 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/10 15:43:00 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	tokenizer(char *line, t_shell *shell)
 	char	**token;
 	int		i;
 
-	shell->tokens = malloc(sizeof(t_token_s) * 100);
+	shell->tokens = malloc(sizeof(t_token) * 100);
 	if (!shell->tokens)
 		exit(12);
 	token = ft_split(line, ' ');
@@ -171,17 +171,13 @@ int	lexer(char *line, t_shell *shell)
 	if (!line_valid(line))
 		return (1);
 	tokenizer(line, shell);
-	// for (int i = 0; shell->tokens[i].value != NULL; i++)
-	// 	printf("token[%d] = [%u]\n", i, shell->tokens[i].type);
 	while (shell->tokens[i].value != NULL)
 	{
-		if (!check_quotes(shell->tokens[i].value))
+		if (check_quotes(shell->tokens[i].value) == 1)
 			return (1); // also add free tokens function
-		if (!handle_expansions(shell->tokens[i].value, shell, i))
+		if (handle_expansions(shell->tokens[i].value, shell, i) == 1)
 			return (1);
 		i++;
 	}
-	// for (int i = 0; shell->tokens[i].value != NULL; i++)
-	// 	printf("token[%d] = [%s]\n", i, shell->tokens[i].value);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 20:16:13 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/10 15:36:08 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@
 
 //##########################ERRORS#############################################
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
-
 
 
 //pipex
@@ -72,7 +71,7 @@ typedef struct s_redir
 	int		type; // Here we store the type of redirection
 }				t_redir;
 
-typedef enum s_token
+typedef enum e_type
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
@@ -80,14 +79,15 @@ typedef enum s_token
 	TOKEN_APPEND,
 	TOKEN_REDIRECTION_IN,
 	TOKEN_REDIRECTION_OUT,
-} t_token;
+} t_type;
 
 // Define a structure to represent tokens
-typedef struct s_token_s
+typedef struct s_token
 {
-    t_token type;
-    char *value;
-} t_token_s;
+	t_type			type;
+	struct s_token	*next;
+	char			*value;
+} t_token;
 
 typedef struct s_shell
 {
@@ -95,7 +95,7 @@ typedef struct s_shell
 	char 			**path;
 	char 			*line;
 	char			**req; // splitted argument after pipes
-	t_token_s		*tokens;
+	t_token			*tokens;
 	char			*status_s;
 	char			*status_f;
 	char			*current_status;
@@ -103,10 +103,11 @@ typedef struct s_shell
 	struct termios	saved;
 }					t_shell;
 
-// 
+
 void	xerror(char *s, void *data);
 
 void	ft_free(char **s);
+void	fully_free(t_shell *shell);
 
 void	prepare_prompt(t_shell *shell);
 
