@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/10 16:19:25 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/14 18:04:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 
 //##########################ERRORS#############################################
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
+# define SQUOTE 39
+# define DQUOTE 34
+# define PIPE "|"
 
 //pipex
 # include <unistd.h>
@@ -58,19 +61,6 @@ void	error(const char *s, char *s2);
 char	**special_command(char *argv);
 //-----
 
-//Redirections types
-# define R_INPUT 1
-# define R_OUTPUT 2
-# define R_APPEND 3
-# define R_HEREDOC 4
-
-// redirs
-typedef struct s_redir
-{
-	char	*file; // Here we store the file name
-	int		type; // Here we store the type of redirection
-}				t_redir;
-
 typedef enum e_type
 {
 	TOKEN_WORD,
@@ -86,8 +76,21 @@ typedef struct s_token
 {
 	t_type			type;
 	struct s_token	*next;
+	struct s_token	*prev;
 	char			*value;
 } t_token;
+
+typedef struct s_cmd_table
+{
+	int					index;
+	char				*cmd;
+	char				**args;
+	char				*heredoc;
+	char				*redir;
+	struct s_cmd_table	*next;
+	t_token				*tokens;
+} t_cmd_table;
+
 
 typedef struct s_shell
 {
@@ -97,10 +100,12 @@ typedef struct s_shell
 	char			*trimmed_line;
 	char			**req; // splitted argument after pipes
 	t_token			*tokens;
+	t_cmd_table		*cmd_table;
 	char			*status_s;
 	char			*status_f;
 	char			*current_status;
-	int				status;
+	int				exit_code;
+	int				*fds[2];
 	struct termios	saved;
 }					t_shell;
 
@@ -112,14 +117,31 @@ void	fully_free(t_shell *shell);
 
 void	prepare_prompt(t_shell *shell);
 
-void	ft_getreq(t_shell *shell);
-
 
 // parser
-void	ft_parser(t_shell *shell);
+int	ft_parser(t_shell *shell);
+t_token	*ft_new_token(char *content, int type);
+int	find_token_type(char *line);
+int	pipe_counting(char *line);
+void	free_tokens(t_token *tokens);
+t_cmd_table *create_table(t_token *tokens, int index);
+void	token_print(t_token *tokens);
+void	free_cmd_table(t_cmd_table *table);
+void print_cmd_table(t_cmd_table *cmd_table);
+t_cmd_table	*prepare_cmd_table(void);
+t_cmd_table *add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node);
 
 //lexer
-int	lexer(t_shell *shell);
+int		lexer(t_shell *shell);
+int		line_valid(t_shell *shell);
+int		op_n_pipe(t_shell *shell);
+int		check_pipes(t_shell *shell);
+int		check_quotes(t_shell *shell);
+// lexer utils
+int		tilda(t_shell *shell);
+int		extra_redirect(t_shell *shell);
+int		output_redir(t_shell *shell);
+void	syntax_error(char *line);
 
 // builtins
 int	env_print(t_shell *shell);

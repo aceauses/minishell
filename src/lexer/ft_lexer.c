@@ -6,106 +6,39 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/10 16:23:03 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/14 17:05:09 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_pipes(char *line);
-
-
-static int an_empty_line(char *line)
+int	check_quotes(t_shell *shell)
 {
-	if (line[0] == '')
-}
+	char	*line;
+	int		double_q;
+	int		single_q;
 
-static	int	line_valid(char *line)
-{
-	if (ft_strlen(line) == 0 || an_empty_line(line) == 1)
-		return (1);
-}
-
-static void	remove_quotes(char *line)
-{
-	int	i;
-	int	d_flag;
-	int	s_flag;
-
-	i = 0;
-	d_flag = 0;
-	s_flag = 0;
-	while (line[i])
-	{
-		if (line[i] == '"' && s_flag == 0)
-		{
-			d_flag = 1;
-			line[i] = ' ';
-		}
-		if (line[i] == '\'' && d_flag == 0)
-		{
-			s_flag = 1;
-			line[i] = ' ';
-		}
-		i++;
-	}
-}
-
-static int	check_quotes(char *line)
-{
-	int	i;
-	int	double_q;
-	int	single_q;
-
-	i = 0;
 	double_q = 0;
 	single_q = 0;
-	while (line[i])
+	line = shell->trimmed_line;
+	while (*line != '\0')
 	{
-		if (line[i] == '"')
+		if (*line == '"')
 			double_q++;
-		if (line[i] == '\'')
+		if (*line == '\'')
 			single_q++;
-		i++;
+		line++;
 	}
+	if (single_q == 1)
+		return (syntax_error("'"), 1);
+	else if (double_q == 1)
+		return (syntax_error("\""), 1);
 	if (double_q % 2 != 0 || single_q % 2 != 0)
 		return (ft_putstr_fd("Error: quotes not closed\n", 2), 1);
-	remove_quotes(line);
 	return (0);
 }
 
-static void	tokenizer(char *line, t_shell *shell)
-{
-	char	**token;
-	int		i;
-
-	shell->tokens = malloc(sizeof(t_token) * 100);
-	if (!shell->tokens)
-		exit(12);
-	token = ft_split(line, ' ');
-	i = -1;
-	while (token[++i] != NULL)
-	{
-		if (ft_strcmp(token[i], "|") == 0)
-			shell->tokens[i].type = TOKEN_PIPE;
-		else if (ft_strcmp(token[i], "<<") == 0)
-			shell->tokens[i].type = TOKEN_HERE_DOC;
-		else if (ft_strcmp(token[i], ">>") == 0)
-			shell->tokens[i].type = TOKEN_APPEND;
-		else if (ft_strcmp(token[i], "<") == 0)
-			shell->tokens[i].type = TOKEN_REDIRECTION_IN;
-		else if (ft_strcmp(token[i], ">") == 0)
-			shell->tokens[i].type = TOKEN_REDIRECTION_OUT;
-		else
-			shell->tokens[i].type = TOKEN_WORD;
-		shell->tokens[i].value = ft_strdup(token[i]);
-	}
-	shell->tokens[i].value = NULL;
-	shell->tokens[i].type = -1;
-	ft_free(token);
-}
-
-static void	*replace_with_env(char *type, t_shell *shell)
+/* static void	*replace_with_env(char *type, t_shell *shell)
 {
 	int		i;
 	char	*tmp;
@@ -148,39 +81,65 @@ static int	handle_expansions(char *line, t_shell *shell, int place)
 	free(shell->tokens[place].value);
 	shell->tokens[place].value = replace_with_env(type, shell);
 	return (free(type), 0);
+} */
+
+int	op_n_pipe(t_shell *shell)
+{
+	char	*line;
+
+	line = shell->trimmed_line;
+	if (ft_strncmp(line, "<|", 2) == 0 && line[2] == '\0')
+	{
+		shell->exit_code = 2;
+		return (syntax_error("newline"), 1);
+	}
+	else if (ft_strncmp(line, "<|", 2) == 0 && line[2] != '\0')
+	{
+		shell->exit_code = 2;
+		return (syntax_error("|"), 1);
+	}
+	else if (ft_strncmp(line, ">|", 2) == 0 && line[2] == '\0')
+	{
+		shell->exit_code = 2;
+		return (syntax_error("newline"), 1);
+	}
+	else if (ft_strncmp(line, ">|", 2) == 0 && line[2] != '\0')
+	{
+		shell->exit_code = 2;
+		return (syntax_error("|"), 1);
+	}
+	else
+		return (0);
 }
 
-static int	check_pipes(char *line)
+int	check_pipes(t_shell *shell)
 {
-	int	i;
-	char	*tmp;
+	int	len;
 
-	tmp = ft_strtrim(line, " ");
-	i = ft_strlen(tmp) - 1;
-	if (tmp[0] == '|')
-		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp), 1);
-	if (tmp[i] == '|')
-		return (ft_putstr_fd(BAD_PIPE, 2),free(tmp), 1);
-	return (free(tmp), 0);
+	len = ft_strlen(shell->trimmed_line);
+	if ((shell->trimmed_line[0] == '|' || shell->trimmed_line[len - 1] == '|'))
+	{
+		shell->exit_code = 2;
+		return (syntax_error("|"), 1);
+	}
+	return (0);
+}
+
+int	line_valid(t_shell *shell)
+{
+	if (ft_strlen(shell->trimmed_line) == 0 || tilda(shell) == 1
+		|| extra_redirect(shell) == 1)
+		return (1);
+	return (0);
 }
 
 /*A function that will check the input give for problems*/
 // Maybe implement check of the string.
 int	lexer(t_shell *shell)
 {
-	int	i;
-
-	i = 0;
-	if (!line_valid(shell->trimmed_line) || !check_pipes(shell->trimmed_line))
+	if (line_valid(shell) == 1 || check_quotes(shell) == 1
+		|| op_n_pipe(shell) == 1 || check_pipes(shell) == 1)
 		return (1);
-	// tokenizer(line, shell); // THIS SHOULD BE IN PARSERES SAME WITH WHILE LOOP BELOW
-	// while (shell->tokens[i].value != NULL)
-	// {
-	// 	if (check_quotes(shell->tokens[i].value) == 1)
-	// 		return (1); // also add free tokens function
-	// 	if (handle_expansions(shell->tokens[i].value, shell, i) == 1)
-	// 		return (1);
-	// 	i++;
-	// }
-	return (0);
+	else
+		return (0);
 }

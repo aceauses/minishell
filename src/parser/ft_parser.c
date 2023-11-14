@@ -6,50 +6,79 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/07 18:49:38 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/14 21:07:09 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static int	num_words(char const *s, char set)
-// {
-// 	size_t	i;
-// 	int		words;
-
-// 	i = 0;
-// 	words = 0;
-// 	while (s[i])
-// 	{
-// 		if ((i == 0 || s[i - 1] == set) && s[i] != set)
-// 			words++;
-// 		i++;
-// 	}
-// 	return (words);
-// }
-
-/*ft_getreq:
-	A function that will split the shell->line and get each argument after
-	pipes if they exist.*/
-void	ft_getreq(t_shell *shell)
+char	**split_pipes(char *line, char set)
 {
-
-	shell->req = ft_split(shell->line, '|');
-}
-
-void	ft_parser(t_shell *shell)
-{
-	int	i;
+	char	**splitted;
+	int		i;
+	int		j;
+	int		k;
 
 	i = 0;
-	ft_getreq(shell);
-	while (shell->req[i] != NULL)
+	j = 0;
+	k = 0;
+	splitted = malloc(sizeof(char *) * (pipe_counting(line) + 2));
+	while (line[i])
 	{
-		// ft_getargs(shell, i);
-		// ft_getcmd(shell, i);
-		// ft_getredir(shell, i);
-		// ft_getpipe(shell, i);
+		if (line[i] == set && line[i - 1] != SQUOTE && line[i - 1] != DQUOTE)
+		{
+			splitted[j] = ft_substr(line, k, i - k);
+			while (line[i] == set && line[i + 1] == set)
+				i++;
+			k = i + 1;
+			j++;
+		}
 		i++;
 	}
+	splitted[j] = ft_substr(line, k, i - k);
+	splitted[j + 1] = NULL;
+	return (splitted);
 }
- 
+
+t_cmd_table *create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head)
+{
+	t_token	*head;
+	t_token	*current;
+	int		i;
+
+	i = 0;
+	head = ft_new_token(splitted[i], find_token_type(splitted[i]));
+	head->prev = NULL;
+	current = head;
+	while (splitted[++i])
+	{
+		current->next = ft_new_token(splitted[i], find_token_type(splitted[i]));
+		current->next->prev = current;
+		current = current->next;
+	}
+	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(head, in));
+	return (token_print(head), free_tokens(head), cmd_table_head);
+}
+
+int	ft_parser(t_shell *shell)
+{
+	int		i;
+	t_token	*token;
+	char	**splitted;
+	char	**split_tokens;
+
+	i = -1;
+	shell->cmd_table = NULL;
+	splitted = split_pipes(shell->trimmed_line, '|');
+	while (splitted[++i] != NULL)
+	{
+		split_tokens = NULL;
+		split_tokens = ft_split(splitted[i], ' ');
+		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table);
+		ft_free(split_tokens);
+	}
+	print_cmd_table(shell->cmd_table);
+	free_cmd_table(shell->cmd_table);
+	ft_free(splitted);
+	return (0);
+}

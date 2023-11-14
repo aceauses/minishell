@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
+#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/09 20:31:29 by rmitache         ###   ########.fr        #
+#    Updated: 2023/11/14 18:02:43 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,11 +31,16 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)builtins/ft_unset.c \
 		$(UTILS_DIR)builtins/ft_builtins.c \
 		$(UTILS_DIR)lexer/ft_lexer.c \
+		$(UTILS_DIR)lexer/ft_lexer_utils.c \
 		$(UTILS_DIR)builtins/ft_cd.c \
 		$(UTILS_DIR)functions/ft_signals.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)parser/ft_parser.c \
+		$(UTILS_DIR)parser/ft_parser_utils.c \
+		$(UTILS_DIR)parser/ft_token_utils.c \
+		$(UTILS_DIR)parser/ft_cmd_table.c \
+		$(UTILS_DIR)parser/ft_cmd_table_utils.c \
 		$(UTILS_DIR)test/ft_pipe.c \
 		$(UTILS_DIR)test/ft_error_pipex.c \
 		$(UTILS_DIR)test/pipex.c \
