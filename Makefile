@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/14 18:02:43 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/15 17:27:25 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,15 @@ LIBFT = libft/libft.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
-CFLAGS = 
+CFLAGS = -Wall -Wextra -Werror
 CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
 UTILS_DIR = src/
 UTILS = $(UTILS_DIR)functions/ft_error.c \
+		$(UTILS_DIR)functions/ft_signals.c \
+		$(UTILS_DIR)functions/ft_free.c \
+		$(UTILS_DIR)executor/ft_executor.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \
 		$(UTILS_DIR)builtins/ft_echo.c \
@@ -33,9 +36,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)lexer/ft_lexer.c \
 		$(UTILS_DIR)lexer/ft_lexer_utils.c \
 		$(UTILS_DIR)builtins/ft_cd.c \
-		$(UTILS_DIR)functions/ft_signals.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
-		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)parser/ft_parser.c \
 		$(UTILS_DIR)parser/ft_parser_utils.c \
 		$(UTILS_DIR)parser/ft_token_utils.c \
@@ -65,6 +66,11 @@ RESET	= \x1b[0m
 all: $(NAME)
 
 $(OBJS_DIR)%.o: $(UTILS_DIR)functions/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)executor/%.c
 	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 00:43:12 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:45:14 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	free_cmd_table(t_cmd_table *table)
 		tmp = table->next;
 		free(table->cmd);
 		free(table->heredoc);
+		free(table->redir);
 		ft_free(table->args);
 		free(table);
 		table = tmp;
@@ -43,11 +44,10 @@ t_cmd_table	*prepare_cmd_table(void)
 	return (new);
 }
 
-
-t_cmd_table *add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node)
+t_cmd_table	*add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node)
 {
-	t_cmd_table *current;
-	
+	t_cmd_table	*current;
+
 	if (!head)
 		return (new_node);
 	current = head;
@@ -57,6 +57,19 @@ t_cmd_table *add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node)
 	}
 	current->next = new_node;
 	return (head);
+}
+
+int	count_args(t_token *current)
+{
+	int		i;
+
+	i = 0;
+	while (current != NULL && current->type == TOKEN_WORD)
+	{
+		i++;
+		current = current->next;
+	}
+	return (i);
 }
 
 void print_cmd_table(t_cmd_table *cmd_table)

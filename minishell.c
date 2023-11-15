@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 21:09:50 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/15 17:28:07 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	init_data(char **ev, t_shell *shell)
 	shell->trimmed_line = NULL;
 	shell->status_s = ft_strdup("🟢 ");
 	shell->status_f = ft_strdup("🔴 ");
+	shell->fds[0] = dup(0);
+	shell->fds[1] = dup(1);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -58,9 +60,12 @@ int	main(int argc, char **argv, char **env)
 	{
 		prepare_prompt(shell);
 		shell->line = readline(shell->current_status);
+		if (shell->line == NULL || ft_strlen(shell->line) == 0)
+		{
+			free(shell->line);
+			continue ;
+		}
 		shell->trimmed_line = ft_strtrim(shell->line, SPACES);
-		if (shell->line == NULL)
-			break ;
 		if (lexer(shell) == 1)
 		{
 			free(shell->line);
@@ -71,10 +76,12 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		if (check_builtins(shell) == 1)
 			break ;
+		// executor(shell);
 		free(shell->line);
 		free(shell->trimmed_line);
 	}
 	fully_free(shell);
+	system("leaks minishell");
 	return (0);
 }
 

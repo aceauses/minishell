@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 17:05:09 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/15 17:29:30 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,51 +37,6 @@ int	check_quotes(t_shell *shell)
 		return (ft_putstr_fd("Error: quotes not closed\n", 2), 1);
 	return (0);
 }
-
-/* static void	*replace_with_env(char *type, t_shell *shell)
-{
-	int		i;
-	char	*tmp;
-	char	*tmp2;
-
-	i = 0;
-	while (shell->env[i] != NULL)
-	{
-		if (ft_strncmp(shell->env[i], type, ft_strlen(type)) == 0)
-		{
-			tmp = ft_strchr(shell->env[i], '=');
-			tmp2 = ft_strdup(tmp + 1);
-			return (tmp2);
-		}
-		i++;
-	}
-	return (0);
-}
-
-static int	handle_expansions(char *line, t_shell *shell, int place)
-{
-	char	*type;
-	int		i;
-
-	i = 0;
-	type = NULL;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != '(')
-			type = ft_strdup(line + i + 1);
-		if (line[i] == '$' && line[i + 1] == '(')
-		{
-			type = ft_strdup(line + i + 2);
-			type[ft_strlen(type) - 1] = '\0';
-		}
-		i++;
-	}
-	if (type == NULL)
-		return (0);
-	free(shell->tokens[place].value);
-	shell->tokens[place].value = replace_with_env(type, shell);
-	return (free(type), 0);
-} */
 
 int	op_n_pipe(t_shell *shell)
 {

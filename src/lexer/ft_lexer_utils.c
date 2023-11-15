@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/14 17:08:16 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/15 15:21:29 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 int	tilda(t_shell *shell)
 {
 	char	*tmp;
-	int		i;
 
 	tmp = shell->env[5];
-	i = 0;
 	if (*tmp == 'H' && *(tmp + 1) == 'O' && *(tmp + 2) == 'M'
 		&& *(tmp + 3) == 'E' && *(tmp + 4) == '=')
 		tmp = (char *)tmp + 5;

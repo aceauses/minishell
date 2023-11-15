@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 21:07:09 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:44:30 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,32 @@ char	**split_pipes(char *line, char set)
 	return (splitted);
 }
 
-t_cmd_table *create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head)
+t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
+		t_shell *shell)
 {
-	t_token	*head;
+	t_token	*token;
 	t_token	*current;
 	int		i;
 
 	i = 0;
-	head = ft_new_token(splitted[i], find_token_type(splitted[i]));
-	head->prev = NULL;
-	current = head;
+	token = ft_new_token(splitted[i], find_token_type(splitted[i]));
+	token->prev = NULL;
+	current = token;
 	while (splitted[++i])
 	{
 		current->next = ft_new_token(splitted[i], find_token_type(splitted[i]));
 		current->next->prev = current;
 		current = current->next;
 	}
-	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(head, in));
-	return (token_print(head), free_tokens(head), cmd_table_head);
+	current = token;
+	handle_expansions(current, shell);
+	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
+	return (token_print(token), free_tokens(token), cmd_table_head);
 }
 
 int	ft_parser(t_shell *shell)
 {
 	int		i;
-	t_token	*token;
 	char	**splitted;
 	char	**split_tokens;
 
@@ -74,7 +76,8 @@ int	ft_parser(t_shell *shell)
 	{
 		split_tokens = NULL;
 		split_tokens = ft_split(splitted[i], ' ');
-		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table);
+		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
+			shell);
 		ft_free(split_tokens);
 	}
 	print_cmd_table(shell->cmd_table);

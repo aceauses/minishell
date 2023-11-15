@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 20:27:11 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:45:50 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,26 +42,24 @@ int	find_token_type(char *line)
 
 void	free_tokens(t_token *tokens)
 {
-    t_token *tmp;
+	t_token	*tmp;
 
-    while (tokens)
-    {
-        tmp = tokens->next;
-        free(tokens->value);
-        free(tokens);
-        if (tmp)
-        {
-            tmp->prev = NULL;
-        }
-        tokens = tmp;
-    }
+	while (tokens)
+	{
+		tmp = tokens->next;
+		free(tokens->value);
+		free(tokens);
+		if (tmp)
+		{
+			tmp->prev = NULL;
+		}
+		tokens = tmp;
+	}
 }
 
 void token_print(t_token *tokens)
 {
 	printf("%sPrinting tokens:%s\n", RED, RESET);
-
-	// Print next and prev
 	while (tokens)
 	{
 		printf("Value: %s\n", tokens->value);
@@ -69,15 +67,14 @@ void token_print(t_token *tokens)
 		if (tokens->prev)
 		{
 			printf("------Prev-------\n");
-		    printf("Previous Value: %s\n", tokens->prev->value);
-		    printf("Previous Type: %d\n", tokens->prev->type);
+			printf("Previous Value: %s\n", tokens->prev->value);
+			printf("Previous Type: %d\n", tokens->prev->type);
 			printf("------Prev-END---\n");
 		}
 		else
 		{
-
 			printf("------Prev-------\n");
-		    printf("Previous: (NULL)\n");
+			printf("Previous: (NULL)\n");
 			printf("------Prev-END----\n");
 		}
 		tokens = tokens->next;

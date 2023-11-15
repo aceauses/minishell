@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/14 16:10:12 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/15 20:45:00 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,35 +42,27 @@ static char	*put_heredoc(t_token *tokens)
 	return (NULL);
 }
 
-char **extract_args(t_token *tokens)
+char	**extract_args(t_token *tokens)
 {
 	char	**args;
 	int		args_count;
 	t_token	*current;
+	int		i;
 
 	current = tokens;
 	current = current->next;
-	args_count = 0;
-	while (current != NULL && current->type == TOKEN_WORD)
-	{
-		args_count++;
-		current = current->next;
-	}
+	args_count = count_args(tokens);
 	args = (char **)malloc((args_count + 1) * sizeof(char *));
 	if (args == NULL)
-		// Handle memory allocation error
-		return NULL;
+		return (NULL);
 	current = tokens;
 	current = current->next;
-	int i = 0;
+	i = 0;
 	while (current != NULL && current->type == TOKEN_WORD)
 	{
-		args[i] = strdup(current->value);
-		if (args[i] == NULL) {
-			// Handle strdup error
-			// You may need to free previously allocated memory before returning NULL
-			return NULL;
-		}
+		args[i] = ft_strdup(current->value);
+		if (args[i] == NULL)
+			return (NULL);
 		i++;
 		current = current->next;
 	}
@@ -78,7 +70,25 @@ char **extract_args(t_token *tokens)
 	return (args);
 }
 
-t_cmd_table *create_table(t_token *tokens, int index)
+static char	*extract_redirs(t_token *tokens)
+{
+	t_token	*current;
+	char	*redir;
+
+	current = tokens;
+	redir = NULL;
+	while (current)
+	{
+		if (current->type == TOKEN_REDIRECTION_IN)
+			redir = ft_strdup("<");
+		if (current->type == TOKEN_REDIRECTION_OUT)
+			redir = ft_strdup(">");
+		current = current->next;
+	}
+	return (redir);
+}
+
+t_cmd_table	*create_table(t_token *tokens, int index)
 {
 	t_cmd_table	*node;
 
@@ -86,6 +96,7 @@ t_cmd_table *create_table(t_token *tokens, int index)
 	node->cmd = put_cmd(tokens);
 	node->heredoc = put_heredoc(tokens);
 	node->args = extract_args(tokens);
+	node->redir = extract_redirs(tokens);
 	node->index = index;
 	return (node);
 }
