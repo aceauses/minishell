@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:45:00 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 17:38:16 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static char	*put_cmd(t_token *tokens)
 	if (tokens->type == TOKEN_WORD && tokens->prev == NULL)
 		return (ft_strdup(tokens->value));
 	if (tokens->type == TOKEN_REDIRECTION_IN)
-		return (NULL); // maybe change fds
+		return (first_redirections(tokens)); // maybe change fds
 	if (tokens->type == TOKEN_REDIRECTION_OUT)
-		return (NULL); // maybe change fds
+		return (first_redirections(tokens)); // maybe change fds
 	return (NULL);
 }
 
@@ -58,7 +58,8 @@ char	**extract_args(t_token *tokens)
 	current = tokens;
 	current = current->next;
 	i = 0;
-	while (current != NULL && current->type == TOKEN_WORD)
+	while (current != NULL && current->type == TOKEN_WORD
+	&& current->prev->type != TOKEN_HERE_DOC && current->prev->type != TOKEN_REDIRECTION_IN && current->prev->type != TOKEN_REDIRECTION_OUT)
 	{
 		args[i] = ft_strdup(current->value);
 		if (args[i] == NULL)

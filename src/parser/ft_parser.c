@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:44:30 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 18:17:08 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
 	}
 	current = token;
 	handle_expansions(current, shell);
+	// quotes
 	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
 	return (token_print(token), free_tokens(token), cmd_table_head);
 }
@@ -82,6 +83,5 @@ int	ft_parser(t_shell *shell)
 	}
 	print_cmd_table(shell->cmd_table);
 	free_cmd_table(shell->cmd_table);
-	ft_free(splitted);
-	return (0);
+	return (ft_free(splitted), 0);
 }

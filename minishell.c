@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 17:28:07 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 18:35:50 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ char	**copy_env(char **env)
 
 void	init_data(char **ev, t_shell *shell)
 {
+	if (!ev[0])
+		empty_env(ev, shell);
 	shell->env = copy_env(ev);
 	if (!shell->env)
 		exit(12);
@@ -61,10 +63,7 @@ int	main(int argc, char **argv, char **env)
 		prepare_prompt(shell);
 		shell->line = readline(shell->current_status);
 		if (shell->line == NULL || ft_strlen(shell->line) == 0)
-		{
-			free(shell->line);
-			continue ;
-		}
+			break ;
 		shell->trimmed_line = ft_strtrim(shell->line, SPACES);
 		if (lexer(shell) == 1)
 		{
@@ -76,12 +75,10 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		if (check_builtins(shell) == 1)
 			break ;
-		// executor(shell);
 		free(shell->line);
 		free(shell->trimmed_line);
 	}
 	fully_free(shell);
-	system("leaks minishell");
 	return (0);
 }
 

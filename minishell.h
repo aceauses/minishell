@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:48:03 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 18:31:00 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ typedef enum e_type
 // Define a structure to represent tokens
 typedef struct s_token
 {
-	t_type			type;
-	struct s_token	*next;
-	struct s_token	*prev;
-	char			*value;
+	t_type				type;
+	struct s_token		*next;
+	struct s_token		*prev;
+	char				*value;
 }			t_token;
 
 typedef struct s_cmd_table
@@ -88,17 +88,18 @@ typedef struct s_cmd_table
 	char				**args;
 	char				*heredoc;
 	char				*redir;
-	struct s_cmd_table	*next;
+	char				*file_name;
 	t_token				*tokens;
+	struct s_cmd_table	*next;
 }			t_cmd_table;
 
 typedef struct s_shell
 {
 	char			**env;
+	int				no_env;
 	char			**path;
 	char			*line;
 	char			*trimmed_line;
-	char			**req; // splitted argument after pipes
 	t_token			*tokens;
 	t_cmd_table		*cmd_table;
 	char			*status_s;
@@ -114,7 +115,9 @@ void		xerror(char *s, void *data);
 void		ft_free(char **s);
 void		fully_free(t_shell *shell);
 
+// shell
 void		prepare_prompt(t_shell *shell);
+void	empty_env(char **env, t_shell *shell);
 
 // parser
 int			ft_parser(t_shell *shell);
@@ -130,6 +133,7 @@ t_cmd_table	*prepare_cmd_table(void);
 t_cmd_table	*add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node);
 int			count_args(t_token *token);
 int			handle_expansions(t_token *tokens, t_shell *shell);
+char		*first_redirections(t_token *token);
 
 //lexer
 int			lexer(t_shell *shell);

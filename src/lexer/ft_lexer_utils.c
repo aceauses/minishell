@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/15 15:21:29 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 18:31:18 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ int	tilda(t_shell *shell)
 {
 	char	*tmp;
 
-	tmp = shell->env[5];
+	if (shell->no_env == 1)
+		tmp = "/Users/minishell";
+	else
+		tmp = shell->env[5];
 	if (*tmp == 'H' && *(tmp + 1) == 'O' && *(tmp + 2) == 'M'
 		&& *(tmp + 3) == 'E' && *(tmp + 4) == '=')
 		tmp = (char *)tmp + 5;

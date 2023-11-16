@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:45:14 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/16 17:38:20 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,24 @@ int	count_args(t_token *current)
 		current = current->next;
 	}
 	return (i);
+}
+
+char	*first_redirections(t_token *token)
+{
+	t_token	*tmp;
+
+	tmp = token;
+	if (tmp != NULL)
+	{
+		if (tmp->type == TOKEN_REDIRECTION_IN
+			|| tmp->type == TOKEN_REDIRECTION_OUT)
+			{
+				if (tmp->next->type == TOKEN_WORD
+					&& tmp->next->next->type == TOKEN_WORD)
+					return (ft_strdup(tmp->next->next->value));
+			}
+	}
+	return (NULL);
 }
 
 void print_cmd_table(t_cmd_table *cmd_table)
