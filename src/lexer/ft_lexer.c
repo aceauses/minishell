@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 17:29:30 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:13:09 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,21 @@ int	check_quotes(t_shell *shell)
 int	op_n_pipe(t_shell *shell)
 {
 	char	*line;
+	int		l;
 
 	line = shell->trimmed_line;
-	if (ft_strncmp(line, "<|", 2) == 0 && line[2] == '\0')
-	{
-		shell->exit_code = 2;
-		return (syntax_error("newline"), 1);
-	}
-	else if (ft_strncmp(line, "<|", 2) == 0 && line[2] != '\0')
+	l = ft_strlen(line);
+	if (check_operator(line, '<') == 1)
 	{
 		shell->exit_code = 2;
 		return (syntax_error("|"), 1);
 	}
-	else if (ft_strncmp(line, ">|", 2) == 0 && line[2] == '\0')
+	else if (check_operator(line, '>') == 1)
 	{
 		shell->exit_code = 2;
 		return (syntax_error("newline"), 1);
 	}
-	else if (ft_strncmp(line, ">|", 2) == 0 && line[2] != '\0')
-	{
-		shell->exit_code = 2;
-		return (syntax_error("|"), 1);
-	}
-	else
-		return (0);
+	return (0);
 }
 
 int	check_pipes(t_shell *shell)

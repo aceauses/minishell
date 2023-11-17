@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/16 18:31:18 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:13:54 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ int	tilda(t_shell *shell)
 int	output_redir(t_shell *shell)
 {
 	int	i;
+	int	l;
 
 	i = 0;
+	l = ft_strlen(shell->trimmed_line);
+	if (shell->trimmed_line[l - 1] == '>')
+		return (syntax_error("newline"), 1);
 	while (shell->trimmed_line[i] != '<' && shell->trimmed_line[i])
 		i++;
 	if (shell->trimmed_line[i] == '<' && shell->trimmed_line[i + 1] == '<')
@@ -58,8 +62,12 @@ int	output_redir(t_shell *shell)
 int	input_redir(t_shell *shell)
 {
 	int	i;
+	int	l;
 
 	i = 0;
+	l = ft_strlen(shell->trimmed_line);
+	if (shell->trimmed_line[l - 1] == '>')
+		return (syntax_error("newline"), 1);
 	while (shell->trimmed_line[i] != '>' && shell->trimmed_line[i])
 		i++;
 	if (shell->trimmed_line[i] == '>' && shell->trimmed_line[i + 1] == '>')
@@ -80,12 +88,6 @@ int	input_redir(t_shell *shell)
 
 int	extra_redirect(t_shell *shell)
 {
-	if (ft_strchr(shell->trimmed_line, '>')
-		&& ft_strchr(shell->trimmed_line, '<'))
-	{
-		shell->exit_code = 2;
-		return (syntax_error("newline"), 1);
-	}
 	if (ft_strchr(shell->trimmed_line, '>') && input_redir(shell) == 1)
 	{
 		shell->exit_code = 2;
@@ -95,6 +97,11 @@ int	extra_redirect(t_shell *shell)
 	{
 		shell->exit_code = 2;
 		return (1);
+	}
+	if (inp_next_to_out(shell->trimmed_line) == 1)
+	{
+		shell->exit_code = 2;
+		return (syntax_error("newline"), 1);
 	}
 	return (0);
 }

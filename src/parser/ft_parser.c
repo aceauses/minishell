@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/16 18:17:08 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:00:10 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,60 @@ char	**split_pipes(char *line, char set)
 	return (splitted);
 }
 
+static int	has_quotes(char *line)
+{
+	int	i;
+
+	i = -1;
+	while (line[++i] != '\0')
+	{
+		if (line[i] == '\'' || line[i] == '"')
+			return (1);
+	}
+	return (0);
+}
+
+char	*removing_quotes(t_token *token)
+{
+	int	i;
+
+	if (has_quotes(token->value))
+	{
+		i = -1;
+		while(token->value[++i] != '\0')
+		{
+			if (token->value[i] == '\'')
+				printf("SINGLE FOUND SIRR\n");
+		}
+	}
+	return (token->value);
+}
+
+static void	handle_quotes(t_token *current, t_shell *shell)
+{
+	char	*tmp;
+	t_token	*head;
+
+	head = current;
+	// do not change original next, use a temp bro
+	if (has_quotes(shell->trimmed_line))
+	{
+		while (current)
+		{
+			if (current->type == TOKEN_HERE_DOC)
+			{
+				if (current->next != NULL)
+					current = current->next;
+				else
+					return ;
+			}
+			tmp = removing_quotes(current);
+			current = current->next;
+		}
+	}
+	current = head;
+}
+
 t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
 		t_shell *shell)
 {
@@ -59,7 +113,7 @@ t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
 	}
 	current = token;
 	handle_expansions(current, shell);
-	// quotes
+	handle_quotes(current, shell);
 	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
 	return (token_print(token), free_tokens(token), cmd_table_head);
 }
