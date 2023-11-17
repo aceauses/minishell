@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/16 18:30:37 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/17 15:02:19 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)parser/ft_token_utils.c \
 		$(UTILS_DIR)parser/ft_cmd_table.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils.c \
+		$(UTILS_DIR)parser/ft_cmd_table_utils2.c \
 		$(UTILS_DIR)test/ft_pipe.c \
 		$(UTILS_DIR)test/ft_error_pipex.c \
 		$(UTILS_DIR)test/pipex.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/09 20:42:22 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/17 15:08:37 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free(char **s)
 	int	i;
 
 	i = 0;
-	while (s[i] != NULL && s != NULL)
+	while (s != NULL && s[i] != NULL)
 		free(s[i++]);
 	free(s);
 }
