@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 17:23:23 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:32:41 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ char	*first_redirections(t_token *token)
 	t_token	*tmp;
 
 	tmp = token;
-	if (tmp->type == TOKEN_REDIRECTION_IN
-		|| tmp->type == TOKEN_REDIRECTION_OUT)
+	if (checker(tmp, TOKEN_REDIRECTION_IN)
+		|| checker(tmp, TOKEN_REDIRECTION_OUT))
 		{
-			if (tmp->next->type == TOKEN_WORD)
+			if (checker(tmp->next, TOKEN_WORD))
 			{
 				if (tmp->next->next != NULL
 					&& tmp->next->next->type == TOKEN_WORD)
