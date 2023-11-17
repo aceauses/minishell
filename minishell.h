@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 15:06:30 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/17 17:22:51 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ char		*first_redirections(t_token *token);
 // parser utils 2
 int			is_redirs(t_token *tokens);
 int			checker(t_token *tokens, t_type type);
-t_redir	*append_token(t_redir *head, t_redir *new_token);
+t_redir		*append_token(t_redir *head, t_redir *new_token);
 
 //lexer
 int			lexer(t_shell *shell);
@@ -159,6 +159,10 @@ int			tilda(t_shell *shell);
 int			extra_redirect(t_shell *shell);
 int			output_redir(t_shell *shell);
 void		syntax_error(char *line);
+
+// lexer utils
+int			inp_next_to_out(char *line);
+int			check_operator(char *line, char sign);
 
 // executor
 void		executor(t_shell *shell);

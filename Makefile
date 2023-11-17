@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/17 15:02:19 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/17 17:29:57 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)builtins/ft_builtins.c \
 		$(UTILS_DIR)lexer/ft_lexer.c \
 		$(UTILS_DIR)lexer/ft_lexer_utils.c \
+		$(UTILS_DIR)lexer/ft_lexer_utils2.c \
 		$(UTILS_DIR)builtins/ft_cd.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
 		$(UTILS_DIR)shell/empty_env.c \
@@ -135,4 +136,4 @@ fclean:
 
 re: fclean all
 
-.PHONY: all clean fclean re%
+.PHONY: all clean fclean re
