@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:45:50 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/25 21:54:42 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int	find_token_type(char *line)
 	if (ft_strcmp(line, "|") == 0)
 		return (TOKEN_PIPE);
 	if (ft_strcmp(line, ">") == 0)
-		return (TOKEN_REDIRECTION_OUT);
+		return (REDIR_OUT);
 	if (ft_strcmp(line, ">>") == 0)
-		return (TOKEN_APPEND);
+		return (REDIR_APP);
 	if (ft_strcmp(line, "<") == 0)
-		return (TOKEN_REDIRECTION_IN);
+		return (REDIR_IN);
 	if (ft_strcmp(line, "<<") == 0)
 		return (TOKEN_HERE_DOC);
 	return (TOKEN_WORD);

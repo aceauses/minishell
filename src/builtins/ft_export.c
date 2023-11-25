@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/07 18:28:35 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/25 21:23:42 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static int	is_valid(char *str)
 		return (0);
 	while (str[i] != '\0')
 	{
-		if (str[i] == '=' || !ft_isalnum(str[i]))
+		if (str[i] == '=' && str[i + 1] != '\0' && str[i + 1] != '=')
+			i++;
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
@@ -45,29 +47,31 @@ char	**ft_add_env(char **env, char *var)
 	}
 	new_env[i] = ft_strdup(var);
 	new_env[i + 1] = NULL;
-	return (new_env);
+	return (ft_free(env), new_env);
 }
 
-int	ft_export(t_shell *shell)
+int	ft_export(char **cmd_args, t_shell *shell)
 {
-	char	**var;
+	int		i;
+	char	*var;
 
-	if (ft_strncmp(shell->line, "export", 6) != 0)
-		return (0);
-	var = ft_split(shell->line, ' ');
-	if (var[1] == NULL)
+	i = 1;
+	if (cmd_args[1] == NULL)
 	{
-		ft_putstr_fd("export: not enough arguments\n", 2);
 		return (0);
 	}
-	if (!is_valid(var[1]))
+	while (cmd_args[i] != NULL)
 	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(var[1], 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		return (ft_free(var), 0);
+		if (is_valid(cmd_args[i]))
+		{
+			var = ft_strdup(cmd_args[i]);
+			shell->env = ft_add_env(shell->env, var);
+			free(var);
+		}
+		else
+			printf("minishell: export: `%s': not a valid identifier\n",
+				cmd_args[i]);
+		i++;
 	}
-	shell->env = ft_add_env(shell->env, var[1]);
-	ft_free(var);
-	return (1);
+	return (0);
 }

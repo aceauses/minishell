@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 19:49:28 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/03 17:34:47 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/19 17:30:09 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,14 @@ int	check_access(char *argv, char c)
 
 static void	remove_and_put(char **s, int i, char *command)
 {
-		s[i] = ft_strtrim(s[i], "PATH=");
-		s[i] = free_join(s[i], "/");
-		s[i] = free_join(s[i], command);
+	char	*temp;
+
+	temp = ft_strdup(s[i]);
+	free(s[i]);
+	s[i] = ft_strtrim(temp, "PATH=");
+	free(temp);
+	s[i] = free_join(s[i], "/");
+	s[i] = free_join(s[i], command);
 }
 
 static char	**no_env(char *s)
@@ -68,7 +73,7 @@ char	*find_path(char **path, char *command)
 		i++;
 	}
 	if (paths[i] == NULL && check_access(paths[i - 1], 'X') == -1)
-		return (ft_free_array(paths), NULL);
+		return (ft_free_array(paths), paths = NULL, NULL);
 	return (save = ft_strdup(paths[i]), ft_free_array(paths), save);
 }
 

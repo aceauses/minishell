@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 17:25:20 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/25 21:55:06 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	*put_cmd(t_token *tokens)
 	if (checker(tokens, TOKEN_WORD) && tokens->prev == NULL)
 		return (ft_strdup(tokens->value));
 	if (is_redirs(tokens) && tokens->prev == NULL)
-		return (first_redirections(tokens)); // maybe change fds
+		return (first_redirections(tokens));
 	return (NULL);
 }
 
@@ -48,7 +48,7 @@ char	**extract_args(t_token *tokens)
 	int		i;
 
 	args_count = count_args(tokens);
-	args = (char **)malloc((args_count + 1) * sizeof(char *));
+	args = (char **)malloc((args_count + 2) * sizeof(char *));
 	if (args == NULL)
 		return (NULL);
 	current = tokens;
@@ -86,8 +86,8 @@ static t_redir	*extract_redirs(t_token *tokens)
 	current = tokens;
 	while (current)
 	{
-		if (checker(current, TOKEN_REDIRECTION_IN)
-			|| checker(current, TOKEN_REDIRECTION_OUT))
+		if (checker(current, REDIR_IN)
+			|| checker(current, REDIR_OUT) || checker(current, REDIR_APP))
 		{
 			new_redir = malloc(sizeof(t_token));
 			if (!new_redir)
@@ -105,6 +105,35 @@ static t_redir	*extract_redirs(t_token *tokens)
 	return (redir_list);
 }
 
+char **extract_exec_args(t_cmd_table *cmd_table)
+{
+	int		i;
+	char	**exec_args;
+	char	**args_tables;
+
+	i = 0;
+	if (cmd_table->cmd == NULL)
+		return (NULL);
+	if (cmd_table->args == NULL)
+		return (no_args(cmd_table));
+	args_tables = copy_matrix(cmd_table->args);
+	if (args_tables == NULL)
+		return (NULL);
+	while (args_tables[i] != NULL)
+		i++;
+	if (i < 1 && cmd_table->cmd == NULL)
+		return (ft_free(args_tables), NULL);
+	exec_args = (char **)malloc(sizeof(char *) * (i + 2));
+	if (exec_args == NULL)
+		return (ft_free(args_tables), NULL);
+	exec_args[0] = ft_strdup(cmd_table->cmd);
+	i = -1;
+	while (args_tables[++i] != NULL)
+		exec_args[i + 1] = ft_strdup(args_tables[i]);
+	exec_args[i + 1] = NULL;
+	return (ft_free(args_tables), exec_args);
+}
+
 t_cmd_table	*create_table(t_token *tokens, int index)
 {
 	t_cmd_table	*node;
@@ -113,7 +142,9 @@ t_cmd_table	*create_table(t_token *tokens, int index)
 	node->cmd = put_cmd(tokens);
 	node->heredoc = put_heredoc(tokens);
 	node->args = extract_args(tokens);
+	remove_quotes_table(node);
 	node->redir_list = extract_redirs(tokens);
+	node->exec_args = extract_exec_args(node);
 	node->index = index;
 	return (node);
 }

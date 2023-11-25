@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 17:22:51 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/25 21:54:42 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <stdbool.h>
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -33,6 +34,7 @@
 //##########################ERRORS#############################################
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
 # define BUILTINS "echo cd pwd export unset env exit history"
+# define IS_QUOTE(x) (x == '"' || x == '\'')
 # define SQUOTE 39
 # define DQUOTE 34
 # define PIPE "|"
@@ -68,9 +70,9 @@ typedef enum e_type
 	TOKEN_WORD,
 	TOKEN_PIPE,
 	TOKEN_HERE_DOC,
-	TOKEN_APPEND,
-	TOKEN_REDIRECTION_IN,
-	TOKEN_REDIRECTION_OUT,
+	REDIR_APP,
+	REDIR_IN,
+	REDIR_OUT,
 }			t_type;
 
 // Define a structure to represent tokens
@@ -85,7 +87,7 @@ typedef struct s_token
 typedef struct s_redir
 {
 	char	*file_name;
-	int		type;
+	t_type		type;
 	int		index;
 	struct s_redir	*next;
 }			t_redir;
@@ -95,6 +97,7 @@ typedef struct s_cmd_table
 	int					index;
 	char				*cmd;
 	char				**args;
+	char				**exec_args;
 	char				*heredoc;
 	char				*file_name;
 	t_redir				*redir_list;
@@ -125,7 +128,7 @@ void		fully_free(t_shell *shell);
 
 // shell
 void		prepare_prompt(t_shell *shell);
-void	empty_env(char **env, t_shell *shell);
+void		empty_env(char **env, t_shell *shell);
 
 // parser
 int			ft_parser(t_shell *shell);
@@ -142,11 +145,16 @@ t_cmd_table	*add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node);
 int			count_args(t_token *token);
 int			handle_expansions(t_token *tokens, t_shell *shell);
 char		*first_redirections(t_token *token);
+bool		check_pipe(char *line, int i);
+int			num_words(char const *s, char set);
+void		remove_quotes_table(t_cmd_table *whole_table);
 
 // parser utils 2
 int			is_redirs(t_token *tokens);
 int			checker(t_token *tokens, t_type type);
 t_redir		*append_token(t_redir *head, t_redir *new_token);
+char		**copy_matrix(char **matrix);
+char		**no_args(t_cmd_table *table);
 
 //lexer
 int			lexer(t_shell *shell);
@@ -166,14 +174,20 @@ int			check_operator(char *line, char sign);
 
 // executor
 void		executor(t_shell *shell);
+void		execute_cmd(t_shell *shell);
+
+// handle_redirs
+void	handle_redirs(t_redir *redirs);
 
 // builtins
-int			env_print(t_shell *shell);
-int			check_builtins(t_shell *shell);
-int			check_exit(char *line);
-int			pwd_print(t_shell *shell);
-int			ft_export(t_shell *shell);
+int			ft_env(char **env);
+int			exec_builtin(t_shell *shell);
+int			is_builtin(char	*cmd);
+int			ft_exit(char **args, t_shell *shell);
+int			ft_pwd(t_shell *shell);
+int			ft_export(char **cmd_args, t_shell *shell);
 int			ft_echo(t_shell *shell);
+int			ft_cd(char **cmd_args, char **env);
 
 // colors
 # define RED "\033[0;31m"

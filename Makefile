@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/17 17:29:57 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/25 17:24:27 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)functions/ft_signals.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)executor/ft_executor.c \
+		$(UTILS_DIR)executor/ft_single_cmd.c \
+		$(UTILS_DIR)executor/ft_handle_redirs.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \
 		$(UTILS_DIR)builtins/ft_echo.c \
@@ -41,10 +43,12 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)shell/empty_env.c \
 		$(UTILS_DIR)parser/ft_parser.c \
 		$(UTILS_DIR)parser/ft_parser_utils.c \
+		$(UTILS_DIR)parser/ft_parser_utils2.c \
 		$(UTILS_DIR)parser/ft_token_utils.c \
 		$(UTILS_DIR)parser/ft_cmd_table.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils2.c \
+		$(UTILS_DIR)parser/ft_remove_quotes.c \
 		$(UTILS_DIR)test/ft_pipe.c \
 		$(UTILS_DIR)test/ft_error_pipex.c \
 		$(UTILS_DIR)test/pipex.c \

@@ -1,40 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   ft_parser_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/04 19:44:29 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:37:40 by aceauses         ###   ########.fr       */
+/*   Created: 2023/11/25 16:35:50 by aceauses          #+#    #+#             */
+/*   Updated: 2023/11/25 16:36:02 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **cmd_args, char **env)
+int	num_words(char const *s, char set)
 {
-	int		i;
-	char	*path;
+	size_t	i;
+	int		words;
 
 	i = 0;
-	while (env[i] != NULL)
+	words = 0;
+	while (s[i])
 	{
-		if (ft_strncmp(env[i], "HOME=", 5) == 0)
-		{
-			path = ft_strdup(env[i] + 5);
-			break ;
-		}
+		if ((i == 0 || s[i - 1] == set) && s[i] != set)
+			words++;
 		i++;
 	}
-	if (cmd_args[1] == NULL)
-		chdir(path);
-	else if (chdir(cmd_args[1]) == -1)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(cmd_args[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (free(path), 1);
-	}
-	return (free(path), 0);
+	return (words);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 17:13:09 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/18 14:23:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ int	check_quotes(t_shell *shell)
 int	op_n_pipe(t_shell *shell)
 {
 	char	*line;
-	int		l;
 
 	line = shell->trimmed_line;
-	l = ft_strlen(line);
 	if (check_operator(line, '<') == 1)
 	{
 		shell->exit_code = 2;

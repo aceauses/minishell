@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/17 17:00:10 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/25 20:27:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	skipping_quotes(char *str, int index)
+{
+	int	quote;
+
+	if (str[index] != SQUOTE && str[index] != DQUOTE)
+		return (index);
+	quote = str[index++];
+	while (str[index] != quote)
+	{
+		if (str[index] == '\0')
+			return (index);
+		index++;
+	}
+	return (index);
+}
 
 char	**split_pipes(char *line, char set)
 {
@@ -25,7 +41,8 @@ char	**split_pipes(char *line, char set)
 	splitted = malloc(sizeof(char *) * (pipe_counting(line) + 2));
 	while (line[i])
 	{
-		if (line[i] == set && line[i - 1] != SQUOTE && line[i - 1] != DQUOTE)
+		if (line[i] == set && (!check_pipe(line, i)
+			&& !check_pipe(line, i)))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
 			while (line[i] == set && line[i + 1] == set)
@@ -40,58 +57,33 @@ char	**split_pipes(char *line, char set)
 	return (splitted);
 }
 
-static int	has_quotes(char *line)
+char	**splitter(char *line, char set)
 {
-	int	i;
+	char	**splitted;
+	int		i;
+	int		j;
+	int		k;
 
-	i = -1;
-	while (line[++i] != '\0')
+	i = 0;
+	j = 0;
+	k = 0;
+	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 2));
+	if (line[i] == set)
+		i++;
+	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '"')
-			return (1);
-	}
-	return (0);
-}
-
-char	*removing_quotes(t_token *token)
-{
-	int	i;
-
-	if (has_quotes(token->value))
-	{
-		i = -1;
-		while(token->value[++i] != '\0')
+		i = skipping_quotes(line, i);
+		if (line[i] == set)
 		{
-			if (token->value[i] == '\'')
-				printf("SINGLE FOUND SIRR\n");
+			splitted[j] = ft_substr(line, k, i - k);
+			k = i + 1;
+			j++;
 		}
+		i++;
 	}
-	return (token->value);
-}
-
-static void	handle_quotes(t_token *current, t_shell *shell)
-{
-	char	*tmp;
-	t_token	*head;
-
-	head = current;
-	// do not change original next, use a temp bro
-	if (has_quotes(shell->trimmed_line))
-	{
-		while (current)
-		{
-			if (current->type == TOKEN_HERE_DOC)
-			{
-				if (current->next != NULL)
-					current = current->next;
-				else
-					return ;
-			}
-			tmp = removing_quotes(current);
-			current = current->next;
-		}
-	}
-	current = head;
+	splitted[j] = ft_substr(line, k, i - k);
+	splitted[j + 1] = NULL;
+	return (splitted);
 }
 
 t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
@@ -113,9 +105,8 @@ t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
 	}
 	current = token;
 	handle_expansions(current, shell);
-	handle_quotes(current, shell);
 	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
-	return (token_print(token), free_tokens(token), cmd_table_head);
+	return (free_tokens(token), cmd_table_head);
 }
 
 int	ft_parser(t_shell *shell)
@@ -130,12 +121,12 @@ int	ft_parser(t_shell *shell)
 	while (splitted[++i] != NULL)
 	{
 		split_tokens = NULL;
-		split_tokens = ft_split(splitted[i], ' ');
+		split_tokens = splitter(splitted[i], ' ');
 		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
 			shell);
 		ft_free(split_tokens);
 	}
-	print_cmd_table(shell->cmd_table);
-	free_cmd_table(shell->cmd_table);
+	// print_cmd_table(shell->cmd_table);
+	// free_cmd_table(shell->cmd_table);
 	return (ft_free(splitted), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/15 20:44:36 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/25 21:42:53 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static void	*replace_with_env(char *type, t_shell *shell)
 	i = 0;
 	if (ft_strlen(type) == 0)
 		return (0);
+	if (ft_strncmp(type, "?", 1) == 0)
+		return (ft_itoa(shell->exit_code));
 	while (shell->env[i] != NULL)
 	{
 		if (ft_strncmp(shell->env[i], type, ft_strlen(type)) == 0)
@@ -60,7 +62,7 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 	while (tokens)
 	{
 		if (tokens->value[i] == '$' && tokens->value[i + 1] != '\0'
-			&& tokens->value[i + 1] != '(')
+			&& tokens->value[i + 1] != '(' && tokens->value[i + 1] != ')')
 		{
 			type = ft_strdup(tokens->value + i + 1);
 			free(tokens->value);
@@ -76,4 +78,43 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 		tokens = tokens->next;
 	}
 	return (free(type), 0);
+}
+
+bool	check_pipe(char *line, int i)
+{
+	char quote_char = 0;
+
+	for (int k = 0; k < i; k++)
+	{
+		if ((line[k] == '\'' || line[k] == '"')
+			&& (k == 0 || line[k - 1] != '\\'))
+		{
+			if (!quote_char)
+				quote_char = line[k];
+			else if (quote_char == line[k])
+				quote_char = 0;
+		}
+	}
+	return (quote_char != 0);
+}
+
+char	**copy_matrix(char **matrix)
+{
+	char	**copied;
+	int		y;
+
+	y = 0;
+	while (matrix && matrix[y] != NULL)
+		y++;
+	copied = malloc(sizeof(char *) * (y + 1));
+	if (!copied)
+		return (NULL);
+	y = 0;
+	while (matrix[y] != NULL)
+	{
+		copied[y] = ft_strdup(matrix[y]);
+		y++;
+	}
+	copied[y] = NULL;
+	return (copied);
 }
