@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:22:18 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/20 20:23:57 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 15:34:20 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ void	executor(t_shell *shell)
 			execute_cmd(shell);
 	}
 	else
-		printf("Doesnt work with multiple yet\n");
-		// execute_pipes(shell->cmd_table);
+		execute_pipes(shell->cmd_table, cmd_count, shell);
+		// printf("Doesnt work with multiple yet\n");
 }

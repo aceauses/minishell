@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 20:27:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 16:14:01 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	**splitter(char *line, char set)
 	i = 0;
 	j = 0;
 	k = 0;
-	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 2));
+	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 1));
 	if (line[i] == set)
 		i++;
 	while (line[i])
@@ -81,7 +81,8 @@ char	**splitter(char *line, char set)
 		}
 		i++;
 	}
-	splitted[j] = ft_substr(line, k, i - k);
+	if (line[i - 1] != set)
+		splitted[j] = ft_substr(line, k, i - k);
 	splitted[j + 1] = NULL;
 	return (splitted);
 }
@@ -126,7 +127,8 @@ int	ft_parser(t_shell *shell)
 			shell);
 		ft_free(split_tokens);
 	}
-	// print_cmd_table(shell->cmd_table);
-	// free_cmd_table(shell->cmd_table);
+	t_cmd_table	*tmp = shell->cmd_table;
+	print_cmd_table(tmp);
+	// free_cmd_table(tmp);
 	return (ft_free(splitted), 0);
 }

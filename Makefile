@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/25 17:24:27 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/26 11:57:36 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)executor/ft_executor.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \
+		$(UTILS_DIR)executor/ft_multiple_cmds.c \
 		$(UTILS_DIR)executor/ft_handle_redirs.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \

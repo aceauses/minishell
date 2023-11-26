@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:54:42 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 15:26:57 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,9 +175,11 @@ int			check_operator(char *line, char sign);
 // executor
 void		executor(t_shell *shell);
 void		execute_cmd(t_shell *shell);
+void		execve_cmd(t_shell *shell);
+void		execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell);
 
 // handle_redirs
-void	handle_redirs(t_redir *redirs);
+void		handle_redirs(t_redir *redirs);
 
 // builtins
 int			ft_env(char **env);
@@ -188,6 +190,7 @@ int			ft_pwd(t_shell *shell);
 int			ft_export(char **cmd_args, t_shell *shell);
 int			ft_echo(t_shell *shell);
 int			ft_cd(char **cmd_args, char **env);
+int			ft_unset(char **args, char **env);
 
 // colors
 # define RED "\033[0;31m"

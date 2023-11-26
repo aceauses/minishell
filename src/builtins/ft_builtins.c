@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:57:52 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 12:37:28 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ int	exec_builtin(t_shell *shell)
 	int		code;
 
 	code = 0;
+	handle_redirs(shell->cmd_table->redir_list);
 	// if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
 	// 	ft_echo(shell->cmd_table->exec_args);
-	// else if (ft_strcmp(shell->cmd_table->cmd, "unset") == 0)
-	// 	ft_unset(shell->cmd_table->exec_args, shell->env);
 	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
 		ft_exit(shell->cmd_table->exec_args, shell);
 	else if (ft_strcmp(shell->cmd_table->cmd, "env") == 0)
@@ -41,5 +40,9 @@ int	exec_builtin(t_shell *shell)
 		code = ft_export(shell->cmd_table->exec_args, shell);
 	else if (ft_strcmp(shell->cmd_table->cmd, "cd") == 0)
 		code = ft_cd(shell->cmd_table->exec_args, shell->env);
+	else if (ft_strcmp(shell->cmd_table->cmd, "unset") == 0)
+		ft_unset(shell->cmd_table->exec_args, shell->env);
+	dup2(shell->fds[0], STDIN_FILENO);
+	dup2(shell->fds[1], STDOUT_FILENO);
 	return (code);
 }

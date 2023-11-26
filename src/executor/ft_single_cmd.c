@@ -6,13 +6,13 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 16:34:02 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 15:26:28 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	execve_cmd(t_shell *shell)
+void	execve_cmd(t_shell *shell)
 {
 	char	*cmd_place;
 
