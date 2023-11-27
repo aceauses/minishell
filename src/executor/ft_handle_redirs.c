@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 17:58:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:56:14 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 10:51:28 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static void	handle_redir_in(t_redir *redir)
 	fd = open(redir->file_name, O_RDONLY);
 	if (fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", redir->file_name);
-		exit(1);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		exit(2);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -33,8 +33,8 @@ static void	handle_redir_out(t_redir *redir)
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", redir->file_name);
-		exit(1);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -47,8 +47,8 @@ static void	handle_redir_append(t_redir *redir)
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
-		printf("minishell: %s: No such file or directory\n", redir->file_name);
-		exit(1);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);

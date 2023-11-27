@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 16:14:01 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 12:02:16 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	**splitter(char *line, char set)
 	if (line[i - 1] != set)
 		splitted[j] = ft_substr(line, k, i - k);
 	splitted[j + 1] = NULL;
-	return (splitted);
+	return (free(line), splitted);
 }
 
 t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
@@ -122,13 +122,13 @@ int	ft_parser(t_shell *shell)
 	while (splitted[++i] != NULL)
 	{
 		split_tokens = NULL;
-		split_tokens = splitter(splitted[i], ' ');
+		split_tokens = splitter(custom_trim(splitted[i], " "), ' ');
 		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
 			shell);
 		ft_free(split_tokens);
 	}
-	t_cmd_table	*tmp = shell->cmd_table;
-	print_cmd_table(tmp);
+	// t_cmd_table	*tmp = shell->cmd_table;
+	// print_cmd_table(tmp);
 	// free_cmd_table(tmp);
-	return (ft_free(splitted), 0);
+	return (free(splitted), 0);
 }

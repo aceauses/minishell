@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:04:40 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/20 20:53:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 12:25:18 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void	check_exit_code(char *arg)
 	{
 		if (ft_isdigit(arg[i]) == 0)
 		{
-			printf("minishell: exit: %s: numeric argument required\n", arg);
-			exit(255);
+			ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", arg);
+			exit(243);
 		}
 		i++;
 	}
@@ -47,6 +47,6 @@ int	ft_exit(char **args, t_shell *shell)
 		exit(code);
 	}
 	else
-		printf("minishell: exit: too many arguments\n");
+		ft_dprintf(2, "minishell: exit: too many arguments\n");
 	return (0);
 }

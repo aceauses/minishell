@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 15:54:22 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 12:01:51 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,35 @@ int	main(int argc, char **argv, char **env)
 	t_shell	*shell;
 
 	(void)argv;
-	if (argc > 1)
-		xerror("Hey :(", NULL);
+	(void)argc;
+	printf("PID: %d\n", getpid());
+	// if (argc > 1)
+	// 	xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
 	init_data(env, shell);
 	check_signals(&shell->saved);
 	while (1)
 	{
 		prepare_prompt(shell);
-		shell->line = readline(shell->current_status);
+		if (isatty(fileno(stdin)))
+			shell->line = readline(shell->current_status);
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			if (line == NULL)
+			{
+				int	code = shell->exit_code;
+				ft_free(shell->env);
+				free(shell->status_f);
+				free(shell->status_s);
+				free(shell->current_status);
+				free(shell);
+				exit(code);
+			}
+			shell->line = ft_strtrim(line, "\n");
+			free(line);
+		}
 		if (shell->line == NULL)
 			break ;
 		if (ft_strlen(shell->line) == 0)
@@ -85,8 +105,9 @@ int	main(int argc, char **argv, char **env)
 		free(shell->trimmed_line);
 		free_cmd_table(shell->cmd_table);
 	}
+	int	code = shell->exit_code;
 	fully_free(shell);
-	return (0);
+	return (code);
 }
 
 void	fully_free(t_shell *shell)
@@ -96,13 +117,10 @@ void	fully_free(t_shell *shell)
 		ft_free(shell->env);
 	if (shell->line)
 		free(shell->line);
-	if (shell->trimmed_line)
-		free(shell->trimmed_line);
-	if (shell->cmd_table)
-	{
-		printf("cmd_table free\n");
-		free_cmd_table(shell->cmd_table);
-	}
+	// if (shell->trimmed_line)
+	// 	free(shell->trimmed_line);
+	// if (shell->cmd_table)
+	// 	free_cmd_table(shell->cmd_table);
 	if (shell->current_status)
 		free(shell->current_status);
 	if (shell->status_f)

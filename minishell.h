@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 15:26:57 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 10:38:14 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
+# include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
+# include "ft_dprintf/ft_printf.h"
 
 # define SPACES " \t\n\v\r\f"
 
@@ -155,6 +157,7 @@ int			checker(t_token *tokens, t_type type);
 t_redir		*append_token(t_redir *head, t_redir *new_token);
 char		**copy_matrix(char **matrix);
 char		**no_args(t_cmd_table *table);
+char		*custom_trim(char const *s1, char const *set);
 
 //lexer
 int			lexer(t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:21:24 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/26 16:25:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 16:53:44 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,13 @@ static void remove_quotes_args(char **args)
 }
 
 
-static void	do_magic(char **str, int pos, int str_len, int inside_double)
+static void	do_magic(char **str, int pos, int str_len)
 {
 	int		starts_with;
 	int		ends_with;
 
 	starts_with = IS_QUOTE(str[pos][0]);
 	ends_with = IS_QUOTE(str[pos][str_len - 1]);
-	inside_double = 0;
 	if (ends_with && starts_with)
 		str[pos] = ft_strdup_start_end(str[pos], 1, str_len - 1);
 	else if (ends_with)
@@ -87,7 +86,7 @@ static void	remove_echo_quotes(char **str)
 		str_len = (int)ft_strlen(str[pos]);
 		if (str[pos][0] == '\"' && inside_double == 0)
 			inside_double = 1;
-		do_magic(str, pos, str_len, inside_double);
+		do_magic(str, pos, str_len);
 		pos++;
 	}
 }

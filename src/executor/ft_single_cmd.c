@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 15:26:28 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:55:26 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ void	execve_cmd(t_shell *shell)
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
 	if (cmd_place == NULL)
 	{
-		printf("minishell: %s: command not found\n", shell->cmd_table->cmd);
-		fully_free(shell);
+		ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd);
+		free_cmd_table(shell->cmd_table);
 		exit(127);
 	}
 	if (execve(cmd_place, shell->cmd_table->exec_args, shell->env) == -1)
 	{
-		printf("minishell: %s: %s\n", shell->cmd_table->cmd, strerror(errno));
+		ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd, strerror(errno));
 		free_cmd_table(shell->cmd_table);
-		exit(1);
+		exit(errno);
 	}
 }
 
@@ -65,7 +65,7 @@ static void	handle_heredoc(char *heredoc)
 	fd = open(".heredoc", O_RDONLY);
 	if (fd == -1)
 	{
-		printf("minishell: %s\n", strerror(errno));
+		ft_dprintf(2, "minishell: %s\n", strerror(errno));
 		exit(1);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -85,7 +85,7 @@ void	execute_cmd(t_shell *shell)
 	pid = fork();
 	if (pid == -1)
 	{
-		printf("minishell: fork: %s\n", strerror(errno));
+		ft_dprintf(2, "minishell: fork: %s\n", strerror(errno));
 		exit(1);
 	}
 	else if (pid == 0)

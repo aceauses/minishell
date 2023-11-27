@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 16:18:50 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 16:56:54 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ t_cmd_table	*create_table(t_token *tokens, int index)
 	node->cmd = put_cmd(tokens);
 	node->heredoc = put_heredoc(tokens);
 	node->args = extract_args(tokens);
-	remove_quotes_table(node);
+	if (node->args != NULL)
+		remove_quotes_table(node);
 	node->redir_list = extract_redirs(tokens);
 	node->exec_args = extract_exec_args(node);
 	node->index = index;

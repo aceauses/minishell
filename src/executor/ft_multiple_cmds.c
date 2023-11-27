@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 16:03:58 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/26 16:53:07 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ static void	exec_bin(t_cmd_table *cmd_table, t_shell *shell)
 {
 	char	*path;
 	char	*cmd;
-	int		i;
 
-	i = 0;
 	path = NULL;
 	cmd = ft_strtrim(cmd_table->cmd, " ");
 	if (cmd == NULL)

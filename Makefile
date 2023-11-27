@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/26 11:57:36 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/27 10:39:03 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ NAME = minishell
 NAME_OF_PROJECT = minishell
 CC = cc
 LIBFT = libft/libft.a
+GNL = get_next_line/gnl
+PRINTF = ft_dprintf/dprintf.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
@@ -118,10 +120,15 @@ $(OBJS_DIR)%.o: %.c
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
 
+$(GNL):
+	@make -C get_next_line all
 
-$(NAME): $(LIBFT) $(OBJS)
+$(PRINTF):
+	@make -C ft_dprintf all
+
+$(NAME): $(LIBFT) $(GNL) $(PRINTF) $(OBJS)
 	@echo "$(GREEN)Compiled with $(CYAN)$(CFLAGS)$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT) $(GNL) $(PRINTF)
 
 $(LIBFT):
 ifeq ($(shell uname), Darwin)
