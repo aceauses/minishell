@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 17:58:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 10:51:28 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 15:58:35 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ static void	handle_redir_in(t_redir *redir)
 {
 	int	fd;
 
+	if (check_access(redir->file_name, 'R') < 0)
+	{
+		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		exit(1);
+	}
 	fd = open(redir->file_name, O_RDONLY);
 	if (fd == -1)
 	{
@@ -30,6 +35,11 @@ static void	handle_redir_out(t_redir *redir)
 {
 	int	fd;
 
+	if (check_access(redir->file_name, 'W') < 0)
+	{
+		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		exit(1);
+	}
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
@@ -44,6 +54,11 @@ static void	handle_redir_append(t_redir *redir)
 {
 	int	fd;
 
+	if (check_access(redir->file_name, 'W') < 0)
+	{
+		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		exit(1);
+	}
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{

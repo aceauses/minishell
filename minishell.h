@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 10:38:14 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 15:57:15 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <termios.h>
 # include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
-# include "ft_dprintf/ft_printf.h"
+# include "dprintf/ft_printf.h"
 
 # define SPACES " \t\n\v\r\f"
 

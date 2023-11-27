@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/27 10:39:03 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/27 16:07:40 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME_OF_PROJECT = minishell
 CC = cc
 LIBFT = libft/libft.a
 GNL = get_next_line/gnl
-PRINTF = ft_dprintf/dprintf.a
+PRINTF = dprintf/dprintf.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
@@ -124,26 +124,30 @@ $(GNL):
 	@make -C get_next_line all
 
 $(PRINTF):
-	@make -C ft_dprintf all
+	@make -C dprintf all
 
 $(NAME): $(LIBFT) $(GNL) $(PRINTF) $(OBJS)
 	@echo "$(GREEN)Compiled with $(CYAN)$(CFLAGS)$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT) $(GNL) $(PRINTF)
 
 $(LIBFT):
-ifeq ($(shell uname), Darwin)
-	@git submodule update --init --recursive --remote
-endif
+# ifeq ($(shell uname), Darwin)
+# 	@git submodule update --init --recursive --remote
+# endif
 	@make -C libft all
 
 clean:
 	@$(RM) $(OBJS_DIR)
 	@echo "$(CYAN)[$(NAME_OF_PROJECT)] $(RED)Objects Cleaned$(RESET)"
+	@make -C get_next_line clean
+	@make -C dprintf clean
 	@make -C libft clean
 
 fclean:
 	@$(RM) $(NAME) $(OBJS_DIR)
 	@echo "$(CYAN)[$(NAME_OF_PROJECT)] $(RED)Executable, Objects Cleaned$(RESET)"
+	@make -C get_next_line fclean
+	@make -C dprintf fclean
 	@make -C libft fclean
 
 re: fclean all

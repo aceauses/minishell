@@ -2,3 +2,6 @@
 	path = libft
 	branch = main
 	url = https://github.com/aceauses/42libft
+[submodule "dprintf"]
+	path = dprintf
+	url = https://github.com/aceauses/ft_dprintf
