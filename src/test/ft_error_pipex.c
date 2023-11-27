@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 14:40:59 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/19 17:22:29 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 16:18:02 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,6 @@ void	error(const char *s, char *s2)
 	}
 	perror(s);
 	exit(EXIT_FAILURE);
-}
-
-char	*free_join(char *buffer, char *buff)
-{
-	char	*temp;
-
-	temp = ft_strjoin(buffer, buff);
-	free(buffer);
-	return (temp);
 }
 
 void	ft_free_array(char **array)
