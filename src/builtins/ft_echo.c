@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 13:24:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/07 20:07:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:46:49 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		ft_echo(t_shell *shell)
 	char	**args;
 	int		i;
 	int		n_flag;
-	
+
 	i = 1;
 	n_flag = 0;
 	args = ft_split(shell->line, ' ');
@@ -38,7 +38,7 @@ int		ft_echo(t_shell *shell)
 		if ((ft_strncmp(args[i], "-n", 2) == 0))
 			n_flag = i++;
 		while (args[i] != NULL)
-		{ 
+		{
 			ft_putstr_fd(args[i], 1);
 			if (args[i + 1] != NULL)
 				ft_putchar_fd(' ', 1);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
+#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/27 16:07:40 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/27 16:10:25 by rmitache         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,9 +131,9 @@ $(NAME): $(LIBFT) $(GNL) $(PRINTF) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAG) $(LIBFT) $(GNL) $(PRINTF)
 
 $(LIBFT):
-# ifeq ($(shell uname), Darwin)
-# 	@git submodule update --init --recursive --remote
-# endif
+ifeq ($(shell uname), Darwin)
+	@git submodule update --init --recursive --remote
+endif
 	@make -C libft all
 
 clean:

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:23:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 10:41:36 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:45:45 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	special_cmp(const char *s1, const char *s2)
 int	ft_unset(char **args, char **env)
 {
 	int	i;
-	int k;
+	int	k;
 	int	j;
 
 	i = 0;
@@ -49,7 +49,7 @@ int	ft_unset(char **args, char **env)
 				while (++k && env[k + 1] != NULL)
 					env[k] = env[k + 1];
 				env[k] = NULL;
-				break;
+				break ;
 			}
 			j++;
 		}

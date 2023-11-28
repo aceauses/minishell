@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 15:57:15 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:14:07 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void		syntax_error(char *line);
 // lexer utils
 int			inp_next_to_out(char *line);
 int			check_operator(char *line, char sign);
+char		*check_home(char **env);
 
 // executor
 void		executor(t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/18 14:23:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:33:04 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,21 @@ int	check_quotes(t_shell *shell)
 	return (0);
 }
 
-int	op_n_pipe(t_shell *shell)
+int op_n_pipe(t_shell *shell)
 {
 	char	*line;
 
+
 	line = shell->trimmed_line;
-	if (check_operator(line, '<') == 1)
+	if (!ft_strchr(line, '\'') && !ft_strchr(line, '"'))
 	{
-		shell->exit_code = 2;
-		return (syntax_error("|"), 1);
-	}
-	else if (check_operator(line, '>') == 1)
-	{
-		shell->exit_code = 2;
-		return (syntax_error("newline"), 1);
+		if (check_operator(line, '<') == 1 || check_operator(line, '>') == 1
+			|| ft_strnstr(line, ">>|", ft_strlen(line))
+				|| ft_strnstr(line, "<<|", ft_strlen(line)))
+		{
+			shell->exit_code = 2;
+			return (syntax_error("|"), 1);
+		}
 	}
 	return (0);
 }

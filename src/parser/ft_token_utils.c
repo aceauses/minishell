@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_token_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:54:42 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 18:47:15 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void token_print(t_token *tokens)
+void	token_print(t_token *tokens)
 {
 	printf("%sPrinting tokens:%s\n", RED, RESET);
 	while (tokens)

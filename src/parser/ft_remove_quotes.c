@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remove_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:21:24 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/26 16:53:44 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/27 19:50:10 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,22 @@ static void	remove_echo_quotes(char **str)
 	}
 }
 
+void	remove_quotes_redir(t_redir *redir_list)
+{
+	char	*tmp;
+
+	while (redir_list != NULL)
+	{
+		if (redir_list->file_name != NULL)
+		{
+			tmp = rm_quotes(redir_list->file_name);
+			free(redir_list->file_name);
+			redir_list->file_name = tmp;
+		}
+		redir_list = redir_list->next;
+	}
+}
+
 void	remove_quotes_table(t_cmd_table *whole_table)
 {
 	char	*tmp;
@@ -104,9 +120,12 @@ void	remove_quotes_table(t_cmd_table *whole_table)
 			whole_table->cmd = tmp;
 		}
 		if (ft_strcmp(whole_table->cmd, "echo") == 1)
+		{
 			remove_quotes_args(whole_table->args);
+			remove_quotes_redir(whole_table->redir_list);
+		}
 		else
-			remove_echo_quotes(whole_table->args); // SHOULD FREE SIR!
+			remove_echo_quotes(whole_table->args);
 		whole_table = whole_table->next;
 	}
 }

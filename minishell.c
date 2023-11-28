@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 12:01:51 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:44:59 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv;
 	(void)argc;
-	printf("PID: %d\n", getpid());
+	// printf("PID: %d\n", getpid());
 	// if (argc > 1)
 	// 	xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
 	init_data(env, shell);
-	check_signals(&shell->saved);
+	check_signals(&shell->saved); // THIS SHOULD WORK INSIDE HEREDOC
 	while (1)
 	{
 		prepare_prompt(shell);
@@ -117,10 +117,10 @@ void	fully_free(t_shell *shell)
 		ft_free(shell->env);
 	if (shell->line)
 		free(shell->line);
-	// if (shell->trimmed_line)
-	// 	free(shell->trimmed_line);
-	// if (shell->cmd_table)
-	// 	free_cmd_table(shell->cmd_table);
+	if (shell->trimmed_line)
+		free(shell->trimmed_line);
+	if (shell->cmd_table)
+		free_cmd_table(shell->cmd_table);
 	if (shell->current_status)
 		free(shell->current_status);
 	if (shell->status_f)
