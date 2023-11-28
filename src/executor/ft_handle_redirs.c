@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_redirs.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 17:58:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 10:37:19 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:08:47 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ static void	handle_redir_in(t_redir *redir)
 	if (fd == -1)
 	{
 		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
-		exit(2);
+		exit(1);
 	}
 	if (check_access(redir->file_name, 'R') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
-		exit(1);
+		exit(2);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -39,12 +39,12 @@ static void	handle_redir_out(t_redir *redir)
 	if (fd == -1)
 	{
 		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
-		exit(2);
+		exit(1);
 	}
 	if (check_access(redir->file_name, 'W') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
-		exit(1);
+		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
@@ -58,12 +58,12 @@ static void	handle_redir_append(t_redir *redir)
 	if (fd == -1)
 	{
 		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
-		exit(2);
+		exit(1);
 	}
 	if (check_access(redir->file_name, 'W') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
-		exit(1);
+		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);

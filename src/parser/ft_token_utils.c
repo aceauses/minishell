@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_token_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 18:47:15 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:07:16 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,14 @@ t_token	*ft_new_token(char *content, int type)
 
 int	find_token_type(char *line)
 {
-	if (ft_strcmp(line, "|") == 0)
-		return (TOKEN_PIPE);
-	if (ft_strcmp(line, ">") == 0)
-		return (REDIR_OUT);
-	if (ft_strcmp(line, ">>") == 0)
+	if (ft_strncmp(line, ">>", 2) == 0)
 		return (REDIR_APP);
-	if (ft_strcmp(line, "<") == 0)
-		return (REDIR_IN);
-	if (ft_strcmp(line, "<<") == 0)
+	if (ft_strncmp(line, "<<", 2) == 0)
 		return (TOKEN_HERE_DOC);
+	if (ft_strncmp(line, ">", 1) == 0)
+		return (REDIR_OUT);
+	if (ft_strncmp(line, "<", 1) == 0)
+		return (REDIR_IN);
 	return (TOKEN_WORD);
 }
 

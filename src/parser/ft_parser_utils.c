@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:42:53 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:33:27 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 	while (tokens)
 	{
 		if (tokens->value[i] == '$' && tokens->value[i + 1] != '\0'
-			&& tokens->value[i + 1] != '(' && tokens->value[i + 1] != ')')
+			&& tokens->value[i + 1] != '(' && tokens->value[i + 1] != ')' &&
+			checker(tokens->prev, TOKEN_HERE_DOC) == 0)
 		{
 			type = ft_strdup(tokens->value + i + 1);
 			free(tokens->value);

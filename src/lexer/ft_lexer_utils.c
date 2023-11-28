@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/28 12:37:11 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:10:37 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,7 @@ int	tilda(t_shell *shell)
 			|| shell->trimmed_line[1] == ' '))
 	{
 		shell->exit_code = 126;
-		printf("MA CAC\n");
-		ft_dprintf(2, "%s is a directory\n", tmp);
-		if (tmp != NULL)
-			free(tmp);
-		return (1);
+		return (ft_dprintf(2, "%s is a directory\n", tmp), 1);
 	}
 	free(tmp);
 	return (0);
@@ -49,7 +45,7 @@ int	output_redir(t_shell *shell)
 
 	i = 0;
 	l = ft_strlen(shell->trimmed_line);
-	if (shell->trimmed_line[l - 1] == '>')
+	if (shell->trimmed_line[l - 1] == '<')
 		return (syntax_error("newline"), 1);
 	while (shell->trimmed_line[i] != '<' && shell->trimmed_line[i])
 		i++;
@@ -118,5 +114,5 @@ int	extra_redirect(t_shell *shell)
 
 void	syntax_error(char *line)
 {
-	dprintf(2, "syntax error near unexpected token '%s'\n", line);
+	ft_dprintf(2, "syntax error near unexpected token '%s'\n", line);
 }

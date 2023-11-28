@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 11:55:26 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 11:56:56 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	execve_cmd(t_shell *shell)
 		cmd_place = find_path(shell->env, shell->cmd_table->cmd);
 	else
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
-	if (cmd_place == NULL)
+	if (cmd_place == NULL || ft_strlen(shell->cmd_table->cmd) == 0)
 	{
 		ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd);
 		free_cmd_table(shell->cmd_table);
@@ -37,7 +37,7 @@ void	execve_cmd(t_shell *shell)
 	}
 }
 
-static void	handle_heredoc(char *heredoc)
+void	handle_heredoc(char *heredoc)
 {
 	int		fd;
 	char	*line;

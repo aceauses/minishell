@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 12:14:07 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:11:52 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
 # define BUILTINS "echo cd pwd export unset env exit history"
 # define IS_QUOTE(x) (x == '"' || x == '\'')
+# define IS_REDIR(x) (x == '>' || x == '<')
 # define SQUOTE 39
 # define DQUOTE 34
 # define PIPE "|"
@@ -154,7 +155,11 @@ void		remove_quotes_table(t_cmd_table *whole_table);
 // parser utils 2
 int			is_redirs(t_token *tokens);
 int			checker(t_token *tokens, t_type type);
-t_redir		*append_token(t_redir *head, t_redir *new_token);
+
+//redirects
+t_redir		*append_redir(t_redir *head, t_redir *new_token);
+t_redir		*create_redir(t_token *current, int type);
+
 char		**copy_matrix(char **matrix);
 char		**no_args(t_cmd_table *table);
 char		*custom_trim(char const *s1, char const *set);
@@ -184,6 +189,7 @@ void		execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell);
 
 // handle_redirs
 void		handle_redirs(t_redir *redirs);
+void		handle_heredoc(char *heredoc);
 
 // builtins
 int			ft_env(char **env);

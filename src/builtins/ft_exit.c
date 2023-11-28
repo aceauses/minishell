@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:04:40 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 12:20:02 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:12:55 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,17 @@ static void	check_exit_code(char *arg)
 	i = 0;
 	while (arg[i] != '\0')
 	{
-		if (ft_isdigit(arg[i]) == 0)
+		if (ft_isdigit(arg[i]) == 0 || arg[i] == ' ')
 		{
 			ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", arg);
-			exit(243);
+			exit(255);
 		}
 		i++;
+	}
+	if (i == 0)
+	{
+		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", arg);
+		exit(255);
 	}
 }
 
@@ -38,7 +43,7 @@ int	ft_exit(char **args, t_shell *shell)
 		ft_putstr_fd("exit\n", 2);
 		exit(0);
 	}
-	else if (args[1] != NULL && args[2] == NULL)
+	else if (args[1] != NULL)
 	{
 		check_exit_code(args[1]);
 		code = ft_atoi(args[1]);
@@ -47,6 +52,6 @@ int	ft_exit(char **args, t_shell *shell)
 		exit(code);
 	}
 	else
-		ft_dprintf(2, "minishell: exit: too many arguments\n");
+		return (ft_dprintf(2, "minishell: exit: too many arguments\n"), 1);
 	return (0);
 }

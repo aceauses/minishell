@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 12:34:31 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:06:36 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ static char	*put_heredoc(t_token *tokens)
 	{
 		if (checker(tmp, TOKEN_HERE_DOC))
 		{
-			if (checker(tmp->next, TOKEN_WORD))
+			if (ft_isprint(tmp->value[2]) == 1)
+				return (ft_strdup(tmp->value + 2));
+			else if (checker(tmp->next, TOKEN_WORD))
 				return (ft_strdup(tmp->next->value));
 			else
 				return (NULL);
@@ -89,16 +91,8 @@ static t_redir	*extract_redirs(t_token *tokens)
 		if (checker(current, REDIR_IN)
 			|| checker(current, REDIR_OUT) || checker(current, REDIR_APP))
 		{
-			new_redir = malloc(sizeof(t_token));
-			if (!new_redir)
-				return (NULL);
-			new_redir->type = current->type;
-			if (checker(current->next, TOKEN_WORD))
-				new_redir->file_name = ft_strdup(current->next->value);
-			else
-				new_redir->file_name = NULL;
-			new_redir->next = NULL;
-			redir_list = append_token(redir_list, new_redir);
+			new_redir = create_redir(current, current->type);
+			redir_list = append_redir(redir_list, new_redir);
 		}
 		current = current->next;
 	}

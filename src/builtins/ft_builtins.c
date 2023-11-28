@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 12:37:28 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:08:15 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	exec_builtin(t_shell *shell)
 	// if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
 	// 	ft_echo(shell->cmd_table->exec_args);
 	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
-		ft_exit(shell->cmd_table->exec_args, shell);
+		code = ft_exit(shell->cmd_table->exec_args, shell);
 	else if (ft_strcmp(shell->cmd_table->cmd, "env") == 0)
 		code = ft_env(shell->env);
 	else if (ft_strcmp(shell->cmd_table->cmd, "pwd") == 0)

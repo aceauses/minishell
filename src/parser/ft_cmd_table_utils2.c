@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:52:22 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/25 21:54:42 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 10:25:38 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	checker(t_token *tokens, t_type type)
 	return (0);
 }
 
-t_redir	*append_token(t_redir *head, t_redir *new_token)
+t_redir	*append_redir(t_redir *head, t_redir *new_token)
 {
 	t_redir		*last;
 
@@ -39,6 +39,27 @@ t_redir	*append_token(t_redir *head, t_redir *new_token)
 		last = last->next;
 	last->next = new_token;
 	return (head);
+}
+
+t_redir *create_redir(t_token *current, int type)
+{
+	t_redir		*new_redir;
+
+	new_redir = malloc(sizeof(t_redir));
+	if (!new_redir) {
+		return NULL;
+	}
+	new_redir->type = type;
+	if (IS_REDIR(current->value[2]))
+		new_redir->file_name = ft_strdup(current->value + 2);
+	else if (ft_isprint(current->value[1]))
+		new_redir->file_name = ft_strdup(current->value + 1);
+	else if (checker(current->next, TOKEN_WORD))
+		new_redir->file_name = ft_strdup(current->next->value);
+	else
+		new_redir->file_name = NULL;
+	new_redir->next = NULL;
+	return (new_redir);
 }
 
 char	**no_args(t_cmd_table *table)
