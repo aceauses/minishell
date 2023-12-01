@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 15:08:54 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:36:15 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,10 @@ char	**splitter(char *line, char set)
 	j = 0;
 	k = 0;
 	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 1));
-	if (line[i] == set)
-		i++;
 	while (line[i])
 	{
 		i = skipping_quotes(line, i);
-		if (line[i] == set)
+		if (line[i] == set && line[i + 1] != set)
 		{
 			splitted[j] = ft_substr(line, k, i - k);
 			k = i + 1;
@@ -122,7 +120,7 @@ int	ft_parser(t_shell *shell)
 	while (splitted[++i] != NULL)
 	{
 		split_tokens = NULL;
-		split_tokens = splitter(custom_trim(splitted[i], " "), ' ');
+		split_tokens = splitter(custom_trim(splitted[i], SPACES), ' ');
 		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
 			shell);
 		ft_free(split_tokens);

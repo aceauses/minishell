@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 19:49:28 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/19 17:30:09 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:41:42 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*find_path(char **path, char *command)
 	paths = ft_split(path[j], ':');
 	if (!paths)
 		paths = no_env("/bin:/usr/bin");
-	if (!command)
+	if (!command || command[0] == '.' || command[0] == '/')
 		return (ft_free_array(paths), NULL);
 	save = NULL;
 	while (paths[i] != NULL)

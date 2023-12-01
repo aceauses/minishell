@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 10:08:15 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:58:11 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	exec_builtin(t_shell *shell)
 	int		code;
 
 	code = 0;
-	handle_redirs(shell->cmd_table->redir_list);
 	// if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
 	// 	ft_echo(shell->cmd_table->exec_args);
 	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
@@ -41,8 +40,6 @@ int	exec_builtin(t_shell *shell)
 	else if (ft_strcmp(shell->cmd_table->cmd, "cd") == 0)
 		code = ft_cd(shell->cmd_table->exec_args, shell->env);
 	else if (ft_strcmp(shell->cmd_table->cmd, "unset") == 0)
-		ft_unset(shell->cmd_table->exec_args, shell->env);
-	dup2(shell->fds[0], STDIN_FILENO);
-	dup2(shell->fds[1], STDOUT_FILENO);
+		code = ft_unset(shell->cmd_table->exec_args, shell->env);
 	return (code);
 }

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:44:29 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 19:26:20 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:28:04 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	ft_cd(char **cmd_args, char **env)
 	char	*path;
 
 	i = 0;
+	path = NULL;
 	while (env[i] != NULL)
 	{
 		if (ft_strncmp(env[i], "HOME=", 5) == 0)
@@ -27,24 +28,22 @@ int	ft_cd(char **cmd_args, char **env)
 		}
 		i++;
 	}
-	if (cmd_args[1] == NULL)
+	if (cmd_args[1] == NULL && path == NULL)
+		return (ft_dprintf(2, "minishell: cd: HOME not set\n"), 1);
+	if (cmd_args[1] == NULL && path != NULL)
 		chdir(path);
-	else if (ft_strncmp(cmd_args[1], "~", 1) == 0)
+	else if (ft_strncmp(cmd_args[1], "~", 1) == 0 && path != NULL)
 	{
-		path = ft_strjoin(path, cmd_args[1] + 1);
+		path = free_join(path, cmd_args[1] + 1);
 		if (chdir(path) == -1)
 		{
-			ft_putstr_fd("minishell: cd: ", 2);
-			ft_putstr_fd(cmd_args[1], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
+			ft_dprintf(2, "minishell: cd: %s: No such file or directory\n", path);
 			return (free(path), 1);
 		}
 	}
 	else if (chdir(cmd_args[1]) == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(cmd_args[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_dprintf(2, "minishell: cd: %s: No such file or directory\n", cmd_args[1]);
 		return (free(path), 1);
 	}
 	return (free(path), 0);

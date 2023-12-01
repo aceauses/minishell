@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 15:06:36 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/29 18:54:53 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ t_cmd_table	*create_table(t_token *tokens, int index)
 	node->heredoc = put_heredoc(tokens);
 	node->args = extract_args(tokens);
 	node->redir_list = extract_redirs(tokens);
-	node->exec_args = extract_exec_args(node);
 	if (node->args != NULL)
 		remove_quotes_table(node);
+	node->exec_args = extract_exec_args(node);
 	node->index = index;
 	return (node);
 }

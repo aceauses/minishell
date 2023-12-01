@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:12:44 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/28 15:10:42 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:37:54 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,8 @@ char	*check_home(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (env[i][0] == 'H' && env[i][1] == 'O' && env[i][2] == 'M'
-			&& env[i][3] == 'E' && env[i][4] == '=')
-			return (env[i]);
+		if (ft_strncmp(env[i], "HOME=", 5) == 0)
+			return (env[i] + 5);
 		i++;
 	}
 	return (NULL);

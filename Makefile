@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/28 15:11:19 by aceauses         ###   ########.fr        #
+#    Updated: 2023/11/28 19:52:59 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ RM = rm -rf
 UTILS_DIR = src/
 UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)functions/ft_signals.c \
+		$(UTILS_DIR)functions/ft_signals_child.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)executor/ft_executor.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \

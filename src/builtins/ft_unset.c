@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:23:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 12:45:45 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:58:04 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_unset(char **args, char **env)
 	int	k;
 	int	j;
 
-	i = 0;
+	i = 1;
 	while (args[i])
 	{
 		j = 0;
@@ -51,6 +51,8 @@ int	ft_unset(char **args, char **env)
 				env[k] = NULL;
 				break ;
 			}
+			else if (env[j + 1] == NULL)
+				return (ft_dprintf(2, "minishell: unset: `%s': not a valid identifier\n", args[i]), 1);
 			j++;
 		}
 		i++;

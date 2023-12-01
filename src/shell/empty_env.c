@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 18:27:40 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/16 18:34:29 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/28 16:20:24 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ void	empty_env(char **env, t_shell *shell)
 	env[2] = ft_strdup("SHLVL=1");
 	env[3] = ft_strdup("_=/usr/bin/env");
 	env[4] = ft_strdup("TERM=xterm-256color");
-	env[6] = NULL;
+	env[5] = NULL;
 	free(current_path);
 }

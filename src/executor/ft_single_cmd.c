@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 11:56:56 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/29 14:10:30 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	execve_cmd(t_shell *shell)
 		cmd_place = find_path(shell->env, shell->cmd_table->cmd);
 	else
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
-	if (cmd_place == NULL || ft_strlen(shell->cmd_table->cmd) == 0)
+	if (cmd_place == NULL || !ft_strlen(shell->cmd_table->cmd)
+		|| (!ft_strncmp(shell->cmd_table->cmd, "..", 2) && shell->cmd_table->cmd[3] == '\0')
+		|| (!ft_strncmp(shell->cmd_table->cmd, ".", 1) && shell->cmd_table->cmd[2] == '\0'))
 	{
 		ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd);
 		free_cmd_table(shell->cmd_table);
@@ -90,6 +92,7 @@ void	execute_cmd(t_shell *shell)
 	}
 	else if (pid == 0)
 	{
+		ft_signals_child(&shell->saved);
 		handle_redirs(shell->cmd_table->redir_list);
 		handle_heredoc(shell->cmd_table->heredoc);
 		execve_cmd(shell);

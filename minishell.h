@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 15:11:52 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:24:03 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void		execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell);
 
 // handle_redirs
 void		handle_redirs(t_redir *redirs);
-void		handle_heredoc(char *heredoc);
+void	handle_heredoc(char *heredoc);
 
 // builtins
 int			ft_env(char **env);
@@ -211,9 +211,11 @@ int			ft_unset(char **args, char **env);
 # define RESET "\033[0m"
 //SIGNALS
 void		check_signals(struct termios *saved);
+void		ft_signals_child(struct termios *saved);
 void		ctrl_c_settings(void);
 void		ctrl_slash_settings(void);
 void		handle_ctrl_c(int signal, siginfo_t *info, void *x);
 void		handle_ctrl_slash(int signal, siginfo_t *info, void *x);
+void		ft_signals_child(struct termios *mirror_termios);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 10:33:27 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:24:00 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,18 @@ static void	*replace_with_env(char *type, t_shell *shell)
 	if (ft_strlen(type) == 0)
 		return (0);
 	if (ft_strncmp(type, "?", 1) == 0)
-		return (ft_itoa(shell->exit_code));
+		return (free(type), ft_itoa(shell->exit_code));
 	while (shell->env[i] != NULL)
 	{
 		if (ft_strncmp(shell->env[i], type, ft_strlen(type)) == 0)
 		{
 			tmp = ft_strchr(shell->env[i], '=');
 			tmp2 = ft_strdup(tmp + 1);
-			return (tmp2);
+			return (free(type), tmp2);
 		}
 		i++;
 	}
-	return (ft_strdup(""));
+	return (free(type), ft_strdup(""));
 }
 
 int	handle_expansions(t_token *tokens, t_shell *shell)
@@ -78,7 +78,7 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 		}
 		tokens = tokens->next;
 	}
-	return (free(type), 0);
+	return (0);
 }
 
 bool	check_pipe(char *line, int i)
@@ -111,7 +111,7 @@ char	**copy_matrix(char **matrix)
 	if (!copied)
 		return (NULL);
 	y = 0;
-	while (matrix[y] != NULL)
+	while (matrix && matrix[y] != NULL)
 	{
 		copied[y] = ft_strdup(matrix[y]);
 		y++;

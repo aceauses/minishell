@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/28 15:10:37 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:38:32 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,16 @@ int	tilda(t_shell *shell)
 	if (shell->no_env == 1)
 		tmp = ft_strdup("/Users/minishell");
 	else
-		tmp = ft_strdup(check_home(shell->env) + 5);
+		tmp = ft_strdup(check_home(shell->env));
 	if (tmp == NULL)
 		tmp = ft_strdup("/Users/minishell");
 	if (shell->trimmed_line[0] == '~' && (shell->trimmed_line[1] == '\0'
 			|| shell->trimmed_line[1] == ' '))
 	{
 		shell->exit_code = 126;
-		return (ft_dprintf(2, "%s is a directory\n", tmp), 1);
+		return (ft_dprintf(2, "%s is a directory\n", tmp), free(tmp), 1);
 	}
-	free(tmp);
-	return (0);
+	return (free(tmp), 0);
 }
 
 int	output_redir(t_shell *shell)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 19:03:09 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/29 14:38:16 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@ static int	is_valid(char *str)
 	int	i;
 
 	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (0);
-	while (str[i] != '\0')
+	while (str[i] != '\0' && str[i] != '=')
 	{
-		if (str[i] == '=' && str[i + 1] != '\0' && str[i + 1] != '=')
-			i++;
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (!ft_isalpha(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
+	if (str[i] == '=' && i == 0)
+		return (0);
+	if (str[i] == '\0')
+		return (2);
 	return (1);
 }
 
@@ -36,7 +36,7 @@ char	**ft_add_env(char **env, char *var)
 	char	**new_env;
 
 	i = 0;
-	while (env[i] != NULL)
+	while (env && env[i] != NULL)
 		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
 	i = 0;
@@ -50,6 +50,18 @@ char	**ft_add_env(char **env, char *var)
 	return (ft_free(env), new_env);
 }
 
+void	export_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		printf("declare -x %s\n", env[i]);
+		i++;
+	}
+}
+
 int	ft_export(char **cmd_args, t_shell *shell)
 {
 	int		i;
@@ -57,18 +69,18 @@ int	ft_export(char **cmd_args, t_shell *shell)
 
 	i = 1;
 	if (cmd_args[1] == NULL)
-	{
-		return (0);
-	}
+		return (export_env(shell->env), 0);
 	while (cmd_args[i] != NULL)
 	{
-		if (is_valid(cmd_args[i]))
+		if (is_valid(cmd_args[i]) == 1)
 		{
 			var = ft_strdup(cmd_args[i]);
 			shell->env = ft_add_env(shell->env, var);
 			free(var);
 		}
-		else
+		else if (is_valid(cmd_args[i]) == 2 && cmd_args[i + 1] == NULL)
+			return (0);
+		else if (is_valid(cmd_args[i]) == 0)
 			return (ft_dprintf(2, "minishell: export: `%s': not a valid identifier\n",
 				cmd_args[i]), 1);
 		i++;

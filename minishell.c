@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 15:11:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/11/29 22:32:04 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_data(char **ev, t_shell *shell)
 	if (!shell->env)
 		exit(12);
 	shell->exit_code = 0;
+	shell->saved = (struct termios){0};
 	shell->trimmed_line = NULL;
 	shell->current_status = NULL;
 	shell->status_s = ft_strdup("🟢 ");
