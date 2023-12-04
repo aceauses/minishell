@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:51:19 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 11:28:49 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void print_cmd_table(t_cmd_table *cmd_table)
 	{
 		printf("%s---TABLE-[%d]---%s\n", GREEN, cmd_table->index, RESET);
 		printf("Index: %d\n", cmd_table->index);
-		printf("Command: %s\n", cmd_table->cmd);
+		printf("Command: %sspace\n", cmd_table->cmd);
 		printf("Heredoc: %s\n", cmd_table->heredoc);
 		int i = 0;
 		while (cmd_table->args && cmd_table->args[i])

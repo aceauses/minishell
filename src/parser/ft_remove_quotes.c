@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remove_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:21:24 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/29 18:54:53 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/04 13:09:30 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static char	*single_start_in_rm(char *str)
 	return (tmp);
 }
 
-static char	*do_magic(char *str)
+char	*do_magic(char *str)
 {
 	char	*tmp;
 	int		q;
@@ -128,7 +128,7 @@ static char	*do_magic(char *str)
 		if (str[i] == DQUOTE)
 			dq = 1;
 		if (str[i] == ' ' && str[i + 1] == ' ' && q == 0)
-			while (str[i] == ' ')
+			while (str[i] == ' ' && str[i] != '\0')
 				i++;
 		if (str[i] != DQUOTE && str[i] != SQUOTE)
 			tmp = ft_strjoin_char(tmp, str[i]);
@@ -192,7 +192,7 @@ void	remove_quotes_table(t_cmd_table *whole_table)
 
 	while (whole_table != NULL)
 	{
-		if (whole_table->cmd != NULL)
+		if (whole_table->cmd != NULL && has_quotes(whole_table->cmd) == 1)
 		{
 			tmp = do_magic(whole_table->cmd);
 			free(whole_table->cmd);

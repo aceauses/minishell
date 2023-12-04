@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 15:24:03 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:36:22 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 //##########################ERRORS#############################################
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
 # define BUILTINS "echo cd pwd export unset env exit history"
+# define INVALID_IDEN "!@#$^&*()-+={}[]|;:''<>'',.''/?'"
 # define IS_QUOTE(x) (x == '"' || x == '\'')
 # define IS_REDIR(x) (x == '>' || x == '<')
 # define SQUOTE 39
@@ -128,6 +129,7 @@ void		xerror(char *s, void *data);
 
 void		ft_free(char **s);
 void		fully_free(t_shell *shell);
+int			special_cmp(const char *s1, const char *s2);
 
 // shell
 void		prepare_prompt(t_shell *shell);
@@ -149,7 +151,7 @@ int			count_args(t_token *token);
 int			handle_expansions(t_token *tokens, t_shell *shell);
 char		*first_redirections(t_token *token);
 bool		check_pipe(char *line, int i);
-int			num_words(char const *s, char set);
+int			num_words(char const *s, char *set);
 void		remove_quotes_table(t_cmd_table *whole_table);
 
 // parser utils 2
@@ -160,9 +162,14 @@ int			checker(t_token *tokens, t_type type);
 t_redir		*append_redir(t_redir *head, t_redir *new_token);
 t_redir		*create_redir(t_token *current, int type);
 
+// expansions
+char		*check_exepansion(char *s, t_shell *shell);
+
 char		**copy_matrix(char **matrix);
 char		**no_args(t_cmd_table *table);
 char		*custom_trim(char const *s1, char const *set);
+char		*do_magic(char *str);
+char		*ft_strjoin_char(char *str, char c);
 
 //lexer
 int			lexer(t_shell *shell);
@@ -189,7 +196,7 @@ void		execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell);
 
 // handle_redirs
 void		handle_redirs(t_redir *redirs);
-void	handle_heredoc(char *heredoc);
+void		handle_heredoc(char *heredoc);
 
 // builtins
 int			ft_env(char **env);
@@ -198,7 +205,7 @@ int			is_builtin(char	*cmd);
 int			ft_exit(char **args, t_shell *shell);
 int			ft_pwd(t_shell *shell);
 int			ft_export(char **cmd_args, t_shell *shell);
-int			ft_echo(t_shell *shell);
+int			ft_echo(char **array);
 int			ft_cd(char **cmd_args, char **env);
 int			ft_unset(char **args, char **env);
 

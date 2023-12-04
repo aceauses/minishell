@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 18:36:15 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 14:43:34 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,30 @@ char	**split_pipes(char *line, char set)
 	return (splitted);
 }
 
+int	skipping_spaces(char *str, int index)
+{
+	while ((str[index] == ' ' && str[index + 1] == ' ')
+			|| (str[index] == '\t' && str[index + 1] == '\t')
+			|| (str[index] == '\t' && str[index + 1] == ' ')
+			|| (str[index] == ' ' && str[index + 1] == '\t'))
+		index++;
+	return (index);
+}
+
+int	set_char(char s, const char *set)
+{
+	size_t	i;
+
+	i = 0;
+	while (set[i])
+	{
+		if (set[i] == s)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	**splitter(char *line, char set)
 {
 	char	**splitted;
@@ -67,16 +91,17 @@ char	**splitter(char *line, char set)
 	i = 0;
 	j = 0;
 	k = 0;
-	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 1));
+	splitted = malloc(sizeof(char *) * (num_words(line, SPACES) + 1));
 	while (line[i])
 	{
 		i = skipping_quotes(line, i);
-		if (line[i] == set && line[i + 1] != set)
+		if (set_char(line[i], SPACES))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
 			k = i + 1;
 			j++;
 		}
+		i = skipping_spaces(line, i);
 		i++;
 	}
 	if (line[i - 1] != set)

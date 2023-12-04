@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/29 14:38:16 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:44:04 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ int	ft_export(char **cmd_args, t_shell *shell)
 		if (is_valid(cmd_args[i]) == 1)
 		{
 			var = ft_strdup(cmd_args[i]);
-			shell->env = ft_add_env(shell->env, var);
+			// if (replace_in_env(var, shell->env))
+			// 	shell->env = ft_replace_env(shell->env, var);
+			// else
+				shell->env = ft_add_env(shell->env, var);
 			free(var);
 		}
 		else if (is_valid(cmd_args[i]) == 2 && cmd_args[i + 1] == NULL)

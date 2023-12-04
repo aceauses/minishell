@@ -6,13 +6,13 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 16:35:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 19:01:54 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 13:07:00 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	num_words(char const *s, char set)
+int	num_words(char const *s, char *set)
 {
 	size_t	i;
 	int		words;
@@ -21,7 +21,8 @@ int	num_words(char const *s, char set)
 	words = 0;
 	while (s[i])
 	{
-		if ((i == 0 || s[i - 1] == set) && s[i] != set)
+		if ((i == 0 || ft_strchr(set, s[i - 1]) != NULL)
+			&& ft_strchr(set, s[i]) == NULL)
 			words++;
 		i++;
 	}

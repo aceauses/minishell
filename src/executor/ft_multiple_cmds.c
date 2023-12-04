@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 17:58:03 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 19:22:04 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ void	execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell)
 	}
 	close_pipes(pipes, cmd_count);
 	waitpid(pid, &code, 0);
+	while (wait(NULL) > 0)
+		;
 	if (WIFEXITED(code))
 		shell->exit_code = WEXITSTATUS(code);
 }

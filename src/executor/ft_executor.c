@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_executor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:22:18 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/29 18:54:53 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/04 19:11:26 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,14 @@ void	executor(t_shell *shell)
 	{
 		if (is_builtin(shell->cmd_table->cmd))
 		{
-			// handle_redirs(shell->cmd_table->redir_list);
+			handle_redirs(shell->cmd_table->redir_list);
 			shell->exit_code = exec_builtin(shell);
-			// dup2(shell->fds[0], STDIN_FILENO);
-			// dup2(shell->fds[1], STDOUT_FILENO);
+			dup2(shell->fds[0], STDIN_FILENO);
+			dup2(shell->fds[1], STDOUT_FILENO);
 		}
 		else
 			execute_cmd(shell);
 	}
 	else
 		execute_pipes(shell->cmd_table, cmd_count, shell);
-		// printf("Doesnt work with multiple yet\n");
 }

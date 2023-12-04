@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/29 14:10:30 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:18:11 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	execve_cmd(t_shell *shell)
 	else
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
 	if (cmd_place == NULL || !ft_strlen(shell->cmd_table->cmd)
-		|| (!ft_strncmp(shell->cmd_table->cmd, "..", 2) && shell->cmd_table->cmd[3] == '\0')
-		|| (!ft_strncmp(shell->cmd_table->cmd, ".", 1) && shell->cmd_table->cmd[2] == '\0'))
+		|| !ft_strncmp(shell->cmd_table->cmd, "..", 2)
+		|| !ft_strncmp(shell->cmd_table->cmd, ".", 1))
 	{
 		ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd);
 		free_cmd_table(shell->cmd_table);

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 19:49:28 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 18:41:42 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:18:57 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,6 @@ static void	remove_and_put(char **s, int i, char *command)
 	s[i] = free_join(s[i], command);
 }
 
-static char	**no_env(char *s)
-{
-	char	**env;
-
-	env = ft_split(s, ':');
-	return (env);
-}
-
 char	*find_path(char **path, char *command)
 {
 	char	**paths;
@@ -61,7 +53,7 @@ char	*find_path(char **path, char *command)
 		j++;
 	paths = ft_split(path[j], ':');
 	if (!paths)
-		paths = no_env("/bin:/usr/bin");
+		return (NULL);
 	if (!command || command[0] == '.' || command[0] == '/')
 		return (ft_free_array(paths), NULL);
 	save = NULL;

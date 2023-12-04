@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/11/28 19:52:59 by aceauses         ###   ########.fr        #
+#    Updated: 2023/12/03 18:58:59 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds.c \
 		$(UTILS_DIR)executor/ft_handle_redirs.c \
+		$(UTILS_DIR)expansions/ft_expansion.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \
 		$(UTILS_DIR)builtins/ft_echo.c \
@@ -78,6 +79,11 @@ RESET	= \x1b[0m
 all: $(NAME)
 
 $(OBJS_DIR)%.o: $(UTILS_DIR)functions/%.c
+	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
+	@mkdir -p $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
+
+$(OBJS_DIR)%.o: $(UTILS_DIR)expansions/%.c
 	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)

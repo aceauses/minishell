@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 18:58:11 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 19:12:06 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_builtin(char	*cmd)
 {
-	if (ft_strcmp(cmd, "cd") == 0
+	if (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "echo") == 0
 		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "export") == 0
 		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
 		|| ft_strcmp(cmd, "exit") == 0)
@@ -27,8 +27,8 @@ int	exec_builtin(t_shell *shell)
 	int		code;
 
 	code = 0;
-	// if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
-	// 	ft_echo(shell->cmd_table->exec_args);
+	if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
+		code = ft_echo(shell->cmd_table->exec_args);
 	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
 		code = ft_exit(shell->cmd_table->exec_args, shell);
 	else if (ft_strcmp(shell->cmd_table->cmd, "env") == 0)

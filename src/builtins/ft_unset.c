@@ -6,13 +6,13 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:23:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 18:58:04 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/04 15:36:06 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	special_cmp(const char *s1, const char *s2)
+int	special_cmp(const char *s1, const char *s2)
 {
 	if ((!s1 && !s2) || (!s1 && s2) || (s1 && !s2))
 		return (1);
@@ -27,6 +27,27 @@ static int	special_cmp(const char *s1, const char *s2)
 		return (0);
 	if (*s1 != *s2)
 		return (1);
+	return (0);
+}
+
+static int	set_char(char *s, const char *set)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (set[i])
+	{
+		j = 0;
+		while (s[j])
+		{
+			if (set[i] == s[j])
+				return (1);
+			j++;
+		}
+		i++;
+	}
 	return (0);
 }
 
@@ -51,7 +72,7 @@ int	ft_unset(char **args, char **env)
 				env[k] = NULL;
 				break ;
 			}
-			else if (env[j + 1] == NULL)
+			else if (set_char(args[i], INVALID_IDEN) == 1)
 				return (ft_dprintf(2, "minishell: unset: `%s': not a valid identifier\n", args[i]), 1);
 			j++;
 		}
