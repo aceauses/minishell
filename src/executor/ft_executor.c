@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_executor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:22:18 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 19:11:26 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/07 21:42:00 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,9 @@ static int	cmd_counting(t_cmd_table *cmd_table)
 
 void	executor(t_shell *shell)
 {
-	// t_cmd_table	*cmd_table;
-	int			cmd_count;
+	int		cmd_count;
 
-	// cmd_table = shell->cmd_table;
 	cmd_count = cmd_counting(shell->cmd_table);
-	// printf("cmd_count: %d\n", cmd_count);
 	if (cmd_count == 1)
 	{
 		if (is_builtin(shell->cmd_table->cmd))

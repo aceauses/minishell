@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_prompt.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 18:37:21 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 11:49:21 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:12:57 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	check_status(t_shell *shell)
 		shell->current_status = ft_strdup(shell->status_f);
 }
 
-void prepare_prompt(t_shell *shell)
+void	prepare_prompt(t_shell *shell)
 {
 	check_status(shell);
 	// char *cwd = getcwd(NULL, 0);

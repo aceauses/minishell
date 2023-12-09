@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
+#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/12/03 18:58:59 by aceauses         ###   ########.fr        #
+#    Updated: 2023/12/09 15:31:41 by rmitache         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ PRINTF = dprintf/dprintf.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Werror -Wextra -g3
 CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
@@ -31,8 +31,10 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)executor/ft_executor.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds.c \
+		$(UTILS_DIR)executor/ft_multiple_cmds_utils.c \
 		$(UTILS_DIR)executor/ft_handle_redirs.c \
 		$(UTILS_DIR)expansions/ft_expansion.c \
+		$(UTILS_DIR)expansions/ft_expansion_utils.c \
 		$(UTILS_DIR)builtins/ft_env.c \
 		$(UTILS_DIR)builtins/ft_exit.c \
 		$(UTILS_DIR)builtins/ft_echo.c \
@@ -45,7 +47,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)lexer/ft_lexer_utils2.c \
 		$(UTILS_DIR)builtins/ft_cd.c \
 		$(UTILS_DIR)shell/ft_prompt.c \
-		$(UTILS_DIR)shell/empty_env.c \
+		$(UTILS_DIR)shell/ft_empty_env.c \
 		$(UTILS_DIR)parser/ft_parser.c \
 		$(UTILS_DIR)parser/ft_parser_utils.c \
 		$(UTILS_DIR)parser/ft_parser_utils2.c \
@@ -55,6 +57,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils2.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils3.c \
 		$(UTILS_DIR)parser/ft_remove_quotes.c \
+		$(UTILS_DIR)parser/ft_remove_quotes_utils.c \
 		$(UTILS_DIR)test/ft_pipe.c \
 		$(UTILS_DIR)test/ft_error_pipex.c \
 		$(UTILS_DIR)test/pipex.c \

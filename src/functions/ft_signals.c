@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signals.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:40:35 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/01 22:00:29 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/07 19:02:09 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ctrl_slash_settings(void)
 {
 	struct sigaction	ctrl_slash;
 
-	ctrl_slash.__sigaction_u.__sa_sigaction = handle_ctrl_slash;
+	ctrl_slash.__sigaction_u.__sa_handler = SIG_IGN;
 	ctrl_slash.sa_flags = SA_RESTART;
 	sigemptyset(&ctrl_slash.sa_mask);
 	sigaction(SIGQUIT, &ctrl_slash, NULL);
@@ -54,17 +54,7 @@ void	handle_ctrl_c(int signal, siginfo_t *info, void *x)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-}
-
-
-void	handle_ctrl_slash(int signal, siginfo_t *info, void *x)
-{
-	(void)info;
-	(void)x;
-
-	if (signal == SIGQUIT)
-		rl_redisplay();
 }

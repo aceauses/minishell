@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 17:58:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/29 18:54:53 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:56:31 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static void	handle_redir_in(t_redir *redir)
 	fd = open(redir->file_name, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n",
+			redir->file_name);
 		exit(1);
 	}
 	if (check_access(redir->file_name, 'R') < 0)
@@ -38,7 +39,8 @@ static void	handle_redir_out(t_redir *redir)
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n",
+			redir->file_name);
 		exit(1);
 	}
 	if (check_access(redir->file_name, 'W') < 0)
@@ -57,7 +59,8 @@ static void	handle_redir_append(t_redir *redir)
 	fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
-		ft_dprintf(2, "minishell: %s: No such file or directory\n", redir->file_name);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n",
+			redir->file_name);
 		exit(1);
 	}
 	if (check_access(redir->file_name, 'W') < 0)

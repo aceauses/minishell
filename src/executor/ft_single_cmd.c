@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_single_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 15:18:11 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/07 16:41:19 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ void	execve_cmd(t_shell *shell)
 		|| !ft_strncmp(shell->cmd_table->cmd, "..", 2)
 		|| !ft_strncmp(shell->cmd_table->cmd, ".", 1))
 	{
-		ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd);
+		ft_dprintf(2, "minishell: %s: command not found\n",
+			shell->cmd_table->cmd);
 		free_cmd_table(shell->cmd_table);
 		exit(127);
 	}
 	if (execve(cmd_place, shell->cmd_table->exec_args, shell->env) == -1)
 	{
-		ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd, strerror(errno));
+		ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd,
+			strerror(errno));
 		free_cmd_table(shell->cmd_table);
 		exit(errno);
 	}
@@ -48,10 +50,7 @@ void	handle_heredoc(char *heredoc)
 		return ;
 	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		printf("minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	while (1)
 	{
 		line = readline("> ");
@@ -66,10 +65,7 @@ void	handle_heredoc(char *heredoc)
 	close(fd);
 	fd = open(".heredoc", O_RDONLY);
 	if (fd == -1)
-	{
-		ft_dprintf(2, "minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }

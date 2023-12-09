@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 19:12:06 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:31:52 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ int	is_builtin(char	*cmd)
 int	exec_builtin(t_shell *shell)
 {
 	int		code;
+	int		k;
+	int		j;
 
 	code = 0;
+	k = 0;
+	j = 0;
 	if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
 		code = ft_echo(shell->cmd_table->exec_args);
 	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
@@ -40,6 +44,6 @@ int	exec_builtin(t_shell *shell)
 	else if (ft_strcmp(shell->cmd_table->cmd, "cd") == 0)
 		code = ft_cd(shell->cmd_table->exec_args, shell->env);
 	else if (ft_strcmp(shell->cmd_table->cmd, "unset") == 0)
-		code = ft_unset(shell->cmd_table->exec_args, shell->env);
+		code = ft_unset(shell->cmd_table->exec_args, shell->env, k, j);
 	return (code);
 }

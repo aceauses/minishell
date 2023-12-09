@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:23:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 15:36:06 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:32:12 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	special_cmp(const char *s1, const char *s2)
 	return (0);
 }
 
-static int	set_char(char *s, const char *set)
+static int	set_char_unset(char *s, const char *set)
 {
 	size_t	i;
 	size_t	j;
@@ -51,11 +51,9 @@ static int	set_char(char *s, const char *set)
 	return (0);
 }
 
-int	ft_unset(char **args, char **env)
+int	ft_unset(char **args, char **env, int k, int j)
 {
 	int	i;
-	int	k;
-	int	j;
 
 	i = 1;
 	while (args[i])
@@ -72,8 +70,9 @@ int	ft_unset(char **args, char **env)
 				env[k] = NULL;
 				break ;
 			}
-			else if (set_char(args[i], INVALID_IDEN) == 1)
-				return (ft_dprintf(2, "minishell: unset: `%s': not a valid identifier\n", args[i]), 1);
+			else if (set_char_unset(args[i], INVALID_IDEN) == 1)
+				return (ft_dprintf(2, "minishell: unset: `%s':"IDENTIFIER,
+						args[i]), 1);
 			j++;
 		}
 		i++;

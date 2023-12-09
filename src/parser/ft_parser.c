@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 14:43:34 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:31:46 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**split_pipes(char *line, char set)
 	while (line[i])
 	{
 		if (line[i] == set && (!check_pipe(line, i)
-			&& !check_pipe(line, i)))
+				&& !check_pipe(line, i)))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
 			while (line[i] == set && line[i + 1] == set)
@@ -60,25 +60,11 @@ char	**split_pipes(char *line, char set)
 int	skipping_spaces(char *str, int index)
 {
 	while ((str[index] == ' ' && str[index + 1] == ' ')
-			|| (str[index] == '\t' && str[index + 1] == '\t')
-			|| (str[index] == '\t' && str[index + 1] == ' ')
-			|| (str[index] == ' ' && str[index + 1] == '\t'))
+		|| (str[index] == '\t' && str[index + 1] == '\t')
+		|| (str[index] == '\t' && str[index + 1] == ' ')
+		|| (str[index] == ' ' && str[index + 1] == '\t'))
 		index++;
 	return (index);
-}
-
-int	set_char(char s, const char *set)
-{
-	size_t	i;
-
-	i = 0;
-	while (set[i])
-	{
-		if (set[i] == s)
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 char	**splitter(char *line, char set)
@@ -108,29 +94,6 @@ char	**splitter(char *line, char set)
 		splitted[j] = ft_substr(line, k, i - k);
 	splitted[j + 1] = NULL;
 	return (free(line), splitted);
-}
-
-t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
-		t_shell *shell)
-{
-	t_token	*token;
-	t_token	*current;
-	int		i;
-
-	i = 0;
-	token = ft_new_token(splitted[i], find_token_type(splitted[i]));
-	token->prev = NULL;
-	current = token;
-	while (splitted[++i])
-	{
-		current->next = ft_new_token(splitted[i], find_token_type(splitted[i]));
-		current->next->prev = current;
-		current = current->next;
-	}
-	current = token;
-	handle_expansions(current, shell);
-	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
-	return (free_tokens(token), cmd_table_head);
 }
 
 int	ft_parser(t_shell *shell)

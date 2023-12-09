@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_token_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/28 15:07:16 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 15:11:02 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,18 @@ void	token_print(t_token *tokens)
 		tokens = tokens->next;
 	}
 	printf("%sEnd of tokens%s\n", RED, RESET);
+}
+
+void	remove_quotes_args(char **args, int j, int dq)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
+	while (args[++i])
+	{
+		tmp = do_magic(args[i], j, dq);
+		free(args[i]);
+		args[i] = tmp;
+	}
 }

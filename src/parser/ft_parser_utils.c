@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 14:42:51 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/09 11:28:19 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,16 @@ int	pipe_counting(char *line)
 int	handle_expansions(t_token *tokens, t_shell *shell)
 {
 	char	*type;
+	int		tmp_i;
 	int		i;
 
 	i = 0;
+	tmp_i = -1;
 	type = NULL;
 	while (tokens)
 	{
 		if (checker(tokens->prev, TOKEN_HERE_DOC) == 0)
-			type = check_exepansion(tokens->value, shell);
+			type = check_expansion(tokens->value, tmp_i, shell);
 		if (type && ft_strchr(tokens->value, '$')
 			&& checker(tokens->prev, TOKEN_HERE_DOC) == 0)
 		{
@@ -76,9 +78,12 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 
 bool	check_pipe(char *line, int i)
 {
-	char quote_char = 0;
+	char	quote_char;
+	int		k;
 
-	for (int k = 0; k < i; k++)
+	quote_char = 0;
+	k = -1;
+	while (++k < i)
 	{
 		if ((line[k] == '\'' || line[k] == '"')
 			&& (k == 0 || line[k - 1] != '\\'))

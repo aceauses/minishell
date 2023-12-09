@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/25 16:35:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 13:07:00 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:57:26 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	num_words(char const *s, char *set)
 	return (words);
 }
 
-static char	set_char(char s, const char *set)
+int	set_char(char s, const char *set)
 {
 	size_t	i;
 
@@ -74,4 +74,27 @@ char	*custom_trim(char const *s1, char const *set)
 	mem[j] = '\0';
 	free((char *)s1);
 	return (mem);
+}
+
+t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
+		t_shell *shell)
+{
+	t_token	*token;
+	t_token	*current;
+	int		i;
+
+	i = 0;
+	token = ft_new_token(splitted[i], find_token_type(splitted[i]));
+	token->prev = NULL;
+	current = token;
+	while (splitted[++i])
+	{
+		current->next = ft_new_token(splitted[i], find_token_type(splitted[i]));
+		current->next->prev = current;
+		current = current->next;
+	}
+	current = token;
+	handle_expansions(current, shell);
+	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
+	return (free_tokens(token), cmd_table_head);
 }

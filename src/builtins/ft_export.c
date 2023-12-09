@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 15:44:04 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 16:54:07 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ int	ft_export(char **cmd_args, t_shell *shell)
 		else if (is_valid(cmd_args[i]) == 2 && cmd_args[i + 1] == NULL)
 			return (0);
 		else if (is_valid(cmd_args[i]) == 0)
-			return (ft_dprintf(2, "minishell: export: `%s': not a valid identifier\n",
-				cmd_args[i]), 1);
+			return (ft_dprintf(2, "minishell: export: `%s':" IDENTIFIER,
+					cmd_args[i]), 1);
 		i++;
 	}
 	return (0);

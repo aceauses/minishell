@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_multiple_cmds.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 19:22:04 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/09 15:30:19 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	close_pipes(int pipes[][2], int cmd_count)
+static void	close_pipes(int **pipes, int cmd_count)
 {
 	int	i;
 
@@ -30,14 +30,9 @@ static void	handle_m_heredoc(char *heredoc, t_shell *shell)
 	int		fd;
 	char	*line;
 
-	if (heredoc == NULL)
-		return ;
 	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		printf("minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	dup2(shell->fds[0], STDIN_FILENO);
 	while (1)
 	{
@@ -53,10 +48,7 @@ static void	handle_m_heredoc(char *heredoc, t_shell *shell)
 	close(fd);
 	fd = open(".heredoc", O_RDONLY);
 	if (fd == -1)
-	{
-		ft_dprintf(2, "minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -93,7 +85,8 @@ static void	exec_bin(t_cmd_table *cmd_table, t_shell *shell)
 static void	exec_cmd(t_cmd_table *cmd_table, t_shell *shell)
 {
 	handle_redirs(cmd_table->redir_list);
-	handle_m_heredoc(cmd_table->heredoc, shell);
+	if (cmd_table->heredoc != NULL)
+		handle_m_heredoc(cmd_table->heredoc, shell);
 	if (is_builtin(cmd_table->cmd))
 	{
 		shell->exit_code = exec_builtin(shell);
@@ -106,36 +99,28 @@ static void	exec_cmd(t_cmd_table *cmd_table, t_shell *shell)
 void	execute_pipes(t_cmd_table *cmd_table, int cmd_count, t_shell *shell)
 {
 	int	i;
-	int	pipes[cmd_count - 1][2];
+	int	**pipes;
 	int	pid;
 	int	code;
 
-	i = 0;
-	while (i < cmd_count - 1)
-	{
-		pipe(pipes[i]);
-		i++;
-	}
-	i = 0;
-	while (i < cmd_count)
+	i = -1;
+	code = 0;
+	pipes = calculate_pipes(cmd_count);
+	if (pipes == NULL)
+		return ;
+	count_pipes(pipes, cmd_count, i);
+	while (++i < cmd_count)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			if (i != 0)
-				dup2(pipes[i - 1][0], STDIN_FILENO);
-			if (i != cmd_count - 1)
-				dup2(pipes[i][1], STDOUT_FILENO);
+			setup_pipes(i, pipes, cmd_count);
 			close_pipes(pipes, cmd_count);
 			exec_cmd(cmd_table, shell);
 		}
 		cmd_table = cmd_table->next;
-		i++;
 	}
 	close_pipes(pipes, cmd_count);
-	waitpid(pid, &code, 0);
-	while (wait(NULL) > 0)
-		;
-	if (WIFEXITED(code))
-		shell->exit_code = WEXITSTATUS(code);
+	wait_for_pids(pid, code, shell);
+	free_pipes(pipes, cmd_count);
 }

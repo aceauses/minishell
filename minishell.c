@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 13:08:08 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/07 20:43:05 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **env)
 	// 	xerror("Hey :(", NULL);
 	shell = malloc(sizeof(t_shell));
 	init_data(env, shell);
-	check_signals(&shell->saved); // THIS SHOULD WORK INSIDE HEREDOC
+	check_signals(&shell->saved);
 	while (1)
 	{
 		prepare_prompt(shell);
@@ -69,17 +69,13 @@ int	main(int argc, char **argv, char **env)
 			shell->line = readline(shell->current_status);
 		else
 		{
-			char *line;
+			char	*line;
 			line = get_next_line(fileno(stdin));
 			if (line == NULL)
 			{
 				int	code = shell->exit_code;
-				ft_free(shell->env);
-				free(shell->status_f);
-				free(shell->status_s);
-				free(shell->current_status);
-				free(shell);
-				exit(code);
+				// in case of ctrl + D then fully free without trimmed line and cmd_table
+				return (code);
 			}
 			shell->line = ft_strtrim(line, "\n");
 			free(line);
@@ -91,6 +87,7 @@ int	main(int argc, char **argv, char **env)
 			free(shell->line);
 			continue ;
 		}
+		add_history(shell->line);
 		shell->trimmed_line = ft_strtrim(shell->line, SPACES);
 		if (lexer(shell) == 1)
 		{
@@ -110,22 +107,46 @@ int	main(int argc, char **argv, char **env)
 	return (code);
 }
 
-void	fully_free(t_shell *shell)
-{
 
-	if (shell->env)
-		ft_free(shell->env);
-	if (shell->line)
-		free(shell->line);
-	if (shell->trimmed_line)
-		free(shell->trimmed_line);
-	if (shell->cmd_table)
-		free_cmd_table(shell->cmd_table);
-	if (shell->current_status)
-		free(shell->current_status);
-	if (shell->status_f)
-		free(shell->status_f);
-	if (shell->status_s)
-		free(shell->status_s);
-	free(shell);
+/* void	minishell_loop(t_shell *shell)
+{
+	while (42)
+	{
+		prepare_prompt(shell);
+		check_signals(&shell->saved);
+		shell->line = readline(shell->current_status);
+		if (shell->line == NULL)
+			break ;
+		shell->trimmed_line = ft_strtrim(shell->line, SPACES);
+		add_history(shell->line);
+		if (lexer(shell) == 0 && ft_parser(shell) == 0)
+			executor(shell);
+		else
+			continue ;
+	}
 }
+
+
+void	init_shell(t_shell *shell, char **env)
+{
+	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		exit(12);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	t_shell	shell;
+
+	(void)argv;
+	if (argc > 1)
+		xerror("Run without any arguments!", NULL);
+	else
+	{
+		init_data(env, &shell);
+		init_shell(&shell, env);
+		minishell_loop(&shell);
+		fully_free(&shell);
+	}
+}
+ */

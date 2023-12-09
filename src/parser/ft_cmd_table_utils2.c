@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table_utils2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:52:22 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/01 18:31:23 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/09 16:10:23 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	is_redirs(t_token *tokens)
 {
 	if (tokens != NULL && (tokens->type == REDIR_IN
-		|| tokens->type == REDIR_OUT
-		|| tokens->type == REDIR_APP || tokens->type == TOKEN_HERE_DOC))
+			|| tokens->type == REDIR_OUT || tokens->type == REDIR_APP
+			|| tokens->type == TOKEN_HERE_DOC))
 		return (1);
 	return (0);
 }
@@ -41,7 +41,7 @@ t_redir	*append_redir(t_redir *head, t_redir *new_token)
 	return (head);
 }
 
-t_redir *create_redir(t_token *current, int type)
+t_redir	*create_redir(t_token *current, int type)
 {
 	t_redir		*new_redir;
 
@@ -49,10 +49,10 @@ t_redir *create_redir(t_token *current, int type)
 	if (!new_redir)
 		return (NULL);
 	new_redir->type = type;
-	if (IS_REDIR(current->value[1]) && ((current->value[2] != '\0') ||
-		!checker(current->next, TOKEN_WORD)))
+	if (IS_REDIR(current->value[1]) && ((current->value[2] != '\0')
+			|| !checker(current->next, TOKEN_WORD)))
 		new_redir->file_name = ft_strdup(current->value + 2);
-	else if ((ft_isalnum(current->value[1])  || current->value[1] == '.'
+	else if ((ft_isalnum(current->value[1]) || current->value[1] == '.'
 			|| current->value[1] == '/') && (current->value[1] != '\0'
 			|| !checker(current->next, TOKEN_WORD)))
 		new_redir->file_name = ft_strdup(current->value + 1);

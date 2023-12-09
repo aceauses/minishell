@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:04:40 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/01 19:01:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/05 13:09:31 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ static int	check_exit_code(char *arg)
 	{
 		if (ft_isdigit(arg[i]) == 0 && check_for_sign(arg))
 		{
-			ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", arg);
+			ft_dprintf(2, "minishell: exit: %s: numeric argument required\n",
+				arg);
 			exit(255);
 		}
 		if (arg[i] == '-' && ft_isdigit(arg[i + 1]))
@@ -60,7 +61,7 @@ static int	check_exit_code(char *arg)
 
 static	void	exit_with_minus(char *arg, t_shell *shell)
 {
-	int code;
+	int	code;
 
 	code = ft_atoi(arg);
 	fully_free(shell);

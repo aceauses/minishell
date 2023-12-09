@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 13:24:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 18:15:31 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/08 13:12:21 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ int	ft_echo(char **array)
 	{
 		if (ft_strcmp(array[i], "-n") != 0 || (i >= 2 && array[i + 1] == NULL))
 		{
-			printf("%s", array[i]);
+			ft_dprintf(1, "%s", array[i]);
 			if (array[i + 1] != NULL)
-				printf(" ");
+				ft_dprintf(1, " ");
 		}
 		i++;
 	}
 	if (flag != 1)
-		printf("\n");
+		ft_dprintf(1, "\n");
 	return (0);
 }

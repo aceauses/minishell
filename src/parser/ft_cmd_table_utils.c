@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/04 11:28:49 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/07 20:29:50 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,19 +89,19 @@ char	*first_redirections(t_token *token)
 	tmp = token;
 	if (checker(tmp, REDIR_IN)
 		|| checker(tmp, REDIR_OUT))
+	{
+		if (checker(tmp->next, TOKEN_WORD))
 		{
-			if (checker(tmp->next, TOKEN_WORD))
+			if (tmp->next->next != NULL
+				&& tmp->next->next->type == TOKEN_WORD)
 			{
-				if (tmp->next->next != NULL
-					&& tmp->next->next->type == TOKEN_WORD)
-					{
-						token = token->next->next;
-						return (ft_strdup(tmp->next->next->value));
-					}
-				else
-					return (NULL);
+				token = token->next->next;
+				return (ft_strdup(tmp->next->next->value));
 			}
+			else
+				return (NULL);
 		}
+	}
 	return (NULL);
 }
 

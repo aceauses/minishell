@@ -6,20 +6,11 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/29 18:54:53 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/07 16:02:27 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*put_cmd(t_token *tokens)
-{
-	if (checker(tokens, TOKEN_WORD) && tokens->prev == NULL)
-		return (ft_strdup(tokens->value));
-	if (is_redirs(tokens) && tokens->prev == NULL)
-		return (first_redirections(tokens));
-	return (NULL);
-}
 
 static char	*put_heredoc(t_token *tokens)
 {
@@ -99,7 +90,7 @@ static t_redir	*extract_redirs(t_token *tokens)
 	return (redir_list);
 }
 
-char **extract_exec_args(t_cmd_table *cmd_table)
+char	**extract_exec_args(t_cmd_table *cmd_table)
 {
 	int		i;
 	char	**exec_args;
