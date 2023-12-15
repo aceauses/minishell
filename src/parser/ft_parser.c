@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/05 15:31:46 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:38:36 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ int	skipping_spaces(char *str, int index)
 	while ((str[index] == ' ' && str[index + 1] == ' ')
 		|| (str[index] == '\t' && str[index + 1] == '\t')
 		|| (str[index] == '\t' && str[index + 1] == ' ')
-		|| (str[index] == ' ' && str[index + 1] == '\t'))
+		|| (str[index] == ' ' && str[index + 1] == '\t')
+		|| (str[index] == '\v' && str[index + 1] == '\v')
+		|| (str[index] == '\v' && str[index + 1] == ' ')
+		|| (str[index] == ' ' && str[index + 1] == '\v'))
 		index++;
 	return (index);
 }
@@ -84,7 +87,7 @@ char	**splitter(char *line, char set)
 		if (set_char(line[i], SPACES))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
-			k = i + 1;
+			k = skipping_spaces(line, i) + 1;
 			j++;
 		}
 		i = skipping_spaces(line, i);
@@ -115,6 +118,5 @@ int	ft_parser(t_shell *shell)
 	}
 	// t_cmd_table	*tmp = shell->cmd_table;
 	// print_cmd_table(tmp);
-	// free_cmd_table(tmp);
 	return (free(splitted), 0);
 }

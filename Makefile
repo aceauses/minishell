@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+         #
+#    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/12/09 15:31:41 by rmitache         ###   ########.fr        #
+#    Updated: 2023/12/15 19:37:07 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ PRINTF = dprintf/dprintf.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
-CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra
 CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
@@ -32,6 +32,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds_utils.c \
+		$(UTILS_DIR)executor/ft_multiple_cmds_utils2.c \
 		$(UTILS_DIR)executor/ft_handle_redirs.c \
 		$(UTILS_DIR)expansions/ft_expansion.c \
 		$(UTILS_DIR)expansions/ft_expansion_utils.c \
@@ -57,11 +58,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils2.c \
 		$(UTILS_DIR)parser/ft_cmd_table_utils3.c \
 		$(UTILS_DIR)parser/ft_remove_quotes.c \
-		$(UTILS_DIR)parser/ft_remove_quotes_utils.c \
-		$(UTILS_DIR)test/ft_pipe.c \
-		$(UTILS_DIR)test/ft_error_pipex.c \
-		$(UTILS_DIR)test/pipex.c \
-		$(UTILS_DIR)test/ft_bonus.c 
+		$(UTILS_DIR)parser/ft_remove_quotes_utils.c
 
 UTILS_OBJS = $(patsubst %.c, $(OBJS_DIR)%.o, $(notdir $(UTILS)))
 SRC = minishell.c
@@ -102,11 +99,6 @@ $(OBJS_DIR)%.o: $(UTILS_DIR)lexer/%.c
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
 
 $(OBJS_DIR)%.o: $(UTILS_DIR)builtins/%.c
-	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
-	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)
-
-$(OBJS_DIR)%.o: $(UTILS_DIR)test/%.c
 	@echo "$(YELLOW)Compiling:$(RESET) $(BLUE)$<$(RESET)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -c -o $@ $< $(CPPFLAGS) $(INCFLAGS)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/09 11:28:19 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/14 22:22:13 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,6 @@ int	pipe_counting(char *line)
 	return (count);
 }
 
-// static void	*replace_with_env(char *type, t_shell *shell)
-// {
-// 	int		i;
-// 	char	*tmp;
-// 	char	*tmp2;
-
-// 	i = 0;
-// 	if (ft_strlen(type) == 0)
-// 		return (0);
-// 	if (ft_strncmp(type, "?", 1) == 0)
-// 		return (free(type), ft_itoa(shell->exit_code));
-// 	while (shell->env[i] != NULL)
-// 	{
-// 		if (ft_strncmp(shell->env[i], type, ft_strlen(type)) == 0)
-// 		{
-// 			tmp = ft_strchr(shell->env[i], '=');
-// 			tmp2 = ft_strdup(tmp + 1);
-// 			return (free(type), tmp2);
-// 		}
-// 		i++;
-// 	}
-// 	return (free(type), ft_strdup(""));
-// }
-
 int	handle_expansions(t_token *tokens, t_shell *shell)
 {
 	char	*type;
@@ -63,7 +39,8 @@ int	handle_expansions(t_token *tokens, t_shell *shell)
 	type = NULL;
 	while (tokens)
 	{
-		if (checker(tokens->prev, TOKEN_HERE_DOC) == 0)
+		if (checker(tokens->prev, TOKEN_HERE_DOC) == 0
+			&& (tokens->value == NULL || ft_strchr(tokens->value, '$') != NULL))
 			type = check_expansion(tokens->value, tmp_i, shell);
 		if (type && ft_strchr(tokens->value, '$')
 			&& checker(tokens->prev, TOKEN_HERE_DOC) == 0)

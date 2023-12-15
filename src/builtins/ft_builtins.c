@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 17:08:45 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/08 13:31:52 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 12:56:56 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_builtin(char	*cmd)
 	return (0);
 }
 
-int	exec_builtin(t_shell *shell)
+int	exec_builtin(t_cmd_table *cmd_table, t_shell *shell, int flag)
 {
 	int		code;
 	int		k;
@@ -31,19 +31,19 @@ int	exec_builtin(t_shell *shell)
 	code = 0;
 	k = 0;
 	j = 0;
-	if (ft_strcmp(shell->cmd_table->cmd, "echo") == 0)
-		code = ft_echo(shell->cmd_table->exec_args);
-	if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
-		code = ft_exit(shell->cmd_table->exec_args, shell);
-	else if (ft_strcmp(shell->cmd_table->cmd, "env") == 0)
+	if (ft_strcmp(cmd_table->cmd, "echo") == 0)
+		code = ft_echo(cmd_table->exec_args);
+	if (ft_strcmp(cmd_table->cmd, "exit") == 0 && flag == 0)
+		code = ft_exit(cmd_table->exec_args, shell);
+	else if (ft_strcmp(cmd_table->cmd, "env") == 0)
 		code = ft_env(shell->env);
-	else if (ft_strcmp(shell->cmd_table->cmd, "pwd") == 0)
+	else if (ft_strcmp(cmd_table->cmd, "pwd") == 0)
 		code = ft_pwd(shell);
-	else if (ft_strcmp(shell->cmd_table->cmd, "export") == 0)
-		code = ft_export(shell->cmd_table->exec_args, shell);
-	else if (ft_strcmp(shell->cmd_table->cmd, "cd") == 0)
-		code = ft_cd(shell->cmd_table->exec_args, shell->env);
-	else if (ft_strcmp(shell->cmd_table->cmd, "unset") == 0)
-		code = ft_unset(shell->cmd_table->exec_args, shell->env, k, j);
+	else if (ft_strcmp(cmd_table->cmd, "export") == 0)
+		code = ft_export(cmd_table->exec_args, shell);
+	else if (ft_strcmp(cmd_table->cmd, "cd") == 0)
+		code = ft_cd(cmd_table->exec_args, shell->env);
+	else if (ft_strcmp(cmd_table->cmd, "unset") == 0)
+		code = ft_unset(cmd_table->exec_args, shell->env, k, j);
 	return (code);
 }

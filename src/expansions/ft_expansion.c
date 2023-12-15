@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expansion.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 18:36:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/09 17:21:01 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 12:32:12 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*make_magic(char *str)
-{
-	char	*tmp;
-	int		i;
-	int		dq;
-
-	i = 0;
-	dq = 0;
-	tmp = NULL;
-	while (str[i] != '\0')
-	{
-		if (str[i] == DQUOTE)
-			dq = 1;
-		if (str[i] != DQUOTE && str[i] != SQUOTE)
-			tmp = ft_strjoin_char(tmp, str[i]);
-		else if (str[i] == SQUOTE && str[i + 1] != SQUOTE)
-			tmp = ft_strjoin_char(tmp, str[i]);
-		i++;
-	}
-	if (tmp == NULL)
-		tmp = ft_strdup("");
-	return (tmp);
-}
 
 void	*replace_with_env(char *type, t_shell *shell)
 {
@@ -71,34 +47,56 @@ static	int	should_expand(char *s, int i)
 	return (0);
 }
 
+static char	*expand(char *type, t_shell *shell, char *s, int *i)
+{
+	int		j;
+	char	*save;
+
+	save = NULL;
+	j = ft_strlen(type);
+	if (ft_strlen(type) == 0)
+		save = ft_strjoin_char(save, '$');
+	expand_replace_env(&save, type, shell);
+	c_inside_join(&save, s, *i);
+	*i += j;
+	return (save);
+}
+
+static char	*free_join2(char *buffer, char *buff)
+{
+	char	*temp;
+
+	temp = ft_strjoin_gnl(buffer, buff);
+	free(buffer);
+	free(buff);
+	return (temp);
+}
+
 char	*check_expansion(char *s, int i, t_shell *shell)
 {
 	char	*save;
 	int		flag;
+	int		dq;
 	char	*type;
 
-	if (s == NULL || ft_strchr(s, '$') == NULL)
-		return (s);
 	flag = 1;
-	i = -1;
-	save = NULL;
+	dq = 0;
+	save = ft_calloc(1, 1);
 	while (s[++i] != '\0')
 	{
-		check_flag(s, &flag, i);
+		check_flag(s, &flag, i, &dq);
 		if (should_expand(s, i) == 1 && flag == 1)
 		{
 			type = ft_substr(s, i + 1, check_inside(s, i + 1));
-			expand_replace_env(&save, type, shell);
-			c_inside_join(&save, s, i);
-			// free(type);
+			save = free_join2(save, expand(type, shell, s, &i));
 		}
-		if (should_expand(s, i) == 2 && flag == 1)
+		else if (should_expand(s, i) == 2 && flag == 1)
 		{
 			type = ft_substr(s, i + 2, check_inside(s, i + 2));
-			expand_replace_env2(&save, type, shell);
-			i++;
-			// free(type);
+			save = free_join2(save, expand(type, shell, s, &i)); // HERE IT SHOULD BE I  + 2 BUT SEGFAULT
 		}
+		else
+			save = ft_strjoin_char(save, s[i]);
 	}
 	return (save);
 }

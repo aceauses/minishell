@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remove_quotes_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:59:21 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/07 20:41:46 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/14 22:22:13 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,6 @@ char	*ft_strdup_start_end(char *str, int start, int end)
 		memory[i] = str[start + i];
 	memory[i] = '\0';
 	return (memory);
-}
-
-char	*rm_quotes(char *str)
-{
-	char	*res;
-
-	if (str[0] == '"' || str[0] == '\'')
-	{
-		res = ft_strdup_start_end(str, 1, ft_strlen(str) - 1);
-		return (res);
-	}
-	else
-		return (ft_strdup(str));
 }
 
 bool	has_quotes(char *str)
@@ -75,4 +62,18 @@ char	*ft_strjoin_char(char *str, char c)
 	res[i] = '\0';
 	free(str);
 	return (res);
+}
+
+void	remove_quotes_args(char **args)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
+	while (args && args[++i] != NULL)
+	{
+		tmp = do_magic(args[i]);
+		free(args[i]);
+		args[i] = tmp;
+	}
 }

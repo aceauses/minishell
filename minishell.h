@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/09 16:06:13 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 20:09:19 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@
 # define IDENTIFIER " not a valid identifier\n"
 
 /* ================================ VARIABLES ============================== */
-# define IS_QUOTE(x) (x == '"' || x == '\'')
-# define IS_REDIR(x) (x == '>' || x == '<')
 # define SQUOTE 39
 # define DQUOTE 34
 # define SPACES " \t\n\v\r\f"
@@ -49,13 +47,10 @@
 int			pipex(char **argv, char *ev[]);
 int			check_access(char *argv, char c);
 char		*find_path(char **path, char *command);
-void		child_one(char *argv, char **ev, int p[2]);
-void		child_two(char *argv, char **ev, int p[2]);
 char		*free_join(char *buffer, char *buff);
 void		ft_free_array(char **array);
 void		error(const char *s, char *s2);
 void		fd_error(void);
-char		**special_command(char *argv);
 
 typedef enum e_type
 {
@@ -116,7 +111,7 @@ typedef struct s_shell
 /* ================================ BUILTINS ================================ */
 /* ------------------------------ ft_builtins ------------------------------ */
 int			is_builtin(char	*cmd);
-int			exec_builtin(t_shell *shell);
+int			exec_builtin(t_cmd_table *cmd_table, t_shell *shell, int flag);
 
 /* --------------------------------- ft_cd --------------------------------- */
 int			ft_cd(char **cmd_args, char **env);
@@ -132,8 +127,6 @@ int			ft_exit(char **args, t_shell *shell);
 
 /* ------------------------------- ft_export ------------------------------- */
 int			ft_export(char **cmd_args, t_shell *shell);
-void		export_env(char **env);
-char		**ft_add_env(char **env, char *var);
 
 /* --------------------------------- ft_pwd --------------------------------- */
 int			ft_pwd(t_shell *shell);
@@ -147,11 +140,12 @@ int			special_cmp(const char *s1, const char *s2);
 void		executor(t_shell *shell);
 
 /* ---------------------------- ft_handle_redirs ---------------------------- */
-void		handle_redirs(t_redir *redirs);
+void		handle_redirs(t_redir *redirs, int flag, t_shell *shell);
 
 /* ---------------------------- ft_multiple_cmds ---------------------------- */
 void		execute_pipes(t_cmd_table *cmd_table, int cmd_count,
-				t_shell *shell);
+				t_shell *shell, int code);
+void	handle_m_heredoc(char *heredoc, t_shell *shell, int *pipe);
 
 /* ------------------------- ft_multiple_cmds_utils ------------------------- */
 void		free_pipes(int **pipes, int cmd_count);
@@ -160,9 +154,12 @@ void		wait_for_pids(int pid, int code, t_shell *shell);
 void		count_pipes(int **pipes, int cmd_count, int i);
 void		setup_pipes(int i, int **pipes, int cmd_count);
 
+/* ------------------------ ft_multiple_cmds_utils2 ------------------------ */
+void		close_pipes(int **pipes, int cmd_count);
+
 /* ----------------------------- ft_single_cmd ----------------------------- */
 void		execute_cmd(t_shell *shell);
-void		handle_heredoc(char *heredoc);
+void		handle_heredoc(char *heredoc, t_shell *shell);
 void		execve_cmd(t_shell *shell);
 
 /* =============================== EXPANSIONS =============================== */
@@ -173,10 +170,9 @@ char		*make_magic(char *str);
 
 /* --------------------------- ft_expansion_utils --------------------------- */
 void		expand_replace_env(char **save, char *type, t_shell *shell);
-void		expand_replace_env2(char **save, char *type, t_shell *shell);
 void		c_inside_join(char **save, char *s, int i);
 int			check_inside(char *s, int i);
-void		check_flag(char *s, int *flag, int i);
+void		check_flag(char *s, int *flag, int i, int *dq);
 
 /* =============================== FUNCTIONS =============================== */
 /* -------------------------------- ft_error -------------------------------- */
@@ -259,15 +255,13 @@ int			ft_parser(t_shell *shell);
 
 /* ------------------------- ft_remove_quotes_utils ------------------------- */
 char		*ft_strdup_start_end(char *str, int start, int end);
-char		*rm_quotes(char *str);
 bool		has_quotes(char *str);
 char		*ft_strjoin_char(char *str, char c);
 
 /* ---------------------------- ft_remove_quotes ---------------------------- */
-char		*single_start_in_rm(char *str);
-char		*do_magic(char *str, int i, int dq);
-void		remove_echo_quotes(char **str, int i, int dq);
-void		remove_quotes_redir(t_redir *redir_list, int i, int dq);
+char		*do_magic(char *str);
+void		remove_echo_quotes(char **str);
+void		remove_quotes_redir(t_redir *redir_list);
 void		remove_quotes_table(t_cmd_table *whole_table);
 
 /* ----------------------------- ft_token_utils ----------------------------- */
@@ -275,7 +269,7 @@ t_token		*ft_new_token(char *content, int type);
 int			find_token_type(char *line);
 void		free_tokens(t_token *tokens);
 void		token_print(t_token *tokens);
-void		remove_quotes_args(char **args, int j, int dq);
+void		remove_quotes_args(char **args);
 
 /* ================================== SHELL ================================= */
 /* ------------------------------ ft_empty_env ------------------------------ */

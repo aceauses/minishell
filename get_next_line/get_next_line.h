@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 14:45:36 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 16:16:06 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/14 20:30:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #  define BUFFER_SIZE 10
 # endif
 
-# include	<unistd.h>
-# include	<string.h>
-# include	<stdio.h>
-# include	<fcntl.h>
-# include	<stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <stdlib.h>
 
 char		*get_next_line(int fd);
 

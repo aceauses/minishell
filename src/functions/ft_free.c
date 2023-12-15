@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/07 21:30:25 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 13:09:28 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@ void	ft_free(char **s)
 	while (s != NULL && s[i] != NULL)
 		free(s[i++]);
 	free(s);
+}
+
+void	free_redir_list(t_redir *redir_list)
+{
+	t_redir	*tmp;
+
+	while (redir_list)
+	{
+		tmp = redir_list;
+		redir_list = redir_list->next;
+		free(tmp->file_name);
+		free(tmp);
+	}
 }
 
 void	fully_free(t_shell *shell)
@@ -38,5 +51,6 @@ void	fully_free(t_shell *shell)
 		free(shell->status_f);
 	if (shell->status_s)
 		free(shell->status_s);
+	rl_clear_history();
 	free(shell);
 }

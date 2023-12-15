@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/07 16:02:27 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/13 10:38:35 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static t_redir	*extract_redirs(t_token *tokens)
 	current = tokens;
 	while (current)
 	{
-		if (checker(current, REDIR_IN)
+		if (checker(current, REDIR_IN) || checker(current, TOKEN_HERE_DOC)
 			|| checker(current, REDIR_OUT) || checker(current, REDIR_APP))
 		{
 			new_redir = create_redir(current, current->type);

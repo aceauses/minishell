@@ -1,44 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_error_pipex.c                                   :+:      :+:    :+:   */
+/*   ft_multiple_cmds_utils2.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/12 14:40:59 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/27 16:18:02 by aceauses         ###   ########.fr       */
+/*   Created: 2023/12/14 20:41:49 by rmitache          #+#    #+#             */
+/*   Updated: 2023/12/14 20:42:24 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error(const char *s, char *s2)
-{
-	ft_putstr_fd("pipex: ", 2);
-	if (s2)
-	{
-		s2 = free_join(s2, ": ");
-		ft_putstr_fd(s2, 2);
-		free(s2);
-	}
-	if (!ft_strncmp(s, "command not found", 18))
-	{
-		ft_putstr_fd("command not found\n", 2);
-		exit(127);
-	}
-	perror(s);
-	exit(EXIT_FAILURE);
-}
-
-void	ft_free_array(char **array)
+void	close_pipes(int **pipes, int cmd_count)
 {
 	int	i;
 
 	i = 0;
-	while (array && array[i] != NULL)
+	while (i < cmd_count - 1)
 	{
-		free(array[i]);
+		close(pipes[i][0]);
+		close(pipes[i][1]);
 		i++;
 	}
-	free(array);
 }

@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/03 16:49:58 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/12 18:04:56 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ int	input_redir(t_shell *shell)
 
 int	extra_redirect(t_shell *shell)
 {
+	if (ft_strnstr(shell->trimmed_line, "> >", ft_strlen(shell->trimmed_line))
+		|| ft_strnstr(shell->trimmed_line, "< <", ft_strlen(shell->trimmed_line)))
+	{
+		shell->exit_code = 2;
+		return (syntax_error(">"), 1);
+	}
 	if (ft_strchr(shell->trimmed_line, '>') && input_redir(shell) == 1)
 	{
 		shell->exit_code = 2;
