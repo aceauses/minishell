@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/07 20:29:50 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:35:24 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 
 void	free_cmd_table(t_cmd_table *table)
 {
-	t_cmd_table	*tmp;
+	t_cmd_table	*next_table;
+	t_redir		*next_redir;
 
 	while (table)
 	{
-		tmp = table->next;
+		next_table = table->next;
 		while (table->redir_list)
 		{
-			t_redir *tmp = table->redir_list->next;
+			next_redir = table->redir_list->next;
 			free(table->redir_list->file_name);
 			free(table->redir_list);
-			table->redir_list = tmp;
+			table->redir_list = next_redir;
 		}
 		free(table->cmd);
 		free(table->heredoc);
 		ft_free(table->args);
 		ft_free(table->exec_args);
 		free(table);
-		table = tmp;
+		table = next_table;
 	}
 }
 
@@ -103,32 +104,4 @@ char	*first_redirections(t_token *token)
 		}
 	}
 	return (NULL);
-}
-
-void print_cmd_table(t_cmd_table *cmd_table)
-{
-	while (cmd_table != NULL)
-	{
-		printf("%s---TABLE-[%d]---%s\n", GREEN, cmd_table->index, RESET);
-		printf("Index: %d\n", cmd_table->index);
-		printf("Command: %sspace\n", cmd_table->cmd);
-		printf("Heredoc: %s\n", cmd_table->heredoc);
-		int i = 0;
-		while (cmd_table->args && cmd_table->args[i])
-		{
-			printf("Arg: %s\n", cmd_table->args[i]);
-			i++;
-		}
-		for (int i = 0; cmd_table->exec_args && cmd_table->exec_args[i]; i++)
-			printf("Exec arg: %s\n", cmd_table->exec_args[i]);
-		t_redir *tmp = cmd_table->redir_list;
-		while (tmp)
-		{
-			printf("Redir: %d\n", tmp->type);
-			printf("File: %s\n", tmp->file_name);
-			tmp = tmp->next;
-		}
-		printf("%s---TABLE-END---%s\n", GREEN, RESET);
-		cmd_table = cmd_table->next;
-	}
 }

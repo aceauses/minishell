@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/13 10:38:35 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 12:17:30 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,14 @@ static char	*put_heredoc(t_token *tokens)
 	return (NULL);
 }
 
-char	**extract_args(t_token *tokens)
+char	**extract_args(t_token *tokens, int i, int args_count, char **args)
 {
-	char	**args;
-	int		args_count;
 	t_token	*current;
-	int		i;
 
-	args_count = count_args(tokens);
-	args = (char **)malloc((args_count + 2) * sizeof(char *));
-	if (args == NULL)
+	if (allocate_args(&args, args_count) == 1)
 		return (NULL);
 	current = tokens;
 	current = current->next;
-	i = 0;
 	while (checker(current, TOKEN_WORD))
 	{
 		if (is_redirs(current->prev))
@@ -65,8 +59,7 @@ char	**extract_args(t_token *tokens)
 			break ;
 		current = current->next;
 	}
-	args[i] = NULL;
-	return (args);
+	return (args[i] = NULL, args);
 }
 
 static t_redir	*extract_redirs(t_token *tokens)
@@ -122,11 +115,17 @@ char	**extract_exec_args(t_cmd_table *cmd_table)
 t_cmd_table	*create_table(t_token *tokens, int index)
 {
 	t_cmd_table	*node;
+	int			norm_i;
+	int			args_count;
+	char		**args;
 
+	norm_i = 0;
+	args = NULL;
+	args_count = count_args(tokens);
 	node = prepare_cmd_table();
 	node->cmd = put_cmd(tokens);
 	node->heredoc = put_heredoc(tokens);
-	node->args = extract_args(tokens);
+	node->args = extract_args(tokens, norm_i, args_count, args);
 	node->redir_list = extract_redirs(tokens);
 	if (node->args != NULL)
 		remove_quotes_table(node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expansion.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 18:36:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 12:32:12 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:18:34 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*check_expansion(char *s, int i, t_shell *shell)
 		else if (should_expand(s, i) == 2 && flag == 1)
 		{
 			type = ft_substr(s, i + 2, check_inside(s, i + 2));
-			save = free_join2(save, expand(type, shell, s, &i)); // HERE IT SHOULD BE I  + 2 BUT SEGFAULT
+			save = free_join2(save, expand(type, shell, s, &i));
 		}
 		else
 			save = ft_strjoin_char(save, s[i]);

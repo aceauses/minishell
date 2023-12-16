@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:01:12 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 13:09:28 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 00:03:50 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,20 @@ void	fully_free(t_shell *shell)
 		free(shell->status_s);
 	rl_clear_history();
 	free(shell);
+}
+
+void	free_when_line_null(t_shell *shell)
+{
+	int	code;
+
+	code = 0;
+	if (shell->env)
+		ft_free(shell->env);
+	free(shell->status_f);
+	free(shell->status_s);
+	free(shell->current_status);
+	code = shell->exit_code;
+	free(shell);
+	rl_clear_history();
+	exit(code);
 }

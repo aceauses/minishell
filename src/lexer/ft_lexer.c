@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/05 17:06:04 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:25:37 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	check_quotes(t_shell *shell)
 static int	op_n_pipe(t_shell *shell)
 {
 	char	*line;
-
 
 	line = shell->trimmed_line;
 	if (!ft_strchr(line, '\'') && !ft_strchr(line, '"'))

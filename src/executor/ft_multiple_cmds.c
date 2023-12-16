@@ -3,28 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_multiple_cmds.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 20:18:52 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:14:13 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		g_ctrl_c = 0;
+int	g_ctrl_c = 0;
 
-void	sig_int_handler_before_exec(int sig_num)
-{
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_ctrl_c = 1;
-	(void)sig_num;
-}
-
-void	handle_m_heredoc(char *heredoc, t_shell *shell, int *pipe)
+void	handle_m_heredoc(char *heredoc, int *pipe)
 {
 	int		fd;
 	char	*line;
@@ -32,7 +22,6 @@ void	handle_m_heredoc(char *heredoc, t_shell *shell, int *pipe)
 	fd = open(heredoc, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		fd_error();
-	(void)shell;
 	while (1 && g_ctrl_c == 0)
 	{
 		signal(SIGINT, sig_int_handler_before_exec);
@@ -101,12 +90,13 @@ void	do_heredocs(t_redir *redir_list, t_shell *shell, int **pipe_fd,
 	int	i;
 
 	i = 0;
+	(void)shell;
 	while (i < cmd_count)
 	{
 		if (redir_list)
 		{
 			if (redir_list->type == TOKEN_HERE_DOC)
-				handle_m_heredoc(redir_list->file_name, shell, pipe_fd[i]);
+				handle_m_heredoc(redir_list->file_name, pipe_fd[i]);
 			redir_list = redir_list->next;
 		}
 		i++;

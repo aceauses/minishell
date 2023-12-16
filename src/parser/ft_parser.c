@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/14 17:38:36 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 12:15:17 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ char	**split_pipes(char *line, char set)
 	j = 0;
 	k = 0;
 	splitted = malloc(sizeof(char *) * (pipe_counting(line) + 2));
+	if (!splitted)
+		return (NULL);
 	while (line[i])
 	{
 		if (line[i] == set && (!check_pipe(line, i)
@@ -81,6 +83,8 @@ char	**splitter(char *line, char set)
 	j = 0;
 	k = 0;
 	splitted = malloc(sizeof(char *) * (num_words(line, SPACES) + 1));
+	if (!splitted)
+		return (NULL);
 	while (line[i])
 	{
 		i = skipping_quotes(line, i);
@@ -116,7 +120,5 @@ int	ft_parser(t_shell *shell)
 			shell);
 		ft_free(split_tokens);
 	}
-	// t_cmd_table	*tmp = shell->cmd_table;
-	// print_cmd_table(tmp);
 	return (free(splitted), 0);
 }

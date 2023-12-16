@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:45:35 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 17:01:39 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 20:54:46 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,30 @@ static int	is_valid(char *str)
 	return (1);
 }
 
+static void	check_env_flag(int flag, char **new_env, char *var, int i)
+{
+	if (flag == 0)
+		new_env[i] = ft_strdup(var);
+	if (flag == 0)
+		new_env[i + 1] = NULL;
+	else
+		new_env[i] = NULL;
+}
+
 char	**ft_add_env(char **env, char *var, int i)
 {
 	int		flag;
+	char	**splitted;
 	char	**new_env;
 
 	while (env && env[i] != NULL)
 		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
+	if (new_env == NULL)
+		return (NULL);
 	i = -1;
 	flag = 0;
-	char **splitted = ft_split(var, '=');
+	splitted = ft_split(var, '=');
 	while (env[++i] != NULL)
 	{
 		if (special_cmp(splitted[0], env[i]) == 0)
@@ -51,25 +64,17 @@ char	**ft_add_env(char **env, char *var, int i)
 		else
 			new_env[i] = ft_strdup(env[i]);
 	}
-	if (flag == 0)
-		new_env[i] = ft_strdup(var);
-	if (flag == 0)
-		new_env[i + 1] = NULL;
-	else
-		new_env[i] = NULL;
-	return (ft_free(env), new_env);
+	check_env_flag(flag, new_env, var, i);
+	return (ft_free(env), ft_free(splitted), new_env);
 }
 
 void	export_env(char **env)
 {
 	int	i;
 
-	i = 0;
-	while (env && env[i] != NULL)
-	{
+	i = -1;
+	while (env && env[++i] != NULL)
 		printf("declare -x %s\n", env[i]);
-		i++;
-	}
 }
 
 int	ft_export(char **cmd_args, t_shell *shell)

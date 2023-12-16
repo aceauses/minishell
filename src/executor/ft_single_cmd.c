@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_single_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 12:31:59 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:14:17 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	execve_cmd_error(t_shell *shell)
+{
+	ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd,
+		strerror(errno));
+	fully_free(shell);
+}
 
 void	execve_cmd(t_shell *shell)
 {
@@ -24,8 +31,10 @@ void	execve_cmd(t_shell *shell)
 	else
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
 	if (cmd_place == NULL || !ft_strlen(shell->cmd_table->cmd)
-		|| (!ft_strncmp(shell->cmd_table->cmd, "..", 2) && ft_strlen(shell->cmd_table->cmd) == 2)
-		|| (!ft_strncmp(shell->cmd_table->cmd, ".", 1) && ft_strlen(shell->cmd_table->cmd) == 1))
+		|| (!ft_strncmp(shell->cmd_table->cmd, "..", 2)
+			&& ft_strlen(shell->cmd_table->cmd) == 2)
+		|| (!ft_strncmp(shell->cmd_table->cmd, ".", 1)
+			&& ft_strlen(shell->cmd_table->cmd) == 1))
 	{
 		ft_dprintf(2, "minishell: %s: command not found\n",
 			shell->cmd_table->cmd);
@@ -34,9 +43,7 @@ void	execve_cmd(t_shell *shell)
 	}
 	if (execve(cmd_place, shell->cmd_table->exec_args, shell->env) == -1)
 	{
-		ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd,
-			strerror(errno));
-		fully_free(shell);
+		execve_cmd_error(shell);
 		exit(errno);
 	}
 }

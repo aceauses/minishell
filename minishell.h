@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 20:09:19 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 00:03:25 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include "dprintf/ft_printf.h"
 # include <time.h>
 
+int	g_ctrl_c;
+
 /* ================================= ERRORS ================================= */
 # define BAD_PIPE "Error: syntax error near unexpected token `|'\n"
 # define BUILTINS "echo cd pwd export unset env exit history"
@@ -44,13 +46,6 @@
 # define PIPE "|"
 
 /* ================================ PIPEX ================================= */
-int			pipex(char **argv, char *ev[]);
-int			check_access(char *argv, char c);
-char		*find_path(char **path, char *command);
-char		*free_join(char *buffer, char *buff);
-void		ft_free_array(char **array);
-void		error(const char *s, char *s2);
-void		fd_error(void);
 
 typedef enum e_type
 {
@@ -95,7 +90,6 @@ typedef struct s_shell
 {
 	char			**env;
 	int				no_env;
-	char			**path;
 	char			*line;
 	char			*trimmed_line;
 	t_token			*tokens;
@@ -126,6 +120,8 @@ int			ft_env(char **env);
 int			ft_exit(char **args, t_shell *shell);
 
 /* ------------------------------- ft_export ------------------------------- */
+char		**ft_add_env(char **env, char *var, int i);
+void		export_env(char **env);
 int			ft_export(char **cmd_args, t_shell *shell);
 
 /* --------------------------------- ft_pwd --------------------------------- */
@@ -142,11 +138,6 @@ void		executor(t_shell *shell);
 /* ---------------------------- ft_handle_redirs ---------------------------- */
 void		handle_redirs(t_redir *redirs, int flag, t_shell *shell);
 
-/* ---------------------------- ft_multiple_cmds ---------------------------- */
-void		execute_pipes(t_cmd_table *cmd_table, int cmd_count,
-				t_shell *shell, int code);
-void	handle_m_heredoc(char *heredoc, t_shell *shell, int *pipe);
-
 /* ------------------------- ft_multiple_cmds_utils ------------------------- */
 void		free_pipes(int **pipes, int cmd_count);
 int			**calculate_pipes(int cmd_count);
@@ -156,6 +147,13 @@ void		setup_pipes(int i, int **pipes, int cmd_count);
 
 /* ------------------------ ft_multiple_cmds_utils2 ------------------------ */
 void		close_pipes(int **pipes, int cmd_count);
+
+/* ---------------------------- ft_multiple_cmds ---------------------------- */
+void		execute_pipes(t_cmd_table *cmd_table, int cmd_count,
+				t_shell *shell, int code);
+void		do_heredocs(t_redir *redir_list, t_shell *shell, int **pipe_fd,
+				int cmd_count);
+void		handle_m_heredoc(char *heredoc, int *pipe);
 
 /* ----------------------------- ft_single_cmd ----------------------------- */
 void		execute_cmd(t_shell *shell);
@@ -181,7 +179,9 @@ void		fd_error(void);
 
 /* -------------------------------- ft_free -------------------------------- */
 void		ft_free(char **s);
+void		free_redir_list(t_redir *redir_list);
 void		fully_free(t_shell *shell);
+void		free_when_line_null(t_shell *shell);
 
 /* ---------------------------- ft_signals_child ---------------------------- */
 void		ft_signals_child(struct termios *mirror_termios);
@@ -191,7 +191,7 @@ void		check_signals(struct termios *saved);
 void		ctrl_slash_settings(void);
 void		ctrl_c_settings(void);
 void		handle_ctrl_c(int signal, siginfo_t *info, void *x);
-void		handle_ctrl_slash(int signal, siginfo_t *info, void *x);
+void		sig_int_handler_before_exec(int sig_num);
 
 /* ================================== LEXER ================================= */
 /* ----------------------------- ft_lexer_utils ----------------------------- */
@@ -216,7 +216,6 @@ t_cmd_table	*prepare_cmd_table(void);
 t_cmd_table	*add_to_cmd_table(t_cmd_table *head, t_cmd_table *new_node);
 int			count_args(t_token *current);
 char		*first_redirections(t_token *token);
-void		print_cmd_table(t_cmd_table *cmd_table); // DEBUG ONLY!
 
 /* -------------------------- ft_cmd_table_utils2 -------------------------- */
 int			is_redirs(t_token *tokens);
@@ -231,13 +230,14 @@ char		*put_cmd(t_token *tokens);
 /* ------------------------------ ft_cmd_table ------------------------------ */
 t_cmd_table	*create_table(t_token *tokens, int index);
 char		**extract_exec_args(t_cmd_table *cmd_table);
-char		**extract_args(t_token *tokens);
+char		**extract_args(t_token *tokens, int i, int args_count, char **args);
 
 /* ---------------------------- ft_parser_utils ---------------------------- */
 int			pipe_counting(char *line);
 int			handle_expansions(t_token *tokens, t_shell *shell);
 bool		check_pipe(char *line, int i);
 char		**copy_matrix(char **matrix);
+int			allocate_args(char ***args, int args_count);
 
 /* ---------------------------- ft_parser_utils2 ---------------------------- */
 int			num_words(char const *s, char *set);
@@ -257,6 +257,7 @@ int			ft_parser(t_shell *shell);
 char		*ft_strdup_start_end(char *str, int start, int end);
 bool		has_quotes(char *str);
 char		*ft_strjoin_char(char *str, char c);
+void		remove_quotes_args(char **args);
 
 /* ---------------------------- ft_remove_quotes ---------------------------- */
 char		*do_magic(char *str);
@@ -268,11 +269,11 @@ void		remove_quotes_table(t_cmd_table *whole_table);
 t_token		*ft_new_token(char *content, int type);
 int			find_token_type(char *line);
 void		free_tokens(t_token *tokens);
-void		token_print(t_token *tokens);
-void		remove_quotes_args(char **args);
 
 /* ================================== SHELL ================================= */
 /* ------------------------------ ft_empty_env ------------------------------ */
+int			check_access(char *argv, char c);
+char		*find_path(char **path, char *command);
 void		empty_env(char **env, t_shell *shell);
 
 /* ------------------------------- ft_prompt ------------------------------- */
@@ -280,16 +281,14 @@ void		check_status(t_shell *shell);
 void		prepare_prompt(t_shell *shell);
 
 // colors
-# define RED "\033[0;31m"
-# define GREEN "\033[0;32m"
-# define BLUE "\033[0;34m"
-# define CYAN "\033[0;36m"
-# define YELLOW "\033[0;33m"
 # define RESET "\033[0m"
+# define BOLD_WHITE "\033[1;37m"
+# define ITALIC_WHITE "\033[3;37m"
+# define ITALIC_GRAY "\033[3;90m"
 
 /* ================================== MAIN ================================= */
-void		init_data(char **ev, t_shell *shell);
 char		**copy_env(char **env);
-void		free_all(t_shell *shell);
+void		minishell_loop(t_shell *shell);
+void		init_shell(t_shell *shell, char **env);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_remove_quotes_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:59:21 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/14 22:22:13 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 12:13:43 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,15 @@ char	*ft_strjoin_char(char *str, char c)
 	if (str == NULL)
 	{
 		res = (char *)malloc(2);
+		if (res == NULL)
+			return (NULL);
 		res[0] = c;
 		res[1] = '\0';
 		return (res);
 	}
 	res = (char *)malloc(ft_strlen(str) + 2);
+	if (res == NULL)
+		return (NULL);
 	i = -1;
 	while (str[++i])
 		res[i] = str[i];

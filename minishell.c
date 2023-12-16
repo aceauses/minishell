@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/14 17:29:21 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 12:16:06 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,6 @@ char	**copy_env(char **env)
 	}
 	copied[y] = NULL;
 	return (copied);
-}
-
-static void	free_when_line_null(t_shell *shell)
-{
-	int	code;
-
-	code = 0;
-	if (shell->env)
-		ft_free(shell->env);
-	free(shell->status_f);
-	free(shell->status_s);
-	free(shell->current_status);
-	code = shell->exit_code;
-	free(shell);
-	rl_clear_history();
-	exit(code);
 }
 
 void	minishell_loop(t_shell *shell)
@@ -107,6 +91,27 @@ void	init_shell(t_shell *shell, char **env)
 	shell->fds[1] = dup(1);
 }
 
+static void	display_intro(void)
+{
+	printf(BOLD_WHITE);
+	printf("-------------------------------------------------------------- \n");
+	printf("               Welcome to our Minishell! \n");
+	printf("\n");
+	printf("       /\\_/\\   Meow! Get ready for shell-purr-fection! \n");
+	printf("      ( o.o ) \n");
+	printf("       > ^ < \n");
+	printf("\n");
+	printf("      Version 4.2 - 'The Cat's Meow' Edition \n");
+	printf("                    ~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+	printf("      Discover new purr-sibilities with every command! \n");
+	printf("\n");
+	printf("-------------------------------------------------------------- \n");
+	printf(ITALIC_GRAY "Quote of the Year -- \n");
+	printf(ITALIC_WHITE"    'I swear it's done this time...'");
+	printf(RESET " - The Owners of this Repo\n");
+	printf("\n");
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
@@ -119,6 +124,7 @@ int	main(int argc, char **argv, char **env)
 		shell = malloc(sizeof(t_shell));
 		if (!shell)
 			exit(12);
+		display_intro();
 		init_shell(shell, env);
 		minishell_loop(shell);
 		fully_free(shell);

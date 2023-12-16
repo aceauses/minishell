@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/14 22:22:13 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 23:26:35 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,12 @@ char	**copy_matrix(char **matrix)
 	}
 	copied[y] = NULL;
 	return (copied);
+}
+
+int	allocate_args(char ***args, int args_count)
+{
+	*args = (char **)malloc((args_count + 2) * sizeof(char *));
+	if (*args == NULL)
+		return (1);
+	return (0);
 }

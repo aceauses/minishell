@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_token_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:29:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/14 22:22:13 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 12:13:48 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,29 +53,4 @@ void	free_tokens(t_token *tokens)
 		}
 		tokens = tmp;
 	}
-}
-
-void	token_print(t_token *tokens)
-{
-	printf("%sPrinting tokens:%s\n", RED, RESET);
-	while (tokens)
-	{
-		printf("Value: %s\n", tokens->value);
-		printf("Type: %d\n", tokens->type);
-		if (tokens->prev)
-		{
-			printf("------Prev-------\n");
-			printf("Previous Value: %s\n", tokens->prev->value);
-			printf("Previous Type: %d\n", tokens->prev->type);
-			printf("------Prev-END---\n");
-		}
-		else
-		{
-			printf("------Prev-------\n");
-			printf("Previous: (NULL)\n");
-			printf("------Prev-END----\n");
-		}
-		tokens = tokens->next;
-	}
-	printf("%sEnd of tokens%s\n", RED, RESET);
 }

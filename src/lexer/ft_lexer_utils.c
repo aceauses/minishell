@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 15:36:19 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/12 18:04:56 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:24:45 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,11 @@ int	input_redir(t_shell *shell)
 
 int	extra_redirect(t_shell *shell)
 {
-	if (ft_strnstr(shell->trimmed_line, "> >", ft_strlen(shell->trimmed_line))
-		|| ft_strnstr(shell->trimmed_line, "< <", ft_strlen(shell->trimmed_line)))
+	int	tr_line;
+
+	tr_line = ft_strlen(shell->trimmed_line);
+	if (ft_strnstr(shell->trimmed_line, "> >", tr_line)
+		|| ft_strnstr(shell->trimmed_line, "< <", tr_line))
 	{
 		shell->exit_code = 2;
 		return (syntax_error(">"), 1);
