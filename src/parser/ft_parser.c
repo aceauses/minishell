@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/17 13:08:33 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:34:22 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ int	skipping_quotes(char *str, int index)
 	return (index);
 }
 
-char	**split_pipes(char *line, char set)
+char	**split_pipes(char *line, char set, int i, int j)
 {
 	char	**splitted;
-	int		i;
-	int		j;
 	int		k;
 
 	i = 0;
@@ -72,11 +70,9 @@ int	skipping_spaces(char *str, int index)
 	return (index);
 }
 
-char	**splitter(char *line, char set)
+char	**splitter(char *line, char set, int i, int j)
 {
 	char	**splitted;
-	int		i;
-	int		j;
 	int		k;
 
 	i = 0;
@@ -111,11 +107,11 @@ int	ft_parser(t_shell *shell)
 
 	i = -1;
 	shell->cmd_table = NULL;
-	splitted = split_pipes(shell->trimmed_line, '|');
+	splitted = split_pipes(shell->trimmed_line, '|', 0, 0);
 	while (splitted[++i] != NULL)
 	{
 		split_tokens = NULL;
-		split_tokens = splitter(custom_trim(splitted[i], SPACES), ' ');
+		split_tokens = splitter(custom_trim(splitted[i], SPACES), ' ', 0, 0);
 		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
 			shell);
 		ft_free(split_tokens);

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_multiple_cmds.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/17 15:57:36 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:47:06 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	g_ctrl_c = 0;
 
 void	handle_m_heredoc(char *heredoc, int *pipe, t_shell *shell)
 {
@@ -39,11 +37,7 @@ void	handle_m_heredoc(char *heredoc, int *pipe, t_shell *shell)
 			free(line);
 	}
 	close(fd);
-	fd = open(heredoc, O_RDONLY);
-	if (fd == -1)
-		fd_error();
-	dup2(fd, pipe[0]);
-	close(fd);
+	open_close_fd(fd, pipe, heredoc);
 }
 
 static void	exec_bin(t_cmd_table *cmd_table, t_shell *shell)

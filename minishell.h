@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/17 12:26:48 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:45:25 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void		setup_pipes(int i, int **pipes, int cmd_count);
 
 /* ------------------------ ft_multiple_cmds_utils2 ------------------------ */
 void		close_pipes(int **pipes, int cmd_count);
+void		open_close_fd(int fd, int *pipe, char *heredoc);
 
 /* ---------------------------- ft_multiple_cmds ---------------------------- */
 void		execute_pipes(t_cmd_table *cmd_table, int cmd_count,
@@ -236,7 +237,8 @@ int			pipe_counting(char *line);
 int			handle_expansions(t_token *tokens, t_shell *shell);
 bool		check_pipe(char *line, int i);
 char		**copy_matrix(char **matrix);
-int			allocate_args(char ***args, int args_count);
+int			allocate_args(char ***args, int args_count, t_token **tokens,
+				t_token **current);
 
 /* ---------------------------- ft_parser_utils2 ---------------------------- */
 int			num_words(char const *s, char *set);
@@ -247,9 +249,9 @@ t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
 
 /* ------------------------------- ft_parser ------------------------------- */
 int			skipping_quotes(char *str, int index);
-char		**split_pipes(char *line, char set);
+char		**split_pipes(char *line, char set, int i, int j);
 int			skipping_spaces(char *str, int index);
-char		**splitter(char *line, char set);
+char		**splitter(char *line, char set, int i, int j);
 int			ft_parser(t_shell *shell);
 
 /* ------------------------- ft_remove_quotes_utils ------------------------- */

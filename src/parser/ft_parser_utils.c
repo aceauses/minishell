@@ -6,7 +6,7 @@
 /*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 16:50:54 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 23:26:35 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:40:52 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,13 @@ char	**copy_matrix(char **matrix)
 	return (copied);
 }
 
-int	allocate_args(char ***args, int args_count)
+int	allocate_args(char ***args, int args_count, t_token **tokens,
+	t_token **current)
 {
 	*args = (char **)malloc((args_count + 2) * sizeof(char *));
 	if (*args == NULL)
 		return (1);
+	*current = *tokens;
+	*current = (*current)->next;
 	return (0);
 }

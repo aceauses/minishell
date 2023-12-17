@@ -3,44 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/17 16:19:05 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 17:09:08 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static char	*put_heredoc(t_token *tokens)
-// {
-// 	t_token	*tmp;
-
-// 	tmp = tokens;
-// 	while (tmp)
-// 	{
-// 		if (checker(tmp, TOKEN_HERE_DOC))
-// 		{
-// 			if (ft_isprint(tmp->value[2]) == 1)
-// 				return (ft_strdup(tmp->value + 2));
-// 			else if (checker(tmp->next, TOKEN_WORD))
-// 				return (ft_strdup(tmp->next->value));
-// 			else
-// 				return (NULL);
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	return (NULL);
-// }
-
 char	**extract_args(t_token *tokens, int i, int args_count, char **args)
 {
 	t_token	*current;
 
-	if (allocate_args(&args, args_count) == 1)
+	if (allocate_args(&args, args_count, &tokens, &current) == 1)
 		return (NULL);
-	current = tokens;
-	current = current->next;
 	while (current != NULL)
 	{
 		if (is_redirs(current->prev) || is_redirs(current))
@@ -51,7 +28,7 @@ char	**extract_args(t_token *tokens, int i, int args_count, char **args)
 				&& current->next->next)
 				current = current->next->next;
 			else
-				break;
+				break ;
 		}
 		args[i] = ft_strdup(current->value);
 		if (args[i] == NULL)
