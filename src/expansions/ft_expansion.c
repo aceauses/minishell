@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expansion.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 18:36:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 22:18:34 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/16 23:26:33 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,19 @@ static char	*expand(char *type, t_shell *shell, char *s, int *i)
 	return (save);
 }
 
-static char	*free_join2(char *buffer, char *buff)
+static char	*expand2(char *type, t_shell *shell, char *s, int *i)
 {
-	char	*temp;
+	int		j;
+	char	*save;
 
-	temp = ft_strjoin_gnl(buffer, buff);
-	free(buffer);
-	free(buff);
-	return (temp);
+	save = NULL;
+	j = ft_strlen(type);
+	if (ft_strlen(type) == 0)
+		save = ft_strjoin_char(save, '$');
+	expand_replace_env(&save, type, shell);
+	c_inside_join(&save, s, *i);
+	*i += j + 2;
+	return (save);
 }
 
 char	*check_expansion(char *s, int i, t_shell *shell)
@@ -93,7 +98,7 @@ char	*check_expansion(char *s, int i, t_shell *shell)
 		else if (should_expand(s, i) == 2 && flag == 1)
 		{
 			type = ft_substr(s, i + 2, check_inside(s, i + 2));
-			save = free_join2(save, expand(type, shell, s, &i));
+			save = free_join2(save, expand2(type, shell, s, &i));
 		}
 		else
 			save = ft_strjoin_char(save, s[i]);

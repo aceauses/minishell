@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signals.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:40:35 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/15 22:21:42 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 15:54:18 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ void	handle_ctrl_c(int signal, siginfo_t *info, void *x)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_ctrl_c = 1;
 	}
 }
 
-void	sig_int_handler_before_exec(int sig_num)
-{
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_ctrl_c = 1;
-	(void)sig_num;
-}
+// void	sig_int_handler_before_exec(int sig_num)
+// {
+// 	write(1, "x\n", 1);
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// 	(void)sig_num;
+// }

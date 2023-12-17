@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 17:58:53 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/13 11:24:30 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 13:19:34 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	handle_redir_in(t_redir *redir)
 	if (check_access(redir->file_name, 'R') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		close(fd);
 		exit(2);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -46,6 +47,7 @@ static void	handle_redir_out(t_redir *redir)
 	if (check_access(redir->file_name, 'W') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		close(fd);
 		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);
@@ -66,6 +68,7 @@ static void	handle_redir_append(t_redir *redir)
 	if (check_access(redir->file_name, 'W') < 0)
 	{
 		ft_dprintf(2, "minishell: %s: Permission denied\n", redir->file_name);
+		close(fd);
 		exit(2);
 	}
 	dup2(fd, STDOUT_FILENO);

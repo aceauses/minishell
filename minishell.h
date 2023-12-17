@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/16 00:03:25 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 12:26:48 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ typedef struct s_cmd_table
 	char				*cmd;
 	char				**args;
 	char				**exec_args;
-	char				*heredoc;
 	char				*file_name;
 	t_redir				*redir_list;
 	struct s_cmd_table	*next;
@@ -153,7 +152,7 @@ void		execute_pipes(t_cmd_table *cmd_table, int cmd_count,
 				t_shell *shell, int code);
 void		do_heredocs(t_redir *redir_list, t_shell *shell, int **pipe_fd,
 				int cmd_count);
-void		handle_m_heredoc(char *heredoc, int *pipe);
+void		handle_m_heredoc(char *heredoc, int *pipe, t_shell *shell);
 
 /* ----------------------------- ft_single_cmd ----------------------------- */
 void		execute_cmd(t_shell *shell);
@@ -164,7 +163,6 @@ void		execve_cmd(t_shell *shell);
 /* ------------------------------ ft_expansion ------------------------------ */
 void		*replace_with_env(char *type, t_shell *shell);
 char		*check_expansion(char *s, int i, t_shell *shell);
-char		*make_magic(char *str);
 
 /* --------------------------- ft_expansion_utils --------------------------- */
 void		expand_replace_env(char **save, char *type, t_shell *shell);
@@ -176,6 +174,7 @@ void		check_flag(char *s, int *flag, int i, int *dq);
 /* -------------------------------- ft_error -------------------------------- */
 void		xerror(char *s, void *data);
 void		fd_error(void);
+char		*free_join2(char *buffer, char *buff);
 
 /* -------------------------------- ft_free -------------------------------- */
 void		ft_free(char **s);

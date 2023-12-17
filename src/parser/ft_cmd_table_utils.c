@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 22:35:24 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 13:30:31 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	free_cmd_table(t_cmd_table *table)
 			table->redir_list = next_redir;
 		}
 		free(table->cmd);
-		free(table->heredoc);
 		ft_free(table->args);
 		ft_free(table->exec_args);
 		free(table);
@@ -46,7 +45,6 @@ t_cmd_table	*prepare_cmd_table(void)
 	new->cmd = NULL;
 	new->args = NULL;
 	new->exec_args = NULL;
-	new->heredoc = NULL;
 	new->redir_list = NULL;
 	new->index = -1;
 	new->next = NULL;

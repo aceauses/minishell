@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_table.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 16:54:47 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/16 12:17:30 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:19:05 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*put_heredoc(t_token *tokens)
-{
-	t_token	*tmp;
+// static char	*put_heredoc(t_token *tokens)
+// {
+// 	t_token	*tmp;
 
-	tmp = tokens;
-	while (tmp)
-	{
-		if (checker(tmp, TOKEN_HERE_DOC))
-		{
-			if (ft_isprint(tmp->value[2]) == 1)
-				return (ft_strdup(tmp->value + 2));
-			else if (checker(tmp->next, TOKEN_WORD))
-				return (ft_strdup(tmp->next->value));
-			else
-				return (NULL);
-		}
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
+// 	tmp = tokens;
+// 	while (tmp)
+// 	{
+// 		if (checker(tmp, TOKEN_HERE_DOC))
+// 		{
+// 			if (ft_isprint(tmp->value[2]) == 1)
+// 				return (ft_strdup(tmp->value + 2));
+// 			else if (checker(tmp->next, TOKEN_WORD))
+// 				return (ft_strdup(tmp->next->value));
+// 			else
+// 				return (NULL);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (NULL);
+// }
 
 char	**extract_args(t_token *tokens, int i, int args_count, char **args)
 {
@@ -41,15 +41,17 @@ char	**extract_args(t_token *tokens, int i, int args_count, char **args)
 		return (NULL);
 	current = tokens;
 	current = current->next;
-	while (checker(current, TOKEN_WORD))
+	while (current != NULL)
 	{
-		if (is_redirs(current->prev))
+		if (is_redirs(current->prev) || is_redirs(current))
 		{
-			if (current->next != NULL)
+			if (is_redirs(current->prev) && current->next != NULL)
 				current = current->next;
-			if (current->next == NULL)
-				return (free(args), NULL);
-			current = current->next;
+			if (is_redirs(current) && current->next != NULL
+				&& current->next->next)
+				current = current->next->next;
+			else
+				break;
 		}
 		args[i] = ft_strdup(current->value);
 		if (args[i] == NULL)
@@ -124,7 +126,6 @@ t_cmd_table	*create_table(t_token *tokens, int index)
 	args_count = count_args(tokens);
 	node = prepare_cmd_table();
 	node->cmd = put_cmd(tokens);
-	node->heredoc = put_heredoc(tokens);
 	node->args = extract_args(tokens, norm_i, args_count, args);
 	node->redir_list = extract_redirs(tokens);
 	if (node->args != NULL)

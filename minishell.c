@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 09:06:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/16 12:16:06 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/16 19:19:35 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,23 @@ void	init_shell(t_shell *shell, char **env)
 
 static void	display_intro(void)
 {
-	printf(BOLD_WHITE);
-	printf("-------------------------------------------------------------- \n");
-	printf("               Welcome to our Minishell! \n");
-	printf("\n");
-	printf("       /\\_/\\   Meow! Get ready for shell-purr-fection! \n");
-	printf("      ( o.o ) \n");
-	printf("       > ^ < \n");
-	printf("\n");
-	printf("      Version 4.2 - 'The Cat's Meow' Edition \n");
-	printf("                    ~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-	printf("      Discover new purr-sibilities with every command! \n");
-	printf("\n");
-	printf("-------------------------------------------------------------- \n");
-	printf(ITALIC_GRAY "Quote of the Year -- \n");
-	printf(ITALIC_WHITE"    'I swear it's done this time...'");
-	printf(RESET " - The Owners of this Repo\n");
-	printf("\n");
+	// printf(BOLD_WHITE);
+	// printf("-------------------------------------------------------------- \n");
+	// printf("               Welcome to our Minishell! \n");
+	// printf("\n");
+	// printf("       /\\_/\\   Meow! Get ready for shell-purr-fection! \n");
+	// printf("      ( o.o ) \n");
+	// printf("       > ^ < \n");
+	// printf("\n");
+	// printf("      Version 4.2 - 'The Cat's Meow' Edition \n");
+	// printf("                    ~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+	// printf("      Discover new purr-sibilities with every command! \n");
+	// printf("\n");
+	// printf("-------------------------------------------------------------- \n");
+	// printf(ITALIC_GRAY "Quote of the Year -- \n");
+	// printf(ITALIC_WHITE"    'I swear it's done this time...'");
+	// printf(RESET " - The Owners of this Repo\n");
+	// printf("\n");
 }
 
 int	main(int argc, char **argv, char **env)

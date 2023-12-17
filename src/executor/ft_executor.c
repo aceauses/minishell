@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:22:18 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 16:08:44 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 23:28:10 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ static	int	should_run_child(t_shell *shell)
 static void	execute_in_child(t_shell *shell)
 {
 	handle_redirs(shell->cmd_table->redir_list, 0, shell);
-	shell->exit_code = exec_builtin(shell->cmd_table, shell, 0);
+	shell->exit_code = exec_builtin(shell->cmd_table, shell, 1);
 	dup2(shell->fds[0], STDIN_FILENO);
 	dup2(shell->fds[1], STDOUT_FILENO);
+	close(shell->fds[0]);
+	close(shell->fds[1]);
 	exit(shell->exit_code);
 }
 
-static void	execute_single_builtin(t_shell *shell, int code)
+static void	execute_single_builtin(t_shell *shell)
 {
-	int		pid;
+	pid_t	pid;
 	int		status;
 
 	if (should_run_child(shell))
@@ -71,27 +73,21 @@ static void	execute_single_builtin(t_shell *shell, int code)
 		waitpid(pid, &status, 0);
 		shell->exit_code = WEXITSTATUS(status);
 		if (ft_strcmp(shell->cmd_table->cmd, "exit") == 0)
-		{
-			code = shell->exit_code;
-			fully_free(shell);
-			exit(code);
-		}
+			ft_exit(shell->cmd_table->exec_args, shell);
 	}
 }
 
 void	executor(t_shell *shell)
 {
 	int		cmd_count;
-	int		norm_code;
 	int		norm_i;
 
 	norm_i = 0;
-	norm_code = 0;
 	cmd_count = cmd_counting(shell->cmd_table);
 	if (cmd_count == 1)
 	{
 		if (is_builtin(shell->cmd_table->cmd))
-			execute_single_builtin(shell, norm_code);
+			execute_single_builtin(shell);
 		else
 			execute_cmd(shell);
 	}

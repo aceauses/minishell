@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:21:24 by rmitache          #+#    #+#             */
-/*   Updated: 2023/12/14 20:29:43 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 19:19:23 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*do_magic(char *str)
 	char	quote;
 	char	*res;
 
-	res = NULL;
+	res = ft_strdup("");
 	quote = 0;
 	i = 0;
 	while (str[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_multiple_cmds.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 11:52:20 by aceauses          #+#    #+#             */
-/*   Updated: 2023/12/15 22:14:13 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/17 15:57:36 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_ctrl_c = 0;
 
-void	handle_m_heredoc(char *heredoc, int *pipe)
+void	handle_m_heredoc(char *heredoc, int *pipe, t_shell *shell)
 {
 	int		fd;
 	char	*line;
@@ -22,19 +22,22 @@ void	handle_m_heredoc(char *heredoc, int *pipe)
 	fd = open(heredoc, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		fd_error();
+	g_ctrl_c = 0;
 	while (1 && g_ctrl_c == 0)
 	{
-		signal(SIGINT, sig_int_handler_before_exec);
 		line = readline("> ");
 		if (ft_strcmp(line, heredoc) == 0 || !line || g_ctrl_c == 1)
 		{
 			free(line);
+			g_ctrl_c = 0;
 			break ;
 		}
+		if (ft_strchr(line, '$') != NULL)
+			line = check_expansion(line, -1, shell);
 		ft_dprintf(fd, "%s\n", line);
-		free(line);
+		if (line != NULL)
+			free(line);
 	}
-	g_ctrl_c = 0;
 	close(fd);
 	fd = open(heredoc, O_RDONLY);
 	if (fd == -1)
@@ -96,7 +99,7 @@ void	do_heredocs(t_redir *redir_list, t_shell *shell, int **pipe_fd,
 		if (redir_list)
 		{
 			if (redir_list->type == TOKEN_HERE_DOC)
-				handle_m_heredoc(redir_list->file_name, pipe_fd[i]);
+				handle_m_heredoc(redir_list->file_name, pipe_fd[i], shell);
 			redir_list = redir_list->next;
 		}
 		i++;
@@ -106,9 +109,9 @@ void	do_heredocs(t_redir *redir_list, t_shell *shell, int **pipe_fd,
 void	execute_pipes(t_cmd_table *cmd_table, int cmd_count,
 		t_shell *shell, int code)
 {
-	int	i;
-	int	**pipes;
-	int	pid;
+	int		i;
+	int		**pipes;
+	pid_t	pid;
 
 	i = -1;
 	pipes = calculate_pipes(cmd_count);

@@ -6,7 +6,7 @@
 #    By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 09:14:51 by aceauses          #+#    #+#              #
-#    Updated: 2023/12/15 19:37:07 by aceauses         ###   ########.fr        #
+#    Updated: 2023/12/16 23:27:23 by aceauses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ PRINTF = dprintf/dprintf.a
 READLINE = $(shell brew --prefix readline)
 LDFLAG = -L $(READLINE)/lib -lreadline
 INCFLAGS = -I $(READLINE)/include
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 CPPFLAGS = -I . -MMD -MP
 RM = rm -rf
 
@@ -29,6 +29,7 @@ UTILS = $(UTILS_DIR)functions/ft_error.c \
 		$(UTILS_DIR)functions/ft_signals_child.c \
 		$(UTILS_DIR)functions/ft_free.c \
 		$(UTILS_DIR)executor/ft_executor.c \
+		$(UTILS_DIR)executor/ft_functions.c \
 		$(UTILS_DIR)executor/ft_single_cmd.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds.c \
 		$(UTILS_DIR)executor/ft_multiple_cmds_utils.c \
