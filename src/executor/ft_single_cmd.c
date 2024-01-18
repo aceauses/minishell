@@ -6,11 +6,29 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:46:43 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 15:26:28 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 13:19:14 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	execve_cmd_error(t_shell *shell, char *cmd_place)
+{
+	ft_dprintf(2, "minishell: %s: %s\n", shell->cmd_table->cmd,
+		strerror(errno));
+	free(cmd_place);
+	fully_free(shell);
+	exit(errno);
+}
+
+static void	cmd_not_found(t_shell *shell, char *cmd_place)
+{
+	ft_dprintf(2, "minishell: %s: command not found\n", shell->cmd_table->cmd,
+		strerror(errno));
+	free(cmd_place);
+	fully_free(shell);
+	exit(127);
+}
 
 void	execve_cmd(t_shell *shell)
 {
@@ -23,33 +41,24 @@ void	execve_cmd(t_shell *shell)
 		cmd_place = find_path(shell->env, shell->cmd_table->cmd);
 	else
 		cmd_place = ft_strdup(shell->cmd_table->cmd);
-	if (cmd_place == NULL)
-	{
-		printf("minishell: %s: command not found\n", shell->cmd_table->cmd);
-		fully_free(shell);
-		exit(127);
-	}
+	if (cmd_place == NULL || !ft_strlen(shell->cmd_table->cmd)
+		|| (!ft_strncmp(shell->cmd_table->cmd, "..", 2)
+			&& ft_strlen(shell->cmd_table->cmd) == 2)
+		|| (!ft_strncmp(shell->cmd_table->cmd, ".", 1)
+			&& ft_strlen(shell->cmd_table->cmd) == 1))
+		cmd_not_found(shell, cmd_place);
 	if (execve(cmd_place, shell->cmd_table->exec_args, shell->env) == -1)
-	{
-		printf("minishell: %s: %s\n", shell->cmd_table->cmd, strerror(errno));
-		free_cmd_table(shell->cmd_table);
-		exit(1);
-	}
+		execve_cmd_error(shell, cmd_place);
 }
 
-static void	handle_heredoc(char *heredoc)
+void	handle_heredoc(char *heredoc, t_shell *shell)
 {
 	int		fd;
 	char	*line;
 
-	if (heredoc == NULL)
-		return ;
 	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		printf("minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	while (1)
 	{
 		line = readline("> ");
@@ -58,16 +67,15 @@ static void	handle_heredoc(char *heredoc)
 			free(line);
 			break ;
 		}
+		if (ft_strchr(line, '$'))
+			line = check_expansion(line, -1, shell);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 	close(fd);
 	fd = open(".heredoc", O_RDONLY);
 	if (fd == -1)
-	{
-		printf("minishell: %s\n", strerror(errno));
-		exit(1);
-	}
+		fd_error();
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -84,14 +92,11 @@ void	execute_cmd(t_shell *shell)
 
 	pid = fork();
 	if (pid == -1)
-	{
-		printf("minishell: fork: %s\n", strerror(errno));
-		exit(1);
-	}
+		ft_dprintf(2, "minishell: fork: %s\n", strerror(errno));
 	else if (pid == 0)
 	{
-		handle_redirs(shell->cmd_table->redir_list);
-		handle_heredoc(shell->cmd_table->heredoc);
+		ft_signals_child(&shell->saved);
+		handle_redirs(shell->cmd_table->redir_list, 0, shell);
 		execve_cmd(shell);
 	}
 	else

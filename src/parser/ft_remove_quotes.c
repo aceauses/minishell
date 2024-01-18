@@ -6,89 +6,69 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:21:24 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/26 16:25:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/16 19:19:23 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strdup_start_end(char *str, int start, int end)
+char	*do_magic(char *str)
 {
 	int		i;
-	char	*memory;
-
-	if (str == NULL || start < 0 || end < start)
-		return (NULL);
-	memory = (char *)malloc(end - start + 1);
-	if (memory == NULL)
-		return (NULL);
-	i = -1;
-	while (start + ++i < end)
-		memory[i] = str[start + i];
-	memory[i] = '\0';
-	return (memory);
-}
-
-char	*rm_quotes(char *str)
-{
+	char	quote;
 	char	*res;
 
-	if (str[0] == '"' || str[0] == '\'')
+	res = ft_strdup("");
+	quote = 0;
+	i = 0;
+	while (str[i])
 	{
-		res = ft_strdup_start_end(str, 1, ft_strlen(str) - 1);
-		return (res);
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			if (quote == 0)
+				quote = str[i++];
+			else if (str[i] == quote)
+			{
+				quote = 0;
+				i++;
+			}
+			else
+				res = ft_strjoin_char(res, str[i++]);
+		}
+		else
+			res = ft_strjoin_char(res, str[i++]);
 	}
-	else
-		return (ft_strdup(str));
+	return (res);
 }
 
-static void remove_quotes_args(char **args)
+void	remove_echo_quotes(char **str)
 {
 	char	*tmp;
-	int		i;
-	
-	i = -1;
-	while (args[++i])
+	int		pos;
+
+	pos = 0;
+	while (str[pos] != NULL)
 	{
-		tmp = rm_quotes(args[i]);
-		free(args[i]);
-		args[i] = tmp;
+		tmp = do_magic(str[pos]);
+		free(str[pos]);
+		str[pos] = tmp;
+		pos++;
 	}
 }
 
-
-static void	do_magic(char **str, int pos, int str_len, int inside_double)
+void	remove_quotes_redir(t_redir *redir_list)
 {
-	int		starts_with;
-	int		ends_with;
+	char	*tmp;
 
-	starts_with = IS_QUOTE(str[pos][0]);
-	ends_with = IS_QUOTE(str[pos][str_len - 1]);
-	inside_double = 0;
-	if (ends_with && starts_with)
-		str[pos] = ft_strdup_start_end(str[pos], 1, str_len - 1);
-	else if (ends_with)
-		str[pos] = ft_strdup_start_end(str[pos], 0, str_len - 1);
-	else if (starts_with)
-		str[pos] = ft_strdup_start_end(str[pos], 1, str_len);
-}
-
-static void	remove_echo_quotes(char **str)
-{
-	int	pos;
-	int	inside_double;
-	int	str_len;
-
-	pos = 0;
-	inside_double = 0;
-	str_len = 0;
-	while (str[pos] != NULL)
+	while (redir_list != NULL)
 	{
-		str_len = (int)ft_strlen(str[pos]);
-		if (str[pos][0] == '\"' && inside_double == 0)
-			inside_double = 1;
-		do_magic(str, pos, str_len, inside_double);
-		pos++;
+		if (redir_list->file_name != NULL)
+		{
+			tmp = do_magic(redir_list->file_name);
+			free(redir_list->file_name);
+			redir_list->file_name = tmp;
+		}
+		redir_list = redir_list->next;
 	}
 }
 
@@ -98,16 +78,20 @@ void	remove_quotes_table(t_cmd_table *whole_table)
 
 	while (whole_table != NULL)
 	{
-		if (whole_table->cmd != NULL)
+		if (whole_table->cmd != NULL && has_quotes(whole_table->cmd) == 1)
 		{
-			tmp = rm_quotes(whole_table->cmd);
+			tmp = do_magic(whole_table->cmd);
 			free(whole_table->cmd);
 			whole_table->cmd = tmp;
 		}
-		if (ft_strcmp(whole_table->cmd, "echo") == 1)
+		if (ft_strcmp(whole_table->cmd, "echo") == 1
+			&& ft_strcmp(whole_table->cmd, "/bin/echo") == 1)
+		{
 			remove_quotes_args(whole_table->args);
+			remove_quotes_redir(whole_table->redir_list);
+		}
 		else
-			remove_echo_quotes(whole_table->args); // SHOULD FREE SIR!
+			remove_echo_quotes(whole_table->args);
 		whole_table = whole_table->next;
 	}
 }

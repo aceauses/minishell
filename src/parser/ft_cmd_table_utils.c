@@ -6,7 +6,7 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 18:52:27 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/25 21:51:19 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 13:30:31 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 void	free_cmd_table(t_cmd_table *table)
 {
-	t_cmd_table	*tmp;
+	t_cmd_table	*next_table;
+	t_redir		*next_redir;
 
 	while (table)
 	{
-		tmp = table->next;
+		next_table = table->next;
 		while (table->redir_list)
 		{
-			t_redir *tmp = table->redir_list->next;
+			next_redir = table->redir_list->next;
 			free(table->redir_list->file_name);
 			free(table->redir_list);
-			table->redir_list = tmp;
+			table->redir_list = next_redir;
 		}
 		free(table->cmd);
-		free(table->heredoc);
 		ft_free(table->args);
 		ft_free(table->exec_args);
 		free(table);
-		table = tmp;
+		table = next_table;
 	}
 }
 
@@ -45,7 +45,6 @@ t_cmd_table	*prepare_cmd_table(void)
 	new->cmd = NULL;
 	new->args = NULL;
 	new->exec_args = NULL;
-	new->heredoc = NULL;
 	new->redir_list = NULL;
 	new->index = -1;
 	new->next = NULL;
@@ -89,46 +88,18 @@ char	*first_redirections(t_token *token)
 	tmp = token;
 	if (checker(tmp, REDIR_IN)
 		|| checker(tmp, REDIR_OUT))
-		{
-			if (checker(tmp->next, TOKEN_WORD))
-			{
-				if (tmp->next->next != NULL
-					&& tmp->next->next->type == TOKEN_WORD)
-					{
-						token = token->next->next;
-						return (ft_strdup(tmp->next->next->value));
-					}
-				else
-					return (NULL);
-			}
-		}
-	return (NULL);
-}
-
-void print_cmd_table(t_cmd_table *cmd_table)
-{
-	while (cmd_table != NULL)
 	{
-		printf("%s---TABLE-[%d]---%s\n", GREEN, cmd_table->index, RESET);
-		printf("Index: %d\n", cmd_table->index);
-		printf("Command: %s\n", cmd_table->cmd);
-		printf("Heredoc: %s\n", cmd_table->heredoc);
-		int i = 0;
-		while (cmd_table->args && cmd_table->args[i])
+		if (checker(tmp->next, TOKEN_WORD))
 		{
-			printf("Arg: %s\n", cmd_table->args[i]);
-			i++;
+			if (tmp->next->next != NULL
+				&& tmp->next->next->type == TOKEN_WORD)
+			{
+				token = token->next->next;
+				return (ft_strdup(tmp->next->next->value));
+			}
+			else
+				return (NULL);
 		}
-		for (int i = 0; cmd_table->exec_args && cmd_table->exec_args[i]; i++)
-			printf("Exec arg: %s\n", cmd_table->exec_args[i]);
-		t_redir *tmp = cmd_table->redir_list;
-		while (tmp)
-		{
-			printf("Redir: %d\n", tmp->type);
-			printf("File: %s\n", tmp->file_name);
-			tmp = tmp->next;
-		}
-		printf("%s---TABLE-END---%s\n", GREEN, RESET);
-		cmd_table = cmd_table->next;
 	}
+	return (NULL);
 }

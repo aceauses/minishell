@@ -6,47 +6,58 @@
 /*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 13:24:51 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/07 20:07:46 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/11 09:23:45 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	n_args(char **args)
+static int	check_for_n(char *array)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
-	while (args[i] != NULL)
+	if (array == NULL)
+		return (0);
+	if (ft_strcmp(array, "-n") == 0)
+		return (1);
+	while (array[i] != '\0')
+	{
+		if (array[i] == '-')
+		{
+			i++;
+			while (array[i] == 'n')
+			{
+				i++;
+				if (array[i] == '\0')
+					return (1);
+			}
+		}
 		i++;
-	return (i);
+	}
+	return (0);
 }
 
-int		ft_echo(t_shell *shell)
+int	ft_echo(char **array)
 {
-	char	**args;
 	int		i;
-	int		n_flag;
-	
+	int		flag;
+
 	i = 1;
-	n_flag = 0;
-	args = ft_split(shell->line, ' ');
-	if (ft_strncmp(args[0], "echo", 5) != 0)
-		return (0);
-	if (n_args(args) > 1)
+	flag = check_for_n(array[1]);
+	if (flag == 1)
+		i++;
+	while (array[i] != NULL)
 	{
-		if ((ft_strncmp(args[i], "-n", 2) == 0))
-			n_flag = i++;
-		while (args[i] != NULL)
-		{ 
-			ft_putstr_fd(args[i], 1);
-			if (args[i + 1] != NULL)
-				ft_putchar_fd(' ', 1);
-			i++;
+		if (ft_strcmp(array[i], "-n") != 0 || (i >= 2 && array[i + 1] == NULL))
+		{
+			ft_dprintf(1, "%s", array[i]);
+			if (array[i + 1] != NULL)
+				ft_dprintf(1, " ");
 		}
+		i++;
 	}
-	if (!n_flag)
-		ft_putchar_fd('\n', 1);
-	ft_free(args);
-	return (1);
+	if (flag != 1)
+		ft_dprintf(1, "\n");
+	return (0);
 }

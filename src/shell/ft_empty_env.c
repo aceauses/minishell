@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_empty_env.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/11 19:49:28 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/19 17:30:09 by aceauses         ###   ########.fr       */
+/*   Created: 2023/11/16 18:27:40 by aceauses          #+#    #+#             */
+/*   Updated: 2023/12/15 23:28:37 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	check_access(char *argv, char c)
 	else if (c == 'X')
 		re = access((const char *)argv, X_OK);
 	else
-		error("Please give a valid instruction.", NULL);
+		printf("Please give a valid instruction.\n");
 	return (re);
 }
 
@@ -40,14 +40,6 @@ static void	remove_and_put(char **s, int i, char *command)
 	s[i] = free_join(s[i], command);
 }
 
-static char	**no_env(char *s)
-{
-	char	**env;
-
-	env = ft_split(s, ':');
-	return (env);
-}
-
 char	*find_path(char **path, char *command)
 {
 	char	**paths;
@@ -61,9 +53,9 @@ char	*find_path(char **path, char *command)
 		j++;
 	paths = ft_split(path[j], ':');
 	if (!paths)
-		paths = no_env("/bin:/usr/bin");
-	if (!command)
-		return (ft_free_array(paths), NULL);
+		return (NULL);
+	if (!command || command[0] == '.' || command[0] == '/')
+		return (ft_free(paths), NULL);
 	save = NULL;
 	while (paths[i] != NULL)
 	{
@@ -73,38 +65,23 @@ char	*find_path(char **path, char *command)
 		i++;
 	}
 	if (paths[i] == NULL && check_access(paths[i - 1], 'X') == -1)
-		return (ft_free_array(paths), paths = NULL, NULL);
-	return (save = ft_strdup(paths[i]), ft_free_array(paths), save);
+		return (ft_free(paths), paths = NULL, NULL);
+	return (save = ft_strdup(paths[i]), ft_free(paths), save);
 }
 
-/*Some of the Paths of the commands you can use is
-We can use access() to check if we can access this files.*/
-int	pipex(char **argv, char *ev[])
+void	empty_env(char **env, t_shell *shell)
 {
-	int		child1;
-	int		child2;
-	int		status;
-	int		i;
-	int		p[2];
+	char	*current_path;
 
-	i = 0;
-	while (argv[i] != NULL)
-	{
-		if (pipe(p) < 0)
-			exit (EXIT_FAILURE);
-		child1 = fork();
-		if (child1 < 0)
-			error("Failed to init fork", NULL);
-		if (child1 == 0)
-			child_one(argv[i], ev, p);
-		child2 = fork();
-		if (child2 < 0)
-			error("Failed to init fork", NULL);
-		if (child2 == 0)
-			child_two(argv[i], ev, p);
-		(void) ((close(p[0]) && 0) || (close(p[1]) && 0)
-			|| waitpid(child1, &status, 0) < 0 || waitpid(child2, &status, 0));
-		i++;
-	}
-	return (status);
+	shell->no_env = 1;
+	current_path = NULL;
+	current_path = getcwd(current_path, sizeof((int *)100));
+	env[0] = ft_strdup("USER=minishell");
+	env[1] = ft_strjoin("PWD=", current_path);
+	env[2] = ft_strdup("SHLVL=1");
+	env[3] = ft_strdup("_=/usr/bin/env");
+	env[4] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
+	env[5] = ft_strdup("TERM=xterm-256color");
+	env[6] = NULL;
+	free(current_path);
 }

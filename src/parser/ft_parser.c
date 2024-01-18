@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 13:01:58 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/26 16:14:01 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:34:22 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ int	skipping_quotes(char *str, int index)
 	return (index);
 }
 
-char	**split_pipes(char *line, char set)
+char	**split_pipes(char *line, char set, int i, int j)
 {
 	char	**splitted;
-	int		i;
-	int		j;
 	int		k;
 
 	i = 0;
 	j = 0;
 	k = 0;
 	splitted = malloc(sizeof(char *) * (pipe_counting(line) + 2));
+	if (!splitted)
+		return (NULL);
 	while (line[i])
 	{
 		if (line[i] == set && (!check_pipe(line, i)
-			&& !check_pipe(line, i)))
+				&& !check_pipe(line, i)))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
 			while (line[i] == set && line[i + 1] == set)
@@ -57,57 +57,46 @@ char	**split_pipes(char *line, char set)
 	return (splitted);
 }
 
-char	**splitter(char *line, char set)
+int	skipping_spaces(char *str, int index)
+{
+	while ((str[index] == ' ' && str[index + 1] == ' ')
+		|| (str[index] == '\t' && str[index + 1] == '\t')
+		|| (str[index] == '\t' && str[index + 1] == ' ')
+		|| (str[index] == ' ' && str[index + 1] == '\t')
+		|| (str[index] == '\v' && str[index + 1] == '\v')
+		|| (str[index] == '\v' && str[index + 1] == ' ')
+		|| (str[index] == ' ' && str[index + 1] == '\v'))
+		index++;
+	return (index);
+}
+
+char	**splitter(char *line, char set, int i, int j)
 {
 	char	**splitted;
-	int		i;
-	int		j;
 	int		k;
 
 	i = 0;
 	j = 0;
 	k = 0;
-	splitted = malloc(sizeof(char *) * (num_words(line, ' ') + 1));
-	if (line[i] == set)
-		i++;
+	splitted = malloc(sizeof(char *) * (num_words(line, SPACES) + 1));
+	if (!splitted)
+		return (NULL);
 	while (line[i])
 	{
 		i = skipping_quotes(line, i);
-		if (line[i] == set)
+		if (set_char(line[i], SPACES))
 		{
 			splitted[j] = ft_substr(line, k, i - k);
-			k = i + 1;
+			k = skipping_spaces(line, i) + 1;
 			j++;
 		}
+		i = skipping_spaces(line, i);
 		i++;
 	}
 	if (line[i - 1] != set)
 		splitted[j] = ft_substr(line, k, i - k);
 	splitted[j + 1] = NULL;
-	return (splitted);
-}
-
-t_cmd_table	*create_tokens(char **splitted, int in, t_cmd_table *cmd_table_head,
-		t_shell *shell)
-{
-	t_token	*token;
-	t_token	*current;
-	int		i;
-
-	i = 0;
-	token = ft_new_token(splitted[i], find_token_type(splitted[i]));
-	token->prev = NULL;
-	current = token;
-	while (splitted[++i])
-	{
-		current->next = ft_new_token(splitted[i], find_token_type(splitted[i]));
-		current->next->prev = current;
-		current = current->next;
-	}
-	current = token;
-	handle_expansions(current, shell);
-	cmd_table_head = add_to_cmd_table(cmd_table_head, create_table(token, in));
-	return (free_tokens(token), cmd_table_head);
+	return (free(line), splitted);
 }
 
 int	ft_parser(t_shell *shell)
@@ -118,17 +107,14 @@ int	ft_parser(t_shell *shell)
 
 	i = -1;
 	shell->cmd_table = NULL;
-	splitted = split_pipes(shell->trimmed_line, '|');
+	splitted = split_pipes(shell->trimmed_line, '|', 0, 0);
 	while (splitted[++i] != NULL)
 	{
 		split_tokens = NULL;
-		split_tokens = splitter(splitted[i], ' ');
+		split_tokens = splitter(custom_trim(splitted[i], SPACES), ' ', 0, 0);
 		shell->cmd_table = create_tokens(split_tokens, i, shell->cmd_table, \
 			shell);
 		ft_free(split_tokens);
 	}
-	t_cmd_table	*tmp = shell->cmd_table;
-	print_cmd_table(tmp);
-	// free_cmd_table(tmp);
-	return (ft_free(splitted), 0);
+	return (free(splitted), 0);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:26:50 by aceauses          #+#    #+#             */
-/*   Updated: 2023/11/18 14:23:45 by aceauses         ###   ########.fr       */
+/*   Updated: 2023/12/15 22:25:37 by rmitache         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quotes(t_shell *shell)
+static int	check_quotes(t_shell *shell)
 {
 	char	*line;
 	int		double_q;
@@ -38,25 +38,25 @@ int	check_quotes(t_shell *shell)
 	return (0);
 }
 
-int	op_n_pipe(t_shell *shell)
+static int	op_n_pipe(t_shell *shell)
 {
 	char	*line;
 
 	line = shell->trimmed_line;
-	if (check_operator(line, '<') == 1)
+	if (!ft_strchr(line, '\'') && !ft_strchr(line, '"'))
 	{
-		shell->exit_code = 2;
-		return (syntax_error("|"), 1);
-	}
-	else if (check_operator(line, '>') == 1)
-	{
-		shell->exit_code = 2;
-		return (syntax_error("newline"), 1);
+		if (check_operator(line, '<') == 1 || check_operator(line, '>') == 1
+			|| ft_strnstr(line, ">>|", ft_strlen(line))
+			|| ft_strnstr(line, "<<|", ft_strlen(line)))
+		{
+			shell->exit_code = 2;
+			return (syntax_error("|"), 1);
+		}
 	}
 	return (0);
 }
 
-int	check_pipes(t_shell *shell)
+static int	check_pipes(t_shell *shell)
 {
 	int	len;
 
@@ -69,7 +69,7 @@ int	check_pipes(t_shell *shell)
 	return (0);
 }
 
-int	line_valid(t_shell *shell)
+static int	line_valid(t_shell *shell)
 {
 	if (ft_strlen(shell->trimmed_line) == 0 || tilda(shell) == 1
 		|| extra_redirect(shell) == 1)

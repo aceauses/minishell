@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lexer_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmitache <rmitache@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aceauses <aceauses@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:12:44 by rmitache          #+#    #+#             */
-/*   Updated: 2023/11/17 17:14:09 by rmitache         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:37:54 by aceauses         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,18 @@ int	inp_next_to_out(char *line)
 	if (ft_strnstr(line, "<>", l) || ft_strnstr(line, "><", l))
 		return (1);
 	return (0);
+}
+
+char	*check_home(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], "HOME=", 5) == 0)
+			return (env[i] + 5);
+		i++;
+	}
+	return (NULL);
 }
